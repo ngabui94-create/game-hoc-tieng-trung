@@ -3,176 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thử Thách Tình Huống HSK - Nga Học HSK</title>
+    <title>Thử Thách HSK - Nga Học HSK</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700&family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Lexend', sans-serif;
-            background: #f0f2f5;
-            background-image: radial-gradient(#db2777 0.5px, transparent 0.5px), radial-gradient(#db2777 0.5px, #f0f2f5 0.5px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+            background: #fff5f7;
+            background-image: radial-gradient(#ffccd5 1px, transparent 1px);
+            background-size: 30px 30px;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .chinese-text { font-family: 'Noto Sans SC', sans-serif; }
-        .glass-morphism {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
         }
         .option-btn {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .option-btn:hover:not(:disabled) {
-            transform: translateX(10px);
-            box-shadow: -5px 5px 0px #db2777;
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 0 10px 20px rgba(219, 39, 119, 0.1);
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .option-btn:active { transform: scale(0.98); }
+        
+        @keyframes pop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .animate-slide { animation: slideIn 0.4s ease-out; }
+        .animate-pop { animation: pop 0.4s ease-out forwards; }
+        
+        .progress-glow {
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
     </style>
 </head>
-<body class="p-6">
+<body class="flex items-center justify-center p-4 md:p-8">
 
-    <div id="game-container" class="max-w-4xl w-full glass-morphism rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border-4 border-white">
+    <div id="game-container" class="max-w-5xl w-full glass-card rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
         
-        <!-- Cột trái: Thông tin & Tiến trình (Desktop Sidebar) -->
-        <div class="md:w-1/3 bg-pink-600 p-8 text-white flex flex-col justify-between">
-            <div>
-                <div class="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4 shadow-inner">🏮</div>
-                <h1 class="text-3xl font-bold leading-tight">Ứng dụng<br>Giao tiếp HSK</h1>
-                <p class="mt-4 text-pink-100 opacity-80">Giáo viên: <span class="font-bold border-b-2 border-yellow-300 text-yellow-300">Nga Học HSK</span></p>
+        <div class="md:w-1/3 bg-pink-600 p-8 text-white flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-pink-500 rounded-full opacity-50"></div>
+            
+            <div class="relative z-10">
+                <div class="bg-white text-pink-600 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg">🌸</div>
+                <h1 class="text-3xl font-extrabold leading-tight">Giao Tiếp<br>Thực Tế HSK</h1>
+                <p class="mt-2 text-pink-100 font-medium">Cùng cô <span class="text-yellow-300">Nga Học HSK</span></p>
             </div>
 
-            <div class="mt-8 space-y-6">
-                <div class="bg-black/10 p-4 rounded-2xl border border-white/10">
-                    <p class="text-xs uppercase tracking-widest opacity-60 mb-1">Tiến độ bài học</p>
-                    <div class="flex items-center gap-3">
-                        <div class="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                            <div id="progress-bar" class="h-full bg-yellow-400 transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <span id="progress-text" class="text-sm font-bold">0%</span>
+            <div class="relative z-10 space-y-8 mt-12">
+                <div>
+                    <div class="flex justify-between text-xs uppercase tracking-widest font-bold mb-2 opacity-80">
+                        <span>Tiến độ bài học</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="h-3 bg-pink-800 rounded-full p-0.5">
+                        <div id="progress-bar" class="h-full bg-yellow-400 rounded-full transition-all duration-700 progress-glow" style="width: 0%"></div>
                     </div>
                 </div>
                 
-                <div class="flex justify-between items-end">
-                    <div>
-                        <p class="text-xs uppercase tracking-widest opacity-60">Điểm số</p>
-                        <p id="score-display" class="text-4xl font-black text-yellow-300">0</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-pink-700/50 p-4 rounded-2xl border border-white/10">
+                        <p class="text-[10px] uppercase font-bold opacity-60">Điểm số</p>
+                        <p id="score-display" class="text-3xl font-black text-yellow-300">0</p>
                     </div>
-                    <div class="text-right">
-                        <p class="text-xs uppercase tracking-widest opacity-60">Câu hỏi</p>
-                        <p class="text-xl font-bold"><span id="current-count">0</span>/20</p>
+                    <div class="bg-pink-700/50 p-4 rounded-2xl border border-white/10">
+                        <p class="text-[10px] uppercase font-bold opacity-60">Câu hỏi</p>
+                        <p class="text-xl font-bold mt-1"><span id="current-count">0</span>/20</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Cột phải: Khu vực chơi -->
-        <div class="md:w-2/3 p-10 relative bg-white">
+        <div class="md:w-2/3 p-6 md:p-12 flex flex-col justify-center bg-white/50">
             
-            <!-- Màn hình bắt đầu -->
-            <div id="start-screen" class="h-full flex flex-col justify-center text-center animate-slide">
-                <h2 class="text-4xl font-black text-gray-800 mb-4">Bạn có giỏi ứng xử?</h2>
-                <p class="text-gray-500 mb-10 max-w-sm mx-auto text-lg">Vượt qua 20 tình huống giao tiếp tiếng Trung cơ bản cùng cô Nga.</p>
-                <button onclick="startGame()" class="group relative bg-pink-600 hover:bg-pink-700 text-white font-bold py-5 px-10 rounded-2xl shadow-xl transition-all hover:-translate-y-1 active:scale-95 overflow-hidden">
-                    <span class="relative z-10 text-xl">BẮT ĐẦU THỬ THÁCH</span>
-                    <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <div id="start-screen" class="text-center space-y-6">
+                <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">Thử Thách<br><span class="text-pink-600">Phản Xạ HSK</span></h2>
+                <p class="text-slate-500 text-lg max-w-md mx-auto">Bạn sẽ xử lý thế nào trong 20 tình huống giao tiếp đời thường tại Trung Quốc?</p>
+                <button onclick="startGame()" class="mt-4 bg-slate-900 hover:bg-pink-600 text-white font-extrabold py-5 px-12 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 group">
+                    BẮT ĐẦU NGAY 
+                    <span class="inline-block transition-transform group-hover:translate-x-2 ml-2">➜</span>
                 </button>
             </div>
 
-            <!-- Màn hình chơi -->
-            <div id="game-screen" class="hidden h-full flex flex-col justify-center">
-                <div id="question-container" class="animate-slide">
-                    <div class="mb-2 flex items-center gap-2">
-                        <span class="bg-pink-100 text-pink-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">Tình huống</span>
+            <div id="game-screen" class="hidden animate-pop">
+                <div id="question-area">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-pink-100 text-pink-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-tighter">Scenario Challenge</span>
                     </div>
-                    <h3 id="scenario-text" class="text-2xl font-bold text-gray-800 mb-8 leading-snug">Bạn gặp cô Nga vào buổi sáng, bạn sẽ nói gì?</h3>
+                    <h3 id="scenario-text" class="text-2xl md:text-3xl font-bold text-slate-800 mb-8 leading-tight"></h3>
                     
-                    <div id="options-container" class="space-y-4">
-                        <!-- Nút phương án sẽ ở đây -->
+                    <div id="options-container" class="grid gap-4">
+                        </div>
+
+                    <div id="explanation-box" class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl opacity-0 transition-opacity">
+                        <p class="text-blue-800 font-bold chinese-text text-xl" id="correct-pinyin"></p>
+                        <p class="text-blue-600 text-sm" id="correct-meaning"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Màn hình kết quả -->
-            <div id="result-screen" class="hidden h-full flex flex-col justify-center text-center animate-slide">
-                <div class="text-8xl mb-6" id="result-emoji">🏅</div>
-                <h2 class="text-4xl font-black text-gray-800 mb-2">Kết Quả</h2>
-                <p id="result-message" class="text-gray-500 mb-8 text-lg px-10"></p>
-                <div class="flex flex-col gap-3 max-w-sm mx-auto w-full">
-                    <button onclick="location.reload()" class="bg-gray-800 hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg transition-all">CHƠI LẠI</button>
-                    <button onclick="shareScore()" class="border-2 border-pink-200 text-pink-600 font-bold py-4 rounded-xl hover:bg-pink-50 transition-all">CHIA SẺ VỚI CÔ NGA</button>
+            <div id="result-screen" class="hidden text-center animate-pop">
+                <div class="text-9xl mb-4">🏮</div>
+                <h2 class="text-4xl font-black text-slate-800 mb-2">Chúc mừng bạn!</h2>
+                <p id="result-message" class="text-slate-500 mb-10 text-lg"></p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="location.reload()" class="bg-slate-900 text-white font-bold py-4 px-8 rounded-2xl hover:bg-black transition-all shadow-lg">LÀM LẠI</button>
+                    <button onclick="shareScore()" class="bg-white border-2 border-pink-200 text-pink-600 font-bold py-4 px-8 rounded-2xl hover:bg-pink-50 transition-all shadow-md">CHIA SẺ KẾT QUẢ</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Toast báo đúng/sai -->
-    <div id="toast" class="hidden fixed top-10 right-10 p-6 rounded-2xl shadow-2xl text-white font-bold transform transition-all translate-x-full z-50">
-        <!-- JS điền nội dung -->
-    </div>
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 md:left-auto md:right-10 md:translate-x-0 p-5 rounded-2xl shadow-2xl text-white font-bold z-50 transition-all duration-500 translate-y-32"></div>
 
     <script>
-        // Dữ liệu 20 câu hỏi tình huống
         const scenarioData = [
-            { q: "Khi gặp thầy cô giáo hoặc người lớn tuổi, bạn chào thế nào cho lịch sự?", options: ["你好", "您好", "再见", "对不起"], correct: 1, pinyin: "nín hǎo" },
-            { q: "Bạn lỡ đi trễ một cuộc họp/buổi học quan trọng, bạn nên nói gì đầu tiên?", options: ["没关系", "谢谢", "对不起", "不客气"], correct: 2, pinyin: "duì bu qǐ" },
-            { q: "Khi người khác nói 'Cảm ơn' (谢谢) với bạn, bạn đáp lại thế nào?", options: ["再见", "不客气", "不", "您好"], correct: 1, pinyin: "bú kè qi" },
-            { q: "Khi bạn vô tình làm phiền ai đó và họ nói 'Không sao đâu' (没关系), bạn đã nói gì trước đó?", options: ["再见", "谢谢", "对不起", "你好"], correct: 2, pinyin: "duì bu qǐ" },
-            { q: "Để chào tạm biệt một người bạn, bạn dùng từ nào?", options: ["再见", "好", "不谢", "你们"], correct: 0, pinyin: "zài jiàn" },
-            { q: "Khi bạn muốn chào một nhóm gồm nhiều bạn học?", options: ["你好", "您好", "你们好", "老师好"], correct: 2, pinyin: "nǐ men hǎo" },
-            { q: "Ai đó giúp bạn xách đồ nặng, bạn sẽ nói gì?", options: ["不谢", "谢谢", "没关系", "不"], correct: 1, pinyin: "xiè xie" },
-            { q: "Bạn muốn từ chối một lời đề nghị một cách ngắn gọn?", options: ["不", "好", "您", "再见"], correct: 0, pinyin: "bù" },
-            { q: "Khi khách cảm ơn bạn rất nhiều lần, bạn có thể dùng cách nói ngắn gọn này để đáp lại?", options: ["不客气", "不谢", "对不起", "再见"], correct: 1, pinyin: "bú xiè" },
-            { q: "Bạn gặp một người lớn tuổi mà bạn rất kính trọng, bạn xưng hô thế nào?", options: ["你", "你们", "您", "好"], correct: 2, pinyin: "nín" },
-            { q: "Bạn gặp bạn thân vào buổi sáng?", options: ["你好", "对不起", "没关系", "不客气"], correct: 0, pinyin: "nǐ hǎo" },
-            { q: "Khi bạn muốn hỏi thăm sức khỏe một người?", options: ["你好吗？", "谢谢你", "对不起", "再见"], correct: 0, pinyin: "nǐ hǎo ma?" },
-            { q: "Bạn muốn gọi 'Thầy cô giáo' trong tiếng Trung?", options: ["学生", "老师", "爸爸", "妈妈"], correct: 1, pinyin: "lǎo shī" },
-            { q: "Câu nói nào thể hiện sự đồng ý, khen ngợi điều gì đó ổn?", options: ["不", "再见", "好", "您"], correct: 2, pinyin: "hǎo" },
-            { q: "Bạn làm đổ nước vào áo bạn học, câu đầu tiên cần nói là?", options: ["没关系", "对不起", "谢谢", "你好"], correct: 1, pinyin: "duì bu qǐ" },
-            { q: "Khi bạn chào tạm biệt và hẹn gặp lại vào ngày mai?", options: ["明天见", "谢谢", "您好", "不客气"], correct: 0, pinyin: "míng tiān jiàn" },
-            { q: "Bạn muốn chào 'Chào buổi sáng'?", options: ["早上好", "对不起", "没关系", "不"], correct: 0, pinyin: "zǎo shang hǎo" },
-            { q: "Ai đó xin lỗi bạn vì một lỗi nhỏ, bạn đáp lại để họ an tâm?", options: ["谢谢", "没关系", "再见", "不客气"], correct: 1, pinyin: "méi guān xi" },
-            { q: "Bạn muốn nói 'Tôi không phải học sinh'?", options: ["我不学生", "我不是学生", "我学生", "对不起"], correct: 1, pinyin: "wǒ bú shì xué sheng" },
-            { q: "Kết thúc bài học, học sinh chào cô giáo?", options: ["老师再见", "老师谢谢", "老师您好", "对不起"], correct: 0, pinyin: "lǎo shī zài jiàn" }
+            { q: "Khi gặp thầy cô giáo hoặc người lớn tuổi, bạn chào thế nào cho lịch sự?", options: ["你好", "您好", "再见", "对不起"], correct: 1, pinyin: "nín hǎo", mean: "Chào ngài/Chào thầy/cô" },
+            { q: "Bạn lỡ đi trễ một cuộc học quan trọng, bạn nên nói gì đầu tiên?", options: ["没关系", "谢谢", "对不起", "不客气"], correct: 2, pinyin: "duì bu qǐ", mean: "Xin lỗi" },
+            { q: "Khi người khác nói 'Cảm ơn' (谢谢) với bạn, bạn đáp lại thế nào?", options: ["再见", "不客气", "不", "您好"], correct: 1, pinyin: "bú kè qi", mean: "Đừng khách khí" },
+            { q: "Khi ai đó xin lỗi bạn và bạn muốn nói 'Không sao đâu'?", options: ["谢谢", "没关系", "再见", "你好"], correct: 1, pinyin: "méi guān xi", mean: "Không có gì/Không sao" },
+            { q: "Chào tạm biệt và hẹn gặp lại vào ngày mai?", options: ["明天见", "再见", "谢谢", "您好"], correct: 0, pinyin: "míng tiān jiàn", mean: "Ngày mai gặp lại" },
+            { q: "Bạn muốn gọi 'Thầy cô giáo' trong tiếng Trung?", options: ["学生", "老师", "爸爸", "妈妈"], correct: 1, pinyin: "lǎo shī", mean: "Thầy/Cô giáo" },
+            { q: "Khi bạn muốn hỏi thăm sức khỏe: 'Bạn khỏe không?'", options: ["你好吗？", "谢谢你", "再见", "对不起"], correct: 0, pinyin: "nǐ hǎo ma?", mean: "Bạn khỏe không?" },
+            { q: "Bạn muốn giới thiệu: 'Tôi là học sinh'?", options: ["我是学生", "我不学生", "我学生", "好"], correct: 0, pinyin: "wǒ shì xué sheng", mean: "Tôi là học sinh" },
+            { q: "Khi bạn muốn cảm ơn một nhóm người?", options: ["谢谢你们", "谢谢你", "再见", "你好"], correct: 0, pinyin: "xiè xie nǐ men", mean: "Cảm ơn các bạn" },
+            { q: "Chào buổi sáng một cách trang trọng?", options: ["早上好", "晚安", "再见", "不"], correct: 0, pinyin: "zǎo shang hǎo", mean: "Chào buổi sáng" },
+            { q: "Cách nói đồng ý, thể hiện điều gì đó 'Tốt/Ổn'?", options: ["不", "好", "您", "再见"], correct: 1, pinyin: "hǎo", mean: "Tốt/Được/Ok" },
+            { q: "Bạn vô tình va vào ai đó trên phố?", options: ["对不起", "谢谢", "你好", "再见"], correct: 0, pinyin: "duì bu qǐ", mean: "Xin lỗi" },
+            { q: "Khi người bán hàng đưa đồ cho bạn, bạn nói?", options: ["谢谢", "不客气", "没关系", "你好"], correct: 0, pinyin: "xiè xie", mean: "Cảm ơn" },
+            { q: "Bạn muốn hỏi tên người khác một cách lịch sự?", options: ["你叫什么名字？", "你是谁？", "再见", "好"], correct: 0, pinyin: "nǐ jiào shén me míng zi?", mean: "Bạn tên là gì?" },
+            { q: "Chào tạm biệt chung cho mọi trường hợp?", options: ["再见", "你好", "谢谢", "不谢"], correct: 0, pinyin: "zài jiàn", mean: "Tạm biệt" },
+            { q: "Đáp lại lời cảm ơn một cách ngắn gọn (Không có gì)?", options: ["不客气", "不谢", "没关系", "再见"], correct: 1, pinyin: "bú xiè", mean: "Không cần cảm ơn" },
+            { q: "Hỏi ai đó có bận không?", options: ["你 bận ma?", "你忙吗？", "你叫什么？", "你好"], correct: 1, pinyin: "nǐ máng ma?", mean: "Bạn bận không?" },
+            { q: "Bạn muốn nói 'Tôi không bận'?", options: ["我不忙", "我忙", "很好", "谢谢"], correct: 0, pinyin: "wǒ bù máng", mean: "Tôi không bận" },
+            { q: "Khi bạn muốn khen ai đó: 'Rất tốt'?", options: ["不好", "很好", "再见", "不忙"], correct: 1, pinyin: "hěn hǎo", mean: "Rất tốt" },
+            { q: "Kết thúc tiết học, học sinh chào cô giáo?", options: ["老师再见", "老师好", "谢谢", "老师不客气"], correct: 0, pinyin: "lǎo shī zài jiàn", mean: "Chào tạm biệt thầy/cô" }
         ];
 
         let currentIdx = 0;
         let score = 0;
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Hàm tạo âm thanh không cần file
-        function playSound(type) {
+        function playSound(isCorrect) {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
 
-            if (type === 'correct') {
-                osc.type = 'sine';
+            if (isCorrect) {
                 osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
                 osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
             } else {
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime); 
                 osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             }
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
         }
 
         function startGame() {
@@ -185,6 +181,7 @@
             const data = scenarioData[currentIdx];
             document.getElementById('current-count').innerText = currentIdx + 1;
             document.getElementById('scenario-text').innerText = data.q;
+            document.getElementById('explanation-box').style.opacity = "0";
             
             const progress = (currentIdx / scenarioData.length) * 100;
             document.getElementById('progress-bar').style.width = progress + "%";
@@ -195,13 +192,12 @@
             
             data.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full p-5 bg-gray-50 border-2 border-gray-100 rounded-2xl text-left font-bold text-gray-700 flex justify-between items-center group";
+                btn.className = "option-btn w-full p-4 md:p-5 bg-white border-2 border-slate-100 rounded-2xl text-left font-bold text-slate-700 flex items-center justify-between group";
                 btn.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <span class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-xs group-hover:border-pink-500 transition-colors">${String.fromCharCode(65+i)}</span>
-                        <span class="text-xl chinese-text">${opt}</span>
+                        <span class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-sm group-hover:bg-pink-500 group-hover:text-white transition-colors">${String.fromCharCode(65+i)}</span>
+                        <span class="text-xl md:text-2xl chinese-text">${opt}</span>
                     </div>
-                    <span class="opacity-0 group-hover:opacity-100 transition-opacity text-pink-500 font-black">CHỌN ➜</span>
                 `;
                 btn.onclick = () => handleAnswer(i, btn);
                 container.appendChild(btn);
@@ -209,21 +205,31 @@
         }
 
         function handleAnswer(choiceIdx, btnElement) {
-            const correctIdx = scenarioData[currentIdx].correct;
+            const data = scenarioData[currentIdx];
             const buttons = document.querySelectorAll('.option-btn');
             buttons.forEach(b => b.disabled = true);
 
-            if (choiceIdx === correctIdx) {
+            const isCorrect = choiceIdx === data.correct;
+            
+            if (isCorrect) {
                 score += 5;
-                btnElement.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
-                showToast("TUYỆT VỜI! 🥳", "bg-green-500");
-                playSound('correct');
+                btnElement.classList.replace('border-slate-100', 'border-green-500');
+                btnElement.classList.add('bg-green-50');
+                showToast("CHÍNH XÁC! 🌟", "bg-green-600");
+                playSound(true);
             } else {
-                btnElement.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
-                buttons[correctIdx].classList.add('border-green-500', 'bg-green-100');
-                showToast("CỐ GẮNG HƠN NHÉ! 💡", "bg-red-500");
-                playSound('wrong');
+                btnElement.classList.replace('border-slate-100', 'border-red-500');
+                btnElement.classList.add('bg-red-50');
+                buttons[data.correct].classList.add('ring-4', 'ring-green-400', 'bg-green-50');
+                showToast("SAI MẤT RỒI... 💡", "bg-red-600");
+                playSound(false);
             }
+
+            // Hiện giải thích
+            const expBox = document.getElementById('explanation-box');
+            document.getElementById('correct-pinyin').innerText = data.options[data.correct] + " (" + data.pinyin + ")";
+            document.getElementById('correct-meaning').innerText = "Nghĩa là: " + data.mean;
+            expBox.style.opacity = "1";
 
             document.getElementById('score-display').innerText = score;
 
@@ -234,17 +240,17 @@
                 } else {
                     finishGame();
                 }
-            }, 1800);
+            }, 2500);
         }
 
-        function showToast(text, colorClass) {
-            const toast = document.getElementById('toast');
-            toast.innerText = text;
-            toast.className = `fixed top-10 right-10 p-6 rounded-2xl shadow-2xl text-white font-bold z-50 transition-all duration-500 ${colorClass}`;
-            toast.style.transform = "translateX(0)";
+        function showToast(text, color) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.className = `fixed bottom-10 left-1/2 -translate-x-1/2 md:left-auto md:right-10 md:translate-x-0 p-5 rounded-2xl shadow-2xl text-white font-black z-50 transition-all duration-500 ${color}`;
+            t.style.transform = (window.innerWidth < 768) ? "translate(-50%, 0)" : "translate(0, 0)";
             setTimeout(() => {
-                toast.style.transform = "translateX(200%)";
-            }, 1200);
+                t.style.transform = (window.innerWidth < 768) ? "translate(-50%, 200px)" : "translate(200%, 0)";
+            }, 2000);
         }
 
         function finishGame() {
@@ -254,21 +260,21 @@
             document.getElementById('progress-text').innerText = "100%";
             
             let msg = "";
-            let emoji = "";
-            if (score >= 90) { emoji = "👑"; msg = "Xuất sắc! Bạn là bậc thầy giao tiếp tiếng Trung của cô Nga rồi!"; }
-            else if (score >= 60) { emoji = "🥈"; msg = "Làm tốt lắm! Bạn đã nắm vững các quy tắc ứng xử cơ bản."; }
-            else { emoji = "📚"; msg = "Bạn cần ôn luyện thêm một chút để giao tiếp tự tin hơn nhé."; }
+            if (score >= 90) msg = "Quá đỉnh! Bạn thực sự hiểu văn hóa giao tiếp của người Trung Quốc đấy!";
+            else if (score >= 60) msg = "Tốt lắm! Bạn đã nắm chắc những câu chào hỏi cơ bản.";
+            else msg = "Bạn cần thực hành thêm một chút để tự tin giao tiếp hơn nhé!";
             
-            document.getElementById('result-emoji').innerText = emoji;
             document.getElementById('result-message').innerText = msg;
-            document.getElementById('final-score').innerText = score;
         }
 
         function shareScore() {
-            const text = `Mình vừa hoàn thành 20 tình huống giao tiếp HSK của cô Nga với ${score} điểm! 🏮🇨🇳`;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast("ĐÃ COPY LỜI NHẮN!", "bg-blue-500");
-            });
+            const text = `Mình vừa đạt ${score}/100 điểm tại Thử thách Giao tiếp HSK của cô Nga Học HSK! 🏮🇨🇳`;
+            if (navigator.share) {
+                navigator.share({ title: 'Kết quả HSK', text: text, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(text);
+                showToast("ĐÃ COPY KẾT QUẢ!", "bg-blue-600");
+            }
         }
     </script>
 </body>
