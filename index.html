@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Khu Vườn Học Tập Của Nga - Ghibli Style</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --ghibli-green: #9dc183;
@@ -30,12 +30,12 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden; /* Ngăn thanh cuộn ngang do lá bay */
+            overflow-x: hidden;
         }
 
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             background: rgba(255, 255, 255, 0.75);
             width: 100%;
             margin-bottom: 30px;
@@ -44,7 +44,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* Để chứa các hạt lá bay */
+            position: relative;
             z-index: 1;
         }
 
@@ -55,10 +55,9 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Khung tiêu đề phụ "Nga Học HSK" */
         .sub-title-box {
             display: inline-block;
-            margin-top: 15px;
+            margin: 15px 0;
             padding: 8px 25px;
             border: 2px dashed var(--ghibli-dark-green);
             border-radius: 15px;
@@ -69,32 +68,30 @@
             position: relative;
         }
 
-        .sub-title-box::before {
-            content: '🌸';
-            position: absolute;
-            left: -18px;
-            top: -5px;
+        .sub-title-box::before { content: '🌸'; position: absolute; left: -18px; top: -5px; }
+        .sub-title-box::after { content: '🌸'; position: absolute; right: -18px; top: -5px; }
+
+        /* Hiệu ứng cho câu chào mới */
+        .welcome-quote {
+            font-weight: 600;
+            font-size: 1.1rem;
+            max-width: 700px;
+            line-height: 1.6;
+            margin-top: 10px;
+            color: var(--ghibli-dark-green);
+            /* Hiệu ứng xuất hiện mượt mà */
+            animation: fadeInUp 1.5s ease-out;
+            background: linear-gradient(45deg, #4f7942, #8b5a2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .sub-title-box::after {
-            content: '🌸';
-            position: absolute;
-            right: -18px;
-            top: -5px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Câu quote tiếng Việt */
-        p.vietnamese-quote {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 1.2rem;
-            color: #444;
-            margin-top: 20px;
-            max-width: 600px;
-            line-height: 1.5;
-        }
-
-        /* CSS cho hiệu ứng lá bay */
+        /* Hiệu ứng lá bay */
         .leaves-container {
             position: absolute;
             top: 0;
@@ -102,7 +99,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1; /* Đặt phía sau nội dung header */
+            z-index: -1;
         }
 
         .leaf {
@@ -111,36 +108,22 @@
             width: 15px;
             height: 15px;
             background: var(--ghibli-leaf);
-            opacity: 0.7;
-            border-radius: 50% 0 50% 0; /* Tạo hình chiếc lá đơn giản */
+            opacity: 0.6;
+            border-radius: 50% 0 50% 0;
             animation: fall linear infinite;
         }
 
         @keyframes fall {
-            0% {
-                opacity: 0;
-                top: -10px;
-                transform: translateX(0px) rotate(0deg);
-            }
-            10% {
-                opacity: 0.7;
-            }
-            100% {
-                opacity: 0;
-                top: 100%;
-                transform: translateX(100px) rotate(720deg);
-            }
+            0% { opacity: 0; top: -10px; transform: translateX(0px) rotate(0deg); }
+            10% { opacity: 0.6; }
+            100% { opacity: 0; top: 100%; transform: translateX(100px) rotate(720deg); }
         }
 
-        /* Tạo nhiều lá với kích thước, vị trí và thời gian bay khác nhau */
-        .leaf:nth-child(1) { left: 10%; width: 18px; height: 18px; animation-duration: 5s; animation-delay: 0s; }
-        .leaf:nth-child(2) { left: 25%; width: 12px; height: 12px; animation-duration: 7s; animation-delay: 1s; }
-        .leaf:nth-child(3) { left: 40%; width: 15px; height: 15px; animation-duration: 6s; animation-delay: 2s; }
-        .leaf:nth-child(4) { left: 55%; width: 20px; height: 20px; animation-duration: 8s; animation-delay: 0.5s; }
-        .leaf:nth-child(5) { left: 70%; width: 14px; height: 14px; animation-duration: 5s; animation-delay: 1.5s; }
-        .leaf:nth-child(6) { left: 85%; width: 16px; height: 16px; animation-duration: 7s; animation-delay: 2.5s; }
-        .leaf:nth-child(7) { left: 15%; width: 10px; height: 10px; animation-duration: 9s; animation-delay: 3s; }
-        .leaf:nth-child(8) { left: 95%; width: 19px; height: 19px; animation-duration: 6s; animation-delay: 4s; }
+        .leaf:nth-child(1) { left: 10%; animation-duration: 6s; }
+        .leaf:nth-child(2) { left: 30%; animation-duration: 8s; animation-delay: 1s; }
+        .leaf:nth-child(3) { left: 50%; animation-duration: 7s; animation-delay: 2s; }
+        .leaf:nth-child(4) { left: 70%; animation-duration: 9s; animation-delay: 0.5s; }
+        .leaf:nth-child(5) { left: 90%; animation-duration: 6s; animation-delay: 3s; }
 
         .container {
             display: grid;
@@ -149,7 +132,6 @@
             max-width: 1000px;
             width: 90%;
             padding-bottom: 50px;
-            position: relative;
             z-index: 1;
         }
 
@@ -158,7 +140,7 @@
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             border: 3px solid transparent;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             display: flex;
@@ -169,29 +151,19 @@
         }
 
         .game-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.02);
             border-color: var(--ghibli-leaf);
             box-shadow: 0 15px 30px rgba(79, 121, 66, 0.2);
         }
 
-        .game-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-
-        .game-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--ghibli-wood);
-        }
+        .game-icon { font-size: 50px; margin-bottom: 15px; }
+        .game-title { font-weight: 600; font-size: 1.2rem; color: var(--ghibli-wood); }
 
         footer {
             margin-top: auto;
             padding: 20px;
             font-size: 0.9rem;
             color: var(--ghibli-dark-green);
-            position: relative;
-            z-index: 1;
         }
     </style>
 </head>
@@ -199,14 +171,7 @@
 
 <header>
     <div class="leaves-container">
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
-        <div class="leaf"></div>
+        <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
     </div>
 
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
@@ -215,55 +180,24 @@
         Nga Học HSK
     </div>
 
-    <p class="vietnamese-quote">
-        "Trên bước đường thành công không có dấu chân của kẻ lười biếng."
+    <p class="welcome-quote">
+        "Chào mừng bạn đến với khu vườn nhỏ của Nga, nơi tiếng Trung nảy mầm mỗi ngày."
     </p>
 </header>
 
 <div class="container">
-    <a href="BO THU 1.html" class="game-card">
-        <div class="game-icon">🌱</div>
-        <div class="game-title">BỘ THỦ 1</div>
-    </a>
-
-    <a href="BO THU 2.html" class="game-card">
-        <div class="game-icon">🌿</div>
-        <div class="game-title">BỘ THỦ 2</div>
-    </a>
-
-    <a href="BO THU 3.html" class="game-card">
-        <div class="game-icon">☘️</div>
-        <div class="game-title">BỘ THỦ 3</div>
-    </a>
-
-    <a href="BO THU 4.html" class="game-card">
-        <div class="game-icon">🍀</div>
-        <div class="game-title">BỘ THỦ 4</div>
-    </a>
-
-    <a href="BO THU 5.html" class="game-card">
-        <div class="game-icon">🍃</div>
-        <div class="game-title">BỘ THỦ 5</div>
-    </a>
-
-    <a href="BO THU 6.html" class="game-card">
-        <div class="game-icon">🌳</div>
-        <div class="game-title">BỘ THỦ 6</div>
-    </a>
-
-    <a href="HSK1-LESSON1-2.html" class="game-card">
-        <div class="game-icon">📚</div>
-        <div class="game-title">HSK1: Bài 1-2</div>
-    </a>
-
-    <a href="HSK1-LESSON3.html" class="game-card">
-        <div class="game-icon">📖</div>
-        <div class="game-title">HSK1: Bài 3</div>
-    </a>
+    <a href="BO THU 1.html" class="game-card"><div class="game-icon">🌱</div><div class="game-title">BỘ THỦ 1</div></a>
+    <a href="BO THU 2.html" class="game-card"><div class="game-icon">🌿</div><div class="game-title">BỘ THỦ 2</div></a>
+    <a href="BO THU 3.html" class="game-card"><div class="game-icon">☘️</div><div class="game-title">BỘ THỦ 3</div></a>
+    <a href="BO THU 4.html" class="game-card"><div class="game-icon">🍀</div><div class="game-title">BỘ THỦ 4</div></a>
+    <a href="BO THU 5.html" class="game-card"><div class="game-icon">🍃</div><div class="game-title">BỘ THỦ 5</div></a>
+    <a href="BO THU 6.html" class="game-card"><div class="game-icon">🌳</div><div class="game-title">BỘ THỦ 6</div></a>
+    <a href="HSK1-LESSON1-2.html" class="game-card"><div class="game-icon">📚</div><div class="game-title">HSK1: Bài 1-2</div></a>
+    <a href="HSK1-LESSON3.html" class="game-card"><div class="game-icon">📖</div><div class="game-title">HSK1: Bài 3</div></a>
 </div>
 
 <footer>
-    © 2024 - Made with ❤️ for Nga Học HSK - Ghibli Inspired
+    © 2024 - Made with ❤️ for Nga Học HSK
 </footer>
 
 </body>
