@@ -30,6 +30,38 @@
             padding: 15px;
         }
 
+        /* --- NÚT QUAY VỀ TRANG CHỦ --- */
+        .btn-back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: white;
+            border: 3px solid var(--animal-orange);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--animal-orange);
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 5px 0 var(--animal-orange);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-back-home:hover {
+            background: var(--animal-orange);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-back-home:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--animal-orange);
+        }
+
         .game-wrapper {
             width: 100%;
             max-width: 850px;
@@ -163,17 +195,21 @@
         @media (max-width: 700px) {
             .game-layout { grid-template-columns: 1fr; }
             .visual-hint { height: 140px; font-size: 60px; order: -1; }
+            .btn-back-home { top: 10px; left: 10px; padding: 8px 15px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
+
+<a href="index.html" class="btn-back-home" onmousedown="playSfx('s-pop')">
+    <i class="fa-solid fa-house-paw"></i> Quay về vườn
+</a>
 
 <audio id="s-correct" src="https://assets.mixkit.co/active_storage/sfx/2012/2012-preview.mp3"></audio>
 <audio id="s-wrong" src="https://assets.mixkit.co/active_storage/sfx/251/251-preview.mp3"></audio>
 <audio id="s-pop" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
 <div class="game-wrapper">
-    <!-- START SCREEN -->
     <div id="welcome-screen" class="screen active">
         <div class="logo">🦁</div>
         <h1 class="main-title">THỬ THÁCH BỘ THỦ 4</h1>
@@ -182,7 +218,6 @@
         <p style="margin-top: 25px; color: #4a5568; font-size: 15px;">Cùng Cô Nga chinh phục tiếng Trung qua hình ảnh!</p>
     </div>
 
-    <!-- PLAY SCREEN -->
     <div id="game-screen" class="screen">
         <div class="header">
             <div class="badge">Nga Học HSK</div>
@@ -210,7 +245,6 @@
         </div>
     </div>
 
-    <!-- FINAL SCREEN -->
     <div id="result-screen" class="screen">
         <div style="font-size:90px">🦁</div>
         <h2 style="color:var(--safari-brown); margin: 10px 0;">CHÚA TỂ BỘ THỦ!</h2>
@@ -225,146 +259,26 @@
 
 <script>
     const animalQuiz = [
-        {
-            q: "Chữ '狗' (gǒu - con chó) có bộ Khuyển (犭) bên trái. Bộ này tượng trưng cho loài vật nào?",
-            options: ["Các loài thú có vú, động vật bốn chân", "Các loài chim", "Các loài cá", "Các loài côn trùng"],
-            a: "Các loài thú có vú, động vật bốn chân",
-            expl: "Bộ Khuyển (犭) là hình ảnh con chó đứng dựng đứng. Nó dùng để chỉ các loài thú bốn chân như: chó, mèo (猫), lợn (猪), sư tử (狮).",
-            icon: "🐕"
-        },
-        {
-            q: "Bộ Điểu (鸟) trong chữ '鸡' (jī - con gà) mô phỏng hình ảnh gì?",
-            options: ["Con chim có lông và đuôi", "Con chim đang bay", "Con chim đang hót", "Tổ chim"],
-            a: "Con chim có lông và đuôi",
-            expl: "Bộ Điểu (鸟) là chữ tượng hình vẽ một con chim với mắt, lông và mào. Các loài gia cầm và chim chóc đều dùng bộ này.",
-            icon: "🐔"
-        },
-        {
-            q: "Chữ '鱼' (yú - cá) có nét ngang ở dưới cùng tượng trưng cho bộ phận nào?",
-            options: ["Đuôi cá", "Vây cá", "Mắt cá", "Miệng cá"],
-            a: "Đuôi cá",
-            expl: "Chữ Ngư (鱼) vẽ hình đầu cá, vảy cá và nét ngang ở dưới chính là biến thể của cái đuôi cá.",
-            icon: "🐟"
-        },
-        {
-            q: "Bộ Trùng (虫) trong chữ '蚂蚁' (mǎyǐ - con kiến) thường chỉ loại động vật nào?",
-            options: ["Côn trùng, sâu bọ, bò sát", "Chim chóc", "Thú săn mồi", "Động vật dưới nước"],
-            a: "Côn trùng, sâu bọ, bò sát",
-            expl: "Bộ Trùng (虫) vẽ hình một con sâu/rắn nhỏ. Nó dùng cho kiến, muỗi, rắn (蛇), tôm (虾 - vì xưa coi tôm là sâu dưới nước).",
-            icon: "🐜"
-        },
-        {
-            q: "Bộ Mã (马) trong chữ '骑' (qí - cưỡi) tượng trưng cho con vật nào giúp con người di chuyển?",
-            options: ["Con ngựa", "Con bò", "Con lừa", "Con voi"],
-            a: "Con ngựa",
-            expl: "Bộ Mã (马) vẽ hình con ngựa đang phi, với bờm và chân. Chữ 'Cưỡi' có bộ Mã vì muốn cưỡi thì phải có ngựa!",
-            icon: "🐎"
-        },
-        {
-            q: "Trong chữ '鲜' (xiān - tươi mới), sự kết hợp giữa bộ Ngư (鱼) và bộ Dương (羊 - con dê) mang ý nghĩa gì?",
-            options: ["Cá và thịt dê ăn cùng rất tươi ngon", "Con dê đang ăn cá", "Con cá trông giống con dê", "Mùi tanh của cá"],
-            a: "Cá và thịt dê ăn cùng rất tươi ngon",
-            expl: "Người xưa cho rằng thịt cá và thịt dê là hai loại thực phẩm bổ dưỡng và tươi nhất, nên ghép lại thành chữ 'Tươi'.",
-            icon: "🐑"
-        },
-        {
-            q: "Bộ Ngưu (牛) trong chữ '物' (wù - đồ vật/sự vật) tượng trưng cho con vật nào?",
-            options: ["Con bò/trâu", "Con lợn", "Con dê", "Con chó"],
-            a: "Con bò/trâu",
-            expl: "Bộ Ngưu (牛) vẽ hình đầu con bò với hai cái sừng. Ngày xưa bò là tài sản quan trọng nhất nên đại diện cho mọi 'sự vật'.",
-            icon: "🐂"
-        },
-        {
-            q: "Chữ '家' (jiā - nhà) có bộ Miên (宀 - mái nhà) và bộ Thỉ (豕 - con lợn) ở dưới. Tại sao trong nhà lại có lợn?",
-            options: ["Nuôi lợn dưới gầm sàn mới được coi là một nhà", "Lợn là thú cưng", "Nhà làm bằng thịt lợn", "Tên của chủ nhà"],
-            a: "Nuôi lợn dưới gầm sàn mới được coi là một nhà",
-            expl: "Thời cổ đại, một gia đình được coi là ổn định khi có nhà ở và có gia súc (lợn) để ăn. Thỉ (豕) chính là bộ thủ chỉ con lợn.",
-            icon: "🏠"
-        },
-        {
-            q: "Bộ Vũ (羽) trong chữ '翅膀' (chìbǎng - cánh) tượng trưng cho cái gì của loài chim?",
-            options: ["Lông vũ/Cánh", "Cái mỏ", "Chân chim", "Tiếng hót"],
-            a: "Lông vũ/Cánh",
-            expl: "Bộ Vũ (羽) vẽ hình hai chiếc lông vũ hoặc hai cánh chim cạnh nhau.",
-            icon: "🪶"
-        },
-        {
-            q: "Chữ '虎' (hǔ - con hổ) có bộ Hổ (虍) ở phía trên. Bộ này mô phỏng đặc điểm nào của hổ?",
-            options: ["Vằn trên da hổ", "Móng vuốt", "Đuôi hổ", "Tiếng gầm"],
-            a: "Vằn trên da hổ",
-            expl: "Bộ Hổ (虍) mô tả cái đầu hổ với những vằn vện đặc trưng của chúa sơn lâm.",
-            icon: "🐅"
-        },
-        {
-            q: "Bộ Hợi (豕) và bộ Khuyển (犭) khác nhau ở chỗ nào khi dùng làm bộ thủ?",
-            options: ["Khuyển dùng cho thú săn/thú nuôi, Thỉ dùng cho lợn", "Giống hệt nhau", "Chỉ dùng cho chim", "Chỉ dùng cho cá"],
-            a: "Khuyển dùng cho thú săn/thú nuôi, Thỉ dùng cho lợn",
-            expl: "Dù đều là động vật 4 chân, nhưng chữ Trung Quốc phân chia rất rõ: 犭thường là thú dữ/thú chạy nhanh, còn 豕 là lợn.",
-            icon: "🐖"
-        },
-        {
-            q: "Chữ '象' (xiàng - con voi) là chữ tượng hình vẽ đặc điểm gì nổi bật nhất?",
-            options: ["Cái vòi dài", "Cái tai to", "Đôi ngà", "Cái bụng phệ"],
-            a: "Cái vòi dài",
-            expl: "Chữ Tượng (象) vẽ lại hình dáng con voi đứng thẳng với cái vòi dài uyển chuyển phía trên.",
-            icon: "🐘"
-        },
-        {
-            q: "Bộ Mi (𠂇) trong chữ '龟' (guī - con rùa) mô tả bộ phận nào?",
-            options: ["Mai rùa", "Đuôi rùa", "Đầu rùa", "Trứng rùa"],
-            a: "Mai rùa",
-            expl: "Chữ Quy (龟) vẽ hình con rùa nhìn từ trên xuống với cái mai cứng có vân.",
-            icon: "🐢"
-        },
-        {
-            q: "Bộ Thử (鼠) trong chữ '老鼠' (lǎoshǔ - con chuột) mô tả cái gì?",
-            options: ["Hàm răng sắc nhọn và cái đuôi", "Đôi tai to", "Bộ lông xám", "Hành động ăn trộm"],
-            a: "Hàm răng sắc nhọn và cái đuôi",
-            expl: "Chữ Thử (鼠) vẽ đầu con chuột với răng cửa dài (để gặm nhấm) và cái đuôi phía dưới.",
-            icon: "🐭"
-        },
-        {
-            q: "Chữ '鹿' (lù - con hươu) có phần trên cùng tượng trưng cho?",
-            options: ["Cặp sừng", "Đôi mắt", "Cái cổ dài", "Đốm trên lưng"],
-            a: "Cặp sừng",
-            expl: "Bộ Lộc (鹿) vẽ hình con hươu có cặp sừng đẹp trên đầu và đôi chân dài đang đứng.",
-            icon: "🦌"
-        },
-        {
-            q: "Tại sao chữ '群' (qún - bầy đàn) lại có bộ Dương (羊 - con dê)?",
-            options: ["Dê là loài vật sống theo bầy đàn điển hình", "Dê thích đi một mình", "Dê rất hung dữ", "Dê chạy rất nhanh"],
-            a: "Dê là loài vật sống theo bầy đàn điển hình",
-            expl: "Dê là loài gia súc hiền lành, luôn đi cùng nhau, nên bộ Dương đại diện cho ý nghĩa tập hợp, bầy đàn.",
-            icon: "🐑"
-        },
-        {
-            q: "Bộ Trùng (虫) có bao nhiêu nét nếu viết độc lập?",
-            options: ["6 nét", "5 nét", "4 nét", "7 nét"],
-            a: "6 nét",
-            expl: "Bộ Trùng (虫) gồm 6 nét: sổ, ngang gập, ngang, sổ, hất và chấm.",
-            icon: "🐛"
-        },
-        {
-            q: "Chữ '蛇' (shé - con rắn) có bộ Trùng (虫). Tại sao không có bộ Khuyển?",
-            options: ["Vì rắn bò sát, không có chân", "Vì rắn biết bay", "Vì rắn sống dưới nước", "Vì rắn có lông"],
-            a: "Vì rắn bò sát, không có chân",
-            expl: "Ngày xưa người Trung Quốc xếp rắn vào nhóm 'Trùng' (loài bò sát, sâu bọ), không phải nhóm thú (Khuyển).",
-            icon: "🐍"
-        },
-        {
-            q: "Bộ Chu (隹) trong chữ '难' (nán - khó) tượng trưng cho loài chim gì?",
-            options: ["Chim đuôi ngắn", "Chim đại bàng", "Chim công", "Chim sẻ"],
-            a: "Chim đuôi ngắn",
-            expl: "Bộ Truy (隹) khác bộ Điểu (鸟) ở chỗ nó mô phỏng loài chim đuôi ngắn. Nó xuất hiện trong rất nhiều chữ Hán.",
-            icon: "🐦"
-        },
-        {
-            q: "Học bộ thủ nhóm Động vật giúp bạn làm gì?",
-            options: ["Phân loại và nhớ nhanh từ vựng về muông thú", "Biết cách đi săn", "Học cách cưỡi ngựa", "Nhớ tên các món ăn"],
-            a: "Phân loại và nhớ nhanh từ vựng về muông thú",
-            expl: "Cứ thấy 犭là thú, thấy 鸟 là chim, thấy 鱼 là cá. Đó chính là chìa khóa để 'hack' não tiếng Trung đấy!",
-            icon: "🎓"
-        }
+        { q: "Chữ '狗' (gǒu - con chó) có bộ Khuyển (犭) bên trái. Bộ này tượng trưng cho loài vật nào?", options: ["Các loài thú có vú, động vật bốn chân", "Các loài chim", "Các loài cá", "Các loài côn trùng"], a: "Các loài thú có vú, động vật bốn chân", expl: "Bộ Khuyển (犭) là hình ảnh con chó đứng dựng đứng. Nó dùng để chỉ các loài thú bốn chân như: chó, mèo (猫), lợn (猪), sư tử (狮).", icon: "🐕" },
+        { q: "Bộ Điểu (鸟) trong chữ '鸡' (jī - con gà) mô phỏng hình ảnh gì?", options: ["Con chim có lông và đuôi", "Con chim đang bay", "Con chim đang hót", "Tổ chim"], a: "Con chim có lông và đuôi", expl: "Bộ Điểu (鸟) là chữ tượng hình vẽ một con chim với mắt, lông và mào. Các loài gia cầm và chim chóc đều dùng bộ này.", icon: "🐔" },
+        { q: "Chữ '鱼' (yú - cá) có nét ngang ở dưới cùng tượng trưng cho bộ phận nào?", options: ["Đuôi cá", "Vây cá", "Mắt cá", "Miệng cá"], a: "Đuôi cá", expl: "Chữ Ngư (鱼) vẽ hình đầu cá, vảy cá và nét ngang ở dưới chính là biến thể của cái đuôi cá.", icon: "🐟" },
+        { q: "Bộ Trùng (虫) trong chữ '蚂蚁' (mǎyǐ - con kiến) thường chỉ loại động vật nào?", options: ["Côn trùng, sâu bọ, bò sát", "Chim chóc", "Thú săn mồi", "Động vật dưới nước"], a: "Côn trùng, sâu bọ, bò sát", expl: "Bộ Trùng (虫) vẽ hình một con sâu/rắn nhỏ. Nó dùng cho kiến, muỗi, rắn (蛇), tôm (虾 - vì xưa coi tôm là sâu dưới nước).", icon: "🐜" },
+        { q: "Bộ Mã (马) trong chữ '骑' (qí - cưỡi) tượng trưng cho con vật nào giúp con người di chuyển?", options: ["Con ngựa", "Con bò", "Con lừa", "Con voi"], a: "Con ngựa", expl: "Bộ Mã (马) vẽ hình con ngựa đang phi, với bờm và chân. Chữ 'Cưỡi' có bộ Mã vì muốn cưỡi thì phải có ngựa!", icon: "🐎" },
+        { q: "Trong chữ '鲜' (xiān - tươi mới), sự kết hợp giữa bộ Ngư (鱼) và bộ Dương (羊 - con dê) mang ý nghĩa gì?", options: ["Cá và thịt dê ăn cùng rất tươi ngon", "Con dê đang ăn cá", "Con cá trông giống con dê", "Mùi tanh của cá"], a: "Cá và thịt dê ăn cùng rất tươi ngon", expl: "Người xưa cho rằng thịt cá và thịt dê là hai loại thực phẩm bổ dưỡng và tươi nhất, nên ghép lại thành chữ 'Tươi'.", icon: "🐑" },
+        { q: "Bộ Ngưu (牛) trong chữ '物' (wù - đồ vật/sự vật) tượng trưng cho con vật nào?", options: ["Con bò/trâu", "Con lợn", "Con dê", "Con chó"], a: "Con bò/trâu", expl: "Bộ Ngưu (牛) vẽ hình đầu con bò với hai cái sừng. Ngày xưa bò là tài sản quan trọng nhất nên đại diện cho mọi 'sự vật'.", icon: "🐂" },
+        { q: "Chữ '家' (jiā - nhà) có bộ Miên (宀 - mái nhà) và bộ Thỉ (豕 - con lợn) ở dưới. Tại sao trong nhà lại có lợn?", options: ["Nuôi lợn dưới gầm sàn mới được coi là một nhà", "Lợn là thú cưng", "Nhà làm bằng thịt lợn", "Tên của chủ nhà"], a: "Nuôi lợn dưới gầm sàn mới được coi là một nhà", expl: "Thời cổ đại, một gia đình được coi là ổn định khi có nhà ở và có gia súc (lợn) để ăn. Thỉ (豕) chính là bộ thủ chỉ con lợn.", icon: "🏠" },
+        { q: "Bộ Vũ (羽) trong chữ '翅膀' (chìbǎng - cánh) tượng trưng cho cái gì của loài chim?", options: ["Lông vũ/Cánh", "Cái mỏ", "Chân chim", "Tiếng hót"], a: "Lông vũ/Cánh", expl: "Bộ Vũ (羽) vẽ hình hai chiếc lông vũ hoặc hai cánh chim cạnh nhau.", icon: "🪶" },
+        { q: "Chữ '虎' (hǔ - con hổ) có bộ Hổ (虍) ở phía trên. Bộ này mô phỏng đặc điểm nào của hổ?", options: ["Vằn trên da hổ", "Móng vuốt", "Đuôi hổ", "Tiếng gầm"], a: "Vằn trên da hổ", expl: "Bộ Hổ (虍) mô tả cái đầu hổ với những vằn vện đặc trưng của chúa sơn lâm.", icon: "🐅" },
+        { q: "Bộ Hợi (豕) và bộ Khuyển (犭) khác nhau ở chỗ nào khi dùng làm bộ thủ?", options: ["Khuyển dùng cho thú săn/thú nuôi, Thỉ dùng cho lợn", "Giống hệt nhau", "Chỉ dùng cho chim", "Chỉ dùng cho cá"], a: "Khuyển dùng cho thú săn/thú nuôi, Thỉ dùng cho lợn", expl: "Dù đều là động vật 4 chân, nhưng chữ Trung Quốc phân chia rất rõ: 犭thường là thú dữ/thú chạy nhanh, còn 豕 là lợn.", icon: "🐖" },
+        { q: "Chữ '象' (xiàng - con voi) là chữ tượng hình vẽ đặc điểm gì nổi bật nhất?", options: ["Cái vòi dài", "Cái tai to", "Đôi ngà", "Cái bụng phệ"], a: "Cái vòi dài", expl: "Chữ Tượng (象) vẽ lại hình dáng con voi đứng thẳng với cái vòi dài uyển chuyển phía trên.", icon: "🐘" },
+        { q: "Bộ Mi (𠂇) trong chữ '龟' (guī - con rùa) mô tả bộ phận nào?", options: ["Mai rùa", "Đuôi rùa", "Đầu rùa", "Trứng rùa"], a: "Mai rùa", expl: "Chữ Quy (龟) vẽ hình con rùa nhìn từ trên xuống với cái mai cứng có vân.", icon: "🐢" },
+        { q: "Bộ Thử (鼠) trong chữ '老鼠' (lǎoshǔ - con chuột) mô tả cái gì?", options: ["Hàm răng sắc nhọn và cái đuôi", "Đôi tai to", "Bộ lông xám", "Hành động ăn trộm"], a: "Hàm răng sắc nhọn và cái đuôi", expl: "Chữ Thử (鼠) vẽ đầu con chuột với răng cửa dài (để gặm nhấm) và cái đuôi phía dưới.", icon: "🐭" },
+        { q: "Chữ '鹿' (lù - con hươu) có phần trên cùng tượng trưng cho?", options: ["Cặp sừng", "Đôi mắt", "Cái cổ dài", "Đốm trên lưng"], a: "Cặp sừng", expl: "Bộ Lộc (鹿) vẽ hình con hươu có cặp sừng đẹp trên đầu và đôi chân dài đang đứng.", icon: "🦌" },
+        { q: "Tại sao chữ '群' (qún - bầy đàn) lại có bộ Dương (羊 - con dê)?", options: ["Dê là loài vật sống theo bầy đàn điển hình", "Dê thích đi một mình", "Dê rất hung dữ", "Dê chạy rất nhanh"], a: "Dê là loài vật sống theo bầy đàn điển hình", expl: "Dê là loài gia súc hiền lành, luôn đi cùng nhau, nên bộ Dương đại diện cho ý nghĩa tập hợp, bầy đàn.", icon: "🐑" },
+        { q: "Bộ Trùng (虫) có bao nhiêu nét nếu viết độc lập?", options: ["6 nét", "5 nét", "4 nét", "7 nét"], a: "6 nét", expl: "Bộ Trùng (虫) gồm 6 nét: sổ, ngang gập, ngang, sổ, hất và chấm.", icon: "🐛" },
+        { q: "Chữ '蛇' (shé - con rắn) có bộ Trùng (虫). Tại sao không có bộ Khuyển?", options: ["Vì rắn bò sát, không có chân", "Vì rắn biết bay", "Vì rắn sống dưới nước", "Vì rắn có lông"], a: "Vì rắn bò sát, không có chân", expl: "Ngày xưa người Trung Quốc xếp rắn vào nhóm 'Trùng' (loài bò sát, sâu bọ), không phải nhóm thú (Khuyển).", icon: "🐍" },
+        { q: "Bộ Chu (隹) trong chữ '难' (nán - khó) tượng trưng cho loài chim gì?", options: ["Chim đuôi ngắn", "Chim đại bàng", "Chim công", "Chim sẻ"], a: "Chim đuôi ngắn", expl: "Bộ Truy (隹) khác bộ Điểu (鸟) ở chỗ nó mô phỏng loài chim đuôi ngắn. Nó xuất hiện trong rất nhiều chữ Hán.", icon: "🐦" },
+        { q: "Học bộ thủ nhóm Động vật giúp bạn làm gì?", options: ["Phân loại và nhớ nhanh từ vựng về muông thú", "Biết cách đi săn", "Học cách cưỡi ngựa", "Nhớ tên các món ăn"], a: "Phân loại và nhớ nhanh từ vựng về muông thú", expl: "Cứ thấy 犭là thú, thấy 鸟 là chim, thấy 鱼 là cá. Đó chính là chìa khóa để 'hack' não tiếng Trung đấy!", icon: "🎓" }
     ];
 
     let currentQ = 0;
