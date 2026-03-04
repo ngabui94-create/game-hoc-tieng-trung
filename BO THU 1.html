@@ -26,6 +26,39 @@
             align-items: center;
         }
 
+        /* Style cho nút Back Home */
+        .btn-back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001; /* Nằm trên cả Slide mở đầu */
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--ghibli-brown);
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ghibli-brown);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-shadow: 0 4px 0 var(--ghibli-brown);
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-back-home:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--ghibli-brown);
+        }
+
+        .btn-back-home:hover {
+            background: var(--ghibli-green);
+            color: white;
+            border-color: var(--ghibli-brown);
+        }
+
         .btn-ghibli {
             background-color: white;
             border: 3px solid var(--ghibli-brown);
@@ -143,7 +176,10 @@
 </head>
 <body>
 
-    <!-- Slide Mở Đầu -->
+    <a href="index.html" class="btn-back-home">
+        <span>🍃</span> Quay về vườn
+    </a>
+
     <div id="intro-slide" class="fixed inset-0 z-[100] bg-[#fefae0] flex flex-col items-center justify-center p-6 text-center">
         <div class="relative z-10">
             <div class="text-8xl mb-4">🪴</div>
@@ -153,10 +189,8 @@
         </div>
     </div>
 
-    <!-- Game Chính -->
     <div id="main-game" class="w-full max-w-2xl h-full flex flex-col p-4 opacity-0 transition-opacity duration-500">
-        <header id="game-header" class="flex justify-between items-center mb-4">
-            <div class="bg-white px-4 py-1 rounded-full border-2 border-[#e9edc9] shadow-sm flex flex-col items-center">
+        <header id="game-header" class="flex justify-between items-center mt-12 mb-4"> <div class="bg-white px-4 py-1 rounded-full border-2 border-[#e9edc9] shadow-sm flex flex-col items-center">
                 <span class="text-[#606c38] font-black text-xl" id="score-display">0</span>
                 <span class="text-[10px] font-bold uppercase text-gray-400">Điểm</span>
             </div>
@@ -181,7 +215,6 @@
         </footer>
     </div>
 
-    <!-- Popup Kết quả Tạm thời -->
     <div id="result-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200] hidden flex items-center justify-center">
         <div id="modal-content" class="animate-pop">
             <div id="modal-icon" class="text-4xl mb-2">🌸</div>
@@ -217,7 +250,7 @@
                     osc.connect(gain).connect(audioCtx.destination);
                     osc.start(n + i*0.1); osc.stop(n + i*0.1 + 0.4);
                 });
-            } else {
+            } else if(type === 'fail') {
                 o.frequency.setValueAtTime(150, n);
                 o.frequency.linearRampToValueAtTime(50, n + 0.5);
                 g.gain.setValueAtTime(0.1, n);
@@ -320,59 +353,28 @@
         }
 
         function getReview(scoreValue) {
-            if (scoreValue >= 200) return { 
-                rank: "BẬC THẦY 'SOI' CHỮ", 
-                msg: "Kinh khủng thật! Bạn không phải người thường, bạn là từ điển sống rồi. Chắc kiếp trước bạn là người tạo ra bộ thủ đúng không? 👏",
-                icon: "👑"
-            };
-            if (scoreValue >= 150) return { 
-                rank: "CAO THỦ VƯỜN CHỮ", 
-                msg: "Mắt xếch nhìn chữ nào ra chữ nấy! Bạn chỉ cần thêm một xíu 'may mắn' nữa là thành huyền thoại rồi đó. Quá đỉnh! 🔥",
-                icon: "😎"
-            };
-            if (scoreValue >= 100) return { 
-                rank: "DÂN CHƠI HỆ BỘ THỦ", 
-                msg: "Cũng ra gì và này nọ đấy! Kiến thức của bạn đủ để đi 'loè' mấy đứa bạn mới học rồi. Tiếp tục phát huy nhé! 👍",
-                icon: "✨"
-            };
-            if (scoreValue >= 50) return { 
-                rank: "NGƯỜI QUA ĐƯỜNG NGƠ NGÁC", 
-                msg: "Hình như bạn vào nhầm vườn rồi? Nhưng không sao, sai là để sửa, ngã ở đâu thì... nằm đó nghỉ một lát rồi thi lại nhé! 😴",
-                icon: "🐾"
-            };
-            return { 
-                rank: "THIÊN TÀI NGỦ GẬT", 
-                msg: "Điểm số này chứng minh bạn rất có tiềm năng trở thành... một người cần học lại từ đầu. Đừng buồn, Nga Học HSK vẫn đợi bạn mà! 😂",
-                icon: "🤡"
-            };
+            if (scoreValue >= 200) return { rank: "BẬC THẦY 'SOI' CHỮ", msg: "Kinh khủng thật! Bạn là từ điển sống rồi.👏", icon: "👑" };
+            if (scoreValue >= 150) return { rank: "CAO THỦ VƯỜN CHỮ", msg: "Quá đỉnh! Mắt nhìn chữ nào ra chữ nấy! 🔥", icon: "😎" };
+            if (scoreValue >= 100) return { rank: "DÂN CHƠI HỆ BỘ THỦ", msg: "Cũng ra gì và này nọ đấy! Tiếp tục phát huy nhé! 👍", icon: "✨" };
+            if (scoreValue >= 50) return { rank: "NGƯỜI QUA ĐƯỜNG", msg: "Nằm nghỉ một lát rồi thi lại nhé! 😴", icon: "🐾" };
+            return { rank: "THIÊN TÀI NGỦ GẬT", msg: "Đừng buồn, Nga Học HSK vẫn đợi bạn! 😂", icon: "🤡" };
         }
 
         function showFinal() {
             const review = getReview(score);
             const gameContainer = document.getElementById('main-game');
-            
-            // Xóa sạch nội dung cũ để đảm bảo hiển thị đúng
             gameContainer.innerHTML = `
                 <div class="flex flex-col items-center justify-center min-h-full w-full py-8 px-4 animate-pop">
                     <div class="text-8xl mb-4 drop-shadow-lg">${review.icon}</div>
                     <h2 class="text-3xl font-black text-[#606c38] mb-6">KẾT QUẢ CUỐI CÙNG</h2>
-                    
-                    <div class="bg-white w-full max-w-sm p-8 rounded-[2.5rem] border-4 border-[#a7c957] mb-6 shadow-xl relative text-center">
-                        <div class="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Bạn đã đạt được</div>
+                    <div class="bg-white w-full max-w-sm p-8 rounded-[2.5rem] border-4 border-[#a7c957] mb-6 shadow-xl text-center">
                         <div class="text-7xl font-black text-[#283618] mb-4">${score}</div>
-                        <div class="text-xs font-bold text-gray-500 mb-4 italic">trên tổng 200 điểm</div>
                         <div class="rank-badge">${review.rank}</div>
                     </div>
-
-                    <div class="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border-2 border-dashed border-[#bc6c25] mb-8 w-full max-w-sm shadow-md">
-                        <p class="text-[#606c38] font-bold text-sm leading-relaxed italic">
-                            "${review.msg}"
-                        </p>
+                    <div class="bg-white/80 p-6 rounded-2xl border-2 border-dashed border-[#bc6c25] mb-8 w-full max-w-sm shadow-md">
+                        <p class="text-[#606c38] font-bold text-sm italic">"${review.msg}"</p>
                     </div>
-
-                    <button onclick="location.reload()" class="btn-ghibli w-full max-w-sm py-5 text-xl bg-[#606c38] text-white">CHƠI LẠI TỪ ĐẦU</button>
-                    
-                    <p class="mt-8 text-[#bc6c25] font-black text-xs uppercase tracking-tighter">Cảm ơn bạn đã tham gia cùng Nga Học HSK!</p>
+                    <button onclick="location.reload()" class="btn-ghibli w-full max-w-sm py-5 text-xl bg-[#606c38] text-white">CHƠI LẠI</button>
                 </div>
             `;
         }
