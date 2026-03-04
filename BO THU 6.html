@@ -9,24 +9,49 @@
     <style>
         :root {
             --nga-pink: #ff85a2;
-            --nga-pink-hover: #ff6b8e;
+            --nga-pink-light: #ffb3c1;
             --nga-blue: #70d6ff;
+            --nga-blue-dark: #45b3e0;
             --nga-mint: #b9fbc0;
             --nga-dark: #2d3436;
             --white: #ffffff;
-            --bg-gradient: linear-gradient(135deg, #fff5f8 0%, #eefcff 100%);
+            --success: #2ecc71;
+            --error: #ff7675;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             font-family: 'Quicksand', sans-serif;
-            background: var(--bg-gradient);
+            background: linear-gradient(135deg, #fff5f8 0%, #eefcff 100%);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
+
+        /* NÚT QUAY VỀ TRANG CHỦ */
+        .btn-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--white);
+            border: 3px solid var(--nga-blue);
+            border-radius: 50px;
+            padding: 10px 18px;
+            color: var(--nga-blue-dark);
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 4px 0 var(--nga-blue);
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .btn-home:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--nga-blue); }
 
         .app-card {
             width: 100%;
@@ -39,249 +64,138 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 8px solid var(--white);
+            border: 6px solid var(--white);
             margin: 15px;
         }
 
         /* Screens */
-        .screen { display: none; padding: 30px; flex-grow: 1; flex-direction: column; animation: fadeIn 0.4s ease; }
+        .screen { display: none; padding: 25px; flex-grow: 1; flex-direction: column; animation: slideUp 0.4s ease-out; }
         .active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Welcome Screen */
-        .hero-img { width: 140px; height: 140px; background: var(--nga-pink); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 60px; color: white; box-shadow: 0 15px 25px rgba(255, 133, 162, 0.3); }
-        .start-btn { background: var(--nga-pink); color: white; border: none; padding: 18px 45px; border-radius: 50px; font-size: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 0 #e84393; margin-top: 20px; }
-        .start-btn:active { transform: translateY(4px); box-shadow: 0 6px 0 #e84393; }
+        /* Welcome */
+        .hero-circle { width: 120px; height: 120px; background: var(--nga-pink); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 60px; color: white; box-shadow: 0 10px 25px rgba(255, 133, 162, 0.3); border: 5px solid var(--nga-pink-light); }
+        .start-btn { background: var(--nga-pink); color: white; border: none; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 0 #e84393; margin-top: 20px; transition: 0.2s; }
+        .start-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #e84393; }
 
-        /* Quiz Header */
-        .header { text-align: center; margin-bottom: 25px; }
-        .brand { font-family: 'Montserrat', sans-serif; color: var(--nga-pink); font-size: 22px; margin-bottom: 15px; }
-        .progress-bar { height: 10px; background: #f0f0f0; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--nga-pink), var(--nga-blue)); width: 0%; transition: width 0.4s ease; }
+        /* Quiz UI */
+        .brand { font-family: 'Montserrat', sans-serif; color: var(--nga-pink); font-size: 20px; text-align: center; margin-bottom: 15px; }
+        .progress-container { height: 10px; background: #eee; border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--nga-pink), var(--nga-blue)); width: 0%; transition: 0.4s; }
 
-        /* Question Area */
-        .question-container { background: #fdf2f5; padding: 25px; border-radius: 25px; margin-bottom: 25px; border: 2px dashed var(--nga-pink); text-align: center; font-size: 19px; font-weight: 700; color: var(--nga-dark); line-height: 1.4; }
-        .options-grid { display: flex; flex-direction: column; gap: 12px; }
-        .option { background: white; border: 2px solid #edf2f7; padding: 16px 20px; border-radius: 18px; cursor: pointer; transition: 0.2s; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+        .question-box { background: #fff9fa; padding: 22px; border-radius: 25px; margin-bottom: 20px; border: 2px solid var(--nga-pink-light); text-align: center; font-size: 18px; font-weight: 700; color: var(--nga-dark); line-height: 1.5; }
+        
+        .option { background: white; border: 2px solid #f0f0f0; padding: 15px 20px; border-radius: 18px; cursor: pointer; margin-bottom: 10px; transition: 0.2s; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
         .option:hover { border-color: var(--nga-blue); background: #f0faff; }
-        .option.correct { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; }
-        .option.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .option.correct { background: var(--nga-mint) !important; border-color: var(--success) !important; color: #1b5e20; }
+        .option.wrong { background: #ffe0e0 !important; border-color: var(--error) !important; color: #b71c1c; }
 
         /* Explanation */
-        .explanation-box { margin-top: 20px; background: #fffbeb; padding: 15px; border-radius: 15px; border-left: 5px solid #f59e0b; display: none; }
-        .explanation-box h4 { margin: 0 0 5px 0; font-size: 15px; color: #b45309; }
-        .explanation-box p { margin: 0; font-size: 14px; color: #4b5563; }
+        .explanation { margin-top: 15px; background: #eefbff; padding: 15px; border-radius: 18px; border-left: 5px solid var(--nga-blue); display: none; animation: fadeIn 0.3s; }
+        .explanation h4 { margin: 0 0 5px 0; font-size: 15px; color: var(--nga-blue-dark); }
+        .explanation p { margin: 0; font-size: 14px; color: #555; }
 
-        /* Navigation */
-        .nav-footer { margin-top: auto; padding: 20px 0; text-align: center; }
-        .next-btn { background: var(--nga-dark); color: white; border: none; padding: 14px 40px; border-radius: 30px; font-weight: 700; cursor: pointer; display: none; }
+        .footer { margin-top: auto; padding-top: 20px; display: flex; justify-content: center; }
+        .next-btn { background: var(--nga-blue-dark); color: white; border: none; padding: 14px 45px; border-radius: 30px; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 5px 0 #2980b9; }
+        .next-btn:active { transform: translateY(2px); box-shadow: 0 3px 0 #2980b9; }
 
-        /* Feedback Pop */
-        #pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); font-size: 120px; z-index: 100; pointer-events: none; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .pop-active { transform: translate(-50%, -50%) scale(1) !important; }
+        /* Popup Effects */
+        #feedback { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); font-size: 100px; z-index: 100; pointer-events: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .pop-up { transform: translate(-50%, -50%) scale(1.2) !important; }
+
+        .score-box { width: 140px; height: 140px; border: 8px solid var(--nga-pink); border-radius: 50%; margin: 20px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
+    <a href="index.html" class="btn-home"><i class="fa-solid fa-house"></i> Quay về vườn</a>
+
     <div class="app-card">
-        <!-- Home Screen -->
         <div id="home" class="screen active">
-            <div class="hero-img">🌸</div>
-            <h1 style="text-align:center; color:var(--nga-dark);">Nga Học HSK</h1>
-            <p style="text-align:center; color:#666; padding: 0 20px;">Chào mừng bạn! Hôm nay chúng mình sẽ cùng chinh phục 5 bộ thủ: <b>Ngôn, Phộc, Xích, Sước, Thốn</b> nhé!</p>
-            <div style="background:#f0faff; padding:15px; border-radius:15px; margin:10px 20px; text-align: center;">
-                <small>📚 Mục tiêu: Nhận diện & Hiểu ý nghĩa hành động</small>
+            <div class="hero-circle">🗣️</div>
+            <h1 style="text-align:center; color:var(--nga-dark); margin: 10px 0;">Nga Học HSK</h1>
+            <p style="text-align:center; color:#666; padding: 0 20px; line-height: 1.6;">Chào mừng bạn! Hôm nay chúng mình sẽ chinh phục 5 bộ thủ hành động: <b>Ngôn, Phộc, Xích, Sước, Thốn</b>!</p>
+            <div style="background:#f0faff; padding:15px; border-radius:20px; margin: 15px 20px; text-align: center;">
+                <span style="font-weight: 700; color:var(--nga-blue-dark);">Nhóm 6: Ngôn ngữ & Quy tắc</span>
             </div>
             <button class="start-btn" onclick="startQuiz()">BẮT ĐẦU HỌC ➔</button>
         </div>
 
-        <!-- Quiz Screen -->
         <div id="quiz" class="screen">
-            <div class="header">
-                <div class="brand">NGA HỌC HSK</div>
-                <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
-                <div id="counter" style="margin-top:8px; font-weight:700; color:#999; font-size:14px;">Câu 1/20</div>
-            </div>
+            <div class="brand">NGA HỌC HSK</div>
+            <div class="progress-container"><div id="progress" class="progress-fill"></div></div>
+            <div id="counter" style="text-align:center; font-weight:700; color:#999; font-size:14px; margin-bottom:15px;">Câu 1/20</div>
 
-            <div id="question" class="question-container"></div>
+            <div id="question" class="question-box"></div>
             <div id="options" class="options-grid"></div>
 
-            <div id="explanation" class="explanation-box">
-                <h4>💡 Giải thích từ Cô Nga:</h4>
+            <div id="explanation" class="explanation">
+                <h4>✨ Cô Nga giải thích:</h4>
                 <p id="exp-text"></p>
             </div>
 
-            <div class="nav-footer">
-                <button id="next-btn" class="next-btn" onclick="handleNext()">TIẾP THEO ➔</button>
+            <div class="footer">
+                <button id="next-btn" class="next-btn" onclick="nextQuestion()">TIẾP TỤC ➔</button>
             </div>
         </div>
 
-        <!-- Result Screen -->
         <div id="result" class="screen" style="text-align:center;">
-            <h2 style="color:var(--nga-pink);">HOÀN THÀNH! 🎉</h2>
-            <div style="font-size:60px; margin:20px 0;">🏆</div>
-            <div style="font-size:24px; font-weight:800; color:var(--nga-dark);">Điểm của bạn: <span id="final-score" style="color:var(--nga-blue);">0</span>/100</div>
-            <p id="result-comment" style="margin:20px 0; color:#666; line-height:1.5;"></p>
+            <h2 style="color:var(--nga-blue-dark); margin-bottom: 10px;">KẾT QUẢ CỦA BẠN</h2>
+            <div class="score-box">
+                <span id="final-score" style="font-size:45px; font-weight:800; color:var(--nga-pink);">0</span>
+                <small style="font-weight:700; color:#999;">ĐIỂM</small>
+            </div>
+            <p id="result-msg" style="margin:20px 0; color:#555; font-weight:600; padding: 0 15px;"></p>
             <button class="start-btn" onclick="location.reload()">HỌC LẠI NÀO 🔄</button>
         </div>
 
-        <div id="pop"></div>
+        <div id="feedback"></div>
     </div>
 
 <script>
     const questions = [
-        { 
-            q: "Bộ Ngôn (讠- yán) thường liên quan đến lĩnh vực nào?", 
-            a: "Lời nói, ngôn ngữ", 
-            exp: "Bộ Ngôn mô tả cái lưỡi phát ra lời nói. Xuất hiện trong các chữ như 说 (nói), 语 (ngữ).", 
-            options: ["Hành động chạy", "Lời nói, ngôn ngữ", "Đo lường", "Bàn tay"] 
-        },
-        { 
-            q: "Bộ Xích (彳- chì) mô tả hình ảnh gì?", 
-            a: "Bước chân trái, đi thong thả", 
-            exp: "Bộ Xích còn gọi là bộ 'Chim chích', vẽ một nửa của đường đi. Thường gặp trong chữ 行 (hành).", 
-            options: ["Bước chân trái, đi thong thả", "Bàn tay cầm roi", "Mũi tên", "Đường đi dài"] 
-        },
-        { 
-            q: "Bộ Sước (辶- chuò) có ý nghĩa là gì?", 
-            a: "Chợt đi chợt dừng, đường đi", 
-            exp: "Bộ Sước vẽ hình bàn chân trên đường. Liên quan đến di chuyển như 远 (xa), 近 (gần).", 
-            options: ["Ngôn ngữ", "Chợt đi chợt dừng, đường đi", "Đánh khẽ", "Đơn vị đo"] 
-        },
-        { 
-            q: "Bộ Phộc (攵- pū) mang ý nghĩa gốc là gì?", 
-            a: "Đánh khẽ, gõ khẽ", 
-            exp: "Bộ Phộc vẽ hình bàn tay cầm gậy. Liên quan đến hành động như 改 (sửa đổi), 放 (buông).", 
-            options: ["Đi bộ", "Nói chuyện", "Đánh khẽ, gõ khẽ", "Cái đầu"] 
-        },
-        { 
-            q: "Bộ Thốn (寸- cùn) đại diện cho điều gì?", 
-            a: "Đơn vị đo (tấc), quy tắc", 
-            exp: "Bộ Thốn vẽ hình bàn tay đo mạch. Chữ hay gặp: 对 (đúng), 谢 (cảm ơn).", 
-            options: ["Đôi mắt", "Lời nói", "Bước chân", "Đơn vị đo (tấc), quy tắc"] 
-        },
-        { 
-            q: "Trong chữ 'Thuyết' (说 - nói), bộ thủ nào đóng vai trò chỉ ý?", 
-            a: "Bộ Ngôn (讠)", 
-            exp: "Chữ 说 (Shuō) nghĩa là nói, nên chắc chắn phải có bộ Ngôn (讠) đứng trước.", 
-            options: ["Bộ Xích", "Bộ Ngôn (讠)", "Bộ Sước", "Bộ Thốn"] 
-        },
-        { 
-            q: "Chữ 'Viễn' (远 - xa) có chứa bộ thủ nào?", 
-            a: "Bộ Sước (辶)", 
-            exp: "Khoảng cách 'xa' liên quan đến đường đi, vì vậy chữ 远 chứa bộ Quai Sước (辶).", 
-            options: ["Bộ Ngôn", "Bộ Sước (辶)", "Bộ Phộc", "Bộ Xích"] 
-        },
-        { 
-            q: "Bộ thủ nào vẽ hình 'bàn tay cầm gậy'?", 
-            a: "Bộ Phộc (攵)", 
-            exp: "Phộc (攵) chính là hình ảnh cánh tay đang cầm chiếc roi để đánh khẽ dạy bảo.", 
-            options: ["Bộ Thốn", "Bộ Phộc (攵)", "Bộ Xích", "Bộ Ngôn"] 
-        },
-        { 
-            q: "Để mô tả việc 'đi bộ thong thả', người ta dùng bộ?", 
-            a: "Bộ Xích (彳)", 
-            exp: "Xích (彳) là bước chân trái di chuyển thong thả, chậm rãi.", 
-            options: ["Bộ Xích (彳)", "Bộ Thốn", "Bộ Ngôn", "Bộ Phộc"] 
-        },
-        { 
-            q: "Chữ 'Đẳng' (等 - đợi) có bộ Thốn (寸) ở dưới vì?", 
-            a: "Đợi là phải có chừng mực/quy tắc", 
-            exp: "Thốn (寸) ở đây chỉ sự đo lường, quy tắc, tạo nên ý nghĩa về chuẩn mực.", 
-            options: ["Vì đợi bằng miệng", "Vì đợi bằng chân", "Đợi là phải có chừng mực/quy tắc", "Vì đo bằng tay"] 
-        },
-        { 
-            q: "Bộ Ngôn biến thể (讠) thường đứng ở vị trí nào?", 
-            a: "Bên trái", 
-            exp: "Hầu hết các bộ Ngôn trong chữ Hán giản thể đều đứng bên trái làm bộ chỉ ý.", 
-            options: ["Bên phải", "Bên trên", "Bên trái", "Bên dưới"] 
-        },
-        { 
-            q: "Chữ 'Phóng' (放 - thả ra) có bộ Phộc (攵) vì?", 
-            a: "Dùng roi gậy để xua đuổi", 
-            exp: "Hành động 'thả' hoặc 'đuổi' liên quan đến việc tác động lực bằng tay ngày xưa.", 
-            options: ["Vì nói để đi", "Dùng roi gậy để xua đuổi", "Vì đi bộ", "Vì đo khoảng cách"] 
-        },
-        { 
-            q: "Sự khác nhau giữa Xích (彳) và Sước (辶)?", 
-            a: "Xích là bước đi, Sước là đường đi dài", 
-            exp: "Xích (彳) nhấn mạnh vào bước chân đơn lẻ, còn Sước (辶) nhấn mạnh vào quá trình di chuyển.", 
-            options: ["Xích là nói, Sước là đi", "Xích là tay, Sước là chân", "Xích là bước đi, Sước là đường đi dài", "Không có khác biệt"] 
-        },
-        { 
-            q: "Chữ 'Đắc' (得 - đạt được) có bộ Xích (彳) mang ý nghĩa?", 
-            a: "Hành động đạt được qua quá trình", 
-            exp: "Bộ Xích chỉ sự thực hiện hành động để đạt được kết quả.", 
-            options: ["Nói để có", "Đo để có", "Hành động đạt được qua quá trình", "Cầm tay để có"] 
-        },
-        { 
-            q: "Chữ 'Tạ' (谢 - cảm ơn) có bộ Thốn (寸) vì?", 
-            a: "Lời nói (Ngôn) phải có chừng mực (Thốn)", 
-            exp: "Lời cảm ơn là sự kết hợp của Ngôn (nói) và Thốn (lễ tiết/chừng mực).", 
-            options: ["Cảm ơn bằng chân", "Cảm ơn bằng tay", "Lời nói (Ngôn) phải có chừng mực (Thốn)", "Cảm ơn vì quà"] 
-        },
-        { 
-            q: "Bộ nào thường xuất hiện trong chữ 'Dạy bảo/Sửa lỗi'?", 
-            a: "Bộ Phộc (攵)", 
-            exp: "Ví dụ chữ 教 (dạy), 改 (sửa) đều có bộ Phộc (bàn tay cầm roi khuyên bảo).", 
-            options: ["Bộ Ngôn", "Bộ Phộc (攵)", "Bộ Thốn", "Bộ Xích"] 
-        },
-        { 
-            q: "Chữ 'Tiến' (进 - đi vào) có bộ Sước (辶) vì?", 
-            a: "Nó là một hành động di chuyển", 
-            exp: "Các hành động di chuyển như tới, lùi, vào... thường có bộ Quai Sước.", 
-            options: ["Vì nói để vào", "Vì dùng tay đẩy vào", "Nó là một hành động di chuyển", "Vì đo độ sâu"] 
-        },
-        { 
-            q: "Hình ảnh 'ngón tay đo cổ tay' là nguồn gốc bộ?", 
-            a: "Bộ Thốn (寸)", 
-            exp: "Đây là cách đo mạch cổ tay ngày xưa để xác định đơn vị đo 'tấc'.", 
-            options: ["Bộ Ngôn", "Bộ Thốn (寸)", "Bộ Xích", "Bộ Phộc"] 
-        },
-        { 
-            q: "Chữ 'Ngữ' (语 - ngôn ngữ) có bộ Ngôn và chữ gì?", 
-            a: "Chữ Ngũ (五) và chữ Khẩu (口)", 
-            exp: "Ngữ = Ngôn (讠) + Ngũ (五) + Khẩu (口). Lời nói của 5 miệng.", 
-            options: ["Chữ Nhân", "Chữ Ngũ (五) và chữ Khẩu (口)", "Chữ Nhật", "Chữ Nguyệt"] 
-        },
-        { 
-            q: "Tại sao bộ Sước (辶) thường viết sau cùng?", 
-            a: "Đây là quy tắc bút thuận đặc biệt", 
-            exp: "Bộ Quai Sước luôn bao bọc phần 'nhân' bên trong nên được viết cuối cùng.", 
-            options: ["Viết trước cho dễ", "Vì nó nằm bên trái", "Đây là quy tắc bút thuận đặc biệt", "Viết lúc nào cũng được"] 
-        }
+        { q: "Bộ Ngôn (讠- yán) có ý nghĩa cốt lõi là gì?", a: "Lời nói, ngôn từ", exp: "Bộ Ngôn mô tả cái lưỡi phát ra lời nói. Thường thấy trong các từ như 说 (nói), 话 (lời), 语 (ngữ).", options: ["Hành động chạy", "Lời nói, ngôn từ", "Đo lường", "Cái miệng cười"] },
+        { q: "Bộ Xích (彳- chì) mô tả hình ảnh gì?", a: "Bước chân trái di chuyển", exp: "Bộ Xích còn gọi là bộ 'Chim chích' hay 'bước ngắn'. Nó là một nửa của bộ Hành (行 - đi).", options: ["Bước chân trái di chuyển", "Bàn tay cầm roi", "Con chim nhỏ", "Đường đi dài"] },
+        { q: "Bộ Sước (辶- chuò) liên quan đến điều gì?", a: "Sự di chuyển, đường đi", exp: "Bộ Sước vẽ hình bàn chân đang bước đi trên đường. Liên quan đến 远 (xa), 近 (gần), 进 (vào).", options: ["Lời nói", "Sự di chuyển, đường đi", "Đánh khẽ", "Thời gian"] },
+        { q: "Bộ Phộc (攵- pū) tượng trưng cho hành động?", a: "Đánh khẽ, tác động lực", exp: "Bộ Phộc vẽ hình bàn tay cầm một chiếc roi hoặc gậy. Ví dụ: 改 (sửa đổi), 放 (buông thả).", options: ["Nói chuyện", "Chạy bộ", "Đánh khẽ, tác động lực", "Đo đạc"] },
+        { q: "Bộ Thốn (寸- cùn) có nghĩa gốc là gì?", a: "Đơn vị đo (tấc), quy tắc", exp: "Bộ Thốn vẽ hình bàn tay đo mạch. Liên quan đến kích thước và quy tắc như: 对 (đúng), 等 (đợi).", options: ["Bước chân trái", "Lời nói", "Con mắt", "Đơn vị đo (tấc), quy tắc"] },
+        { q: "Chữ 'Thuyết' (说 - nói) sử dụng bộ thủ nào chỉ ý?", a: "Bộ Ngôn (讠)", exp: "Vì 'thuyết' là nói, nên chữ này mang bộ Ngôn để chỉ hành động dùng lời nói.", options: ["Bộ Xích", "Bộ Ngôn (讠)", "Bộ Sước", "Bộ Thốn"] },
+        { q: "Chữ 'Viễn' (远 - xa) có chứa bộ thủ nào?", a: "Bộ Sước (辶)", exp: "Khoảng cách 'xa' cần phải đi trên đường, nên chữ này mang bộ Sước (Quai sước).", options: ["Bộ Ngôn", "Bộ Sước (辶)", "Bộ Phộc", "Bộ Xích"] },
+        { q: "Bộ thủ nào được mệnh danh là 'bàn tay cầm roi'?", a: "Bộ Phộc (攵)", exp: "Hình ảnh này dùng để chỉ việc giáo dục hoặc tác động để thay đổi (như chữ 教 - dạy).", options: ["Bộ Thốn", "Bộ Phộc (攵)", "Bộ Xích", "Bộ Ngôn"] },
+        { q: "Để mô tả việc 'đi bộ thong thả', chữ Hán dùng bộ?", a: "Bộ Xích (彳)", exp: "Xích (彳) tượng trưng cho bước chân trái, thể hiện việc thực hiện hành vi di chuyển.", options: ["Bộ Xích (彳)", "Bộ Thốn", "Bộ Ngôn", "Bộ Phộc"] },
+        { q: "Trong chữ 'Tạ' (谢 - cảm ơn), bộ Thốn (寸) mang nghĩa?", a: "Lời nói phải có chừng mực", exp: "Cảm ơn là dùng lời nói (Ngôn) một cách có lễ tiết, chừng mực (Thốn).", options: ["Cảm ơn bằng tay", "Cảm ơn vì đã đo", "Lời nói phải có chừng mực", "Cảm ơn vì đã đi"] },
+        { q: "Bộ Ngôn biến thể (讠) luôn đứng ở vị trí nào?", a: "Bên trái", exp: "Trong cấu tạo chữ Hán, bộ Ngôn (讠) hầu hết đóng vai trò là bộ chỉ ý nằm bên trái.", options: ["Bên phải", "Bên trên", "Bên trái", "Bên dưới"] },
+        { q: "Chữ 'Phóng' (放 - buông, thả) có bộ Phộc vì?", a: "Dùng roi để xua đuổi/thả", exp: "Phộc (攵) chỉ hành động dùng lực tay để tác động, trong trường hợp này là xua đi hoặc thả ra.", options: ["Vì nói để đi", "Dùng roi để xua đuổi/thả", "Vì đi bộ chậm", "Vì đo khoảng cách"] },
+        { q: "Sự khác biệt giữa Xích (彳) và Sước (辶) là gì?", a: "Xích là bước đi, Sước là đường đi", exp: "Xích (彳) nhấn mạnh vào động tác bước, Sước (辶) nhấn mạnh vào quá trình di chuyển trên đường.", options: ["Xích là nói, Sước là đi", "Xích là bước đi, Sước là đường đi", "Xích là tay, Sước là chân", "Không có khác biệt"] },
+        { q: "Chữ 'Đắc' (得 - đạt được) có bộ Xích vì?", a: "Phải hành động mới đạt được", exp: "Bộ Xích (彳) chỉ việc thực hiện, bước đi để đạt tới kết quả nào đó.", options: ["Nói để có", "Đo để có", "Phải hành động mới đạt được", "Cầm tay để có"] },
+        { q: "Chữ 'Đợi' (等 - đẳng) có bộ Thốn (寸) mang ý nghĩa?", a: "Đợi là sự chờ đợi có giới hạn", exp: "Thốn (寸) chỉ sự đo lường thời gian hoặc quy tắc trong việc chờ đợi.", options: ["Đợi bằng chân", "Đợi bằng tay", "Đợi là sự chờ đợi có giới hạn", "Đợi bằng miệng"] },
+        { q: "Bộ nào thường xuất hiện trong chữ 'Sửa chữa/Dạy dỗ'?", a: "Bộ Phộc (攵)", exp: "Ví dụ: 改 (sửa), 教 (dạy) đều cần tác động lực hoặc khuyên bảo bằng kỷ luật.", options: ["Bộ Ngôn", "Bộ Phộc (攵)", "Bộ Thốn", "Bộ Xích"] },
+        { q: "Chữ 'Tiến' (进 - đi vào) mang bộ Sước (辶) vì?", a: "Nó là một hành động di chuyển", exp: "Bất kỳ chữ nào chỉ hướng di chuyển (tới, lui, vào, ra) thường có bộ Quai Sước.", options: ["Vì nói để vào", "Nó là một hành động di chuyển", "Vì đo độ sâu", "Vì dùng tay đẩy"] },
+        { q: "Nguồn gốc bộ Thốn (寸) là hình ảnh?", a: "Ngón tay đo mạch cổ tay", exp: "Người xưa dùng khoảng cách từ nếp gấp cổ tay đến vị trí bắt mạch để làm đơn vị đo 1 tấc.", options: ["Bàn chân bước", "Lời nói phát ra", "Ngón tay đo mạch cổ tay", "Bàn tay cầm roi"] },
+        { q: "Chữ 'Ngữ' (语) gồm bộ Ngôn, chữ Ngũ và?", a: "Chữ Khẩu (口)", exp: "Ngữ (语) = Ngôn (nói) + Ngũ (số 5) + Khẩu (miệng). Nghĩa là lời nói phát ra từ miệng.", options: ["Chữ Nhân", "Chữ Khẩu (口)", "Chữ Nhật", "Chữ Tâm"] },
+        { q: "Tại sao bộ Sước (辶) thường được viết sau cùng?", a: "Vì nó bao bọc các thành phần khác", exp: "Theo quy tắc bút thuận, các bộ bao quanh phía dưới bên trái như bộ Sước thường viết cuối cùng.", options: ["Vì nó nằm bên phải", "Vì nó quan trọng nhất", "Vì nó bao bọc các thành phần khác", "Viết lúc nào cũng được"] }
     ];
 
     let currentIdx = 0;
     let score = 0;
     let canClick = true;
+    let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Web Audio API Sfx
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioCtx = AudioContext ? new AudioContext() : null;
-
-    function playSfx(type) {
-        if (!audioCtx) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+    function playSound(type) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         if (type === 'correct') {
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.2);
+            osc.stop(audioCtx.currentTime + 0.1);
         } else {
             osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.2);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
+            osc.stop(audioCtx.currentTime + 0.2);
         }
     }
 
@@ -302,72 +216,54 @@
 
         const optionsDiv = document.getElementById('options');
         optionsDiv.innerHTML = '';
-        
-        // Shuffle options
-        const shuffled = [...qData.options].sort(() => Math.random() - 0.5);
-        
-        shuffled.forEach(opt => {
-            const btn = document.createElement('div');
-            btn.className = 'option';
-            btn.innerHTML = `<span class="bullet">•</span> <span>${opt}</span>`;
-            btn.onclick = () => checkAnswer(btn, opt);
-            optionsDiv.appendChild(btn);
+        [...qData.options].sort(() => Math.random() - 0.5).forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.innerHTML = `<span>${opt}</span><i class="fa-solid fa-circle-check" style="opacity:0"></i>`;
+            div.onclick = () => checkAnswer(div, opt);
+            optionsDiv.appendChild(div);
         });
     }
 
     function checkAnswer(el, val) {
         if (!canClick) return;
         canClick = false;
-        
         const qData = questions[currentIdx];
-        const pop = document.getElementById('pop');
+        const feedback = document.getElementById('feedback');
         
         if (val === qData.a) {
             score += 5;
             el.classList.add('correct');
-            pop.innerText = '🌸';
-            playSfx('correct');
+            feedback.innerText = '🌸';
+            playSound('correct');
         } else {
             el.classList.add('wrong');
-            pop.innerText = '☁️';
-            playSfx('wrong');
-            // Highlight correct answer
-            Array.from(document.querySelectorAll('.option')).forEach(opt => {
-                if (opt.textContent.trim().includes(qData.a)) {
-                    opt.classList.add('correct');
-                }
+            feedback.innerText = '☁️';
+            playSound('wrong');
+            Array.from(document.querySelectorAll('.option')).forEach(o => {
+                if (o.innerText.includes(qData.a)) o.classList.add('correct');
             });
         }
 
-        pop.classList.add('pop-active');
-        setTimeout(() => pop.classList.remove('pop-active'), 600);
-
+        feedback.classList.add('pop-up');
+        setTimeout(() => feedback.classList.remove('pop-up'), 600);
         document.getElementById('exp-text').innerText = qData.exp;
         document.getElementById('explanation').style.display = 'block';
-        document.getElementById('next-btn').style.display = 'inline-block';
+        document.getElementById('next-btn').style.display = 'block';
     }
 
-    function handleNext() {
+    function nextQuestion() {
         currentIdx++;
-        if (currentIdx < questions.length) {
-            renderQuestion();
-        } else {
-            showResult();
-        }
+        if (currentIdx < questions.length) renderQuestion();
+        else showResult();
     }
 
     function showResult() {
         document.getElementById('quiz').classList.remove('active');
         document.getElementById('result').classList.add('active');
         document.getElementById('final-score').innerText = score;
-        
-        let comment = "";
-        if (score === 100) comment = "Tuyệt vời! Bạn là cao thủ HSK rồi đó! ✨";
-        else if (score >= 80) comment = "Rất tốt! Bạn nắm vững kiến thức rất nhanh. 🌸";
-        else if (score >= 50) comment = "Cố lên! Bạn đang đi đúng hướng rồi đấy. 💪";
-        else comment = "Đừng nản lòng nhé, ôn lại cùng cô Nga lần nữa nào! ❤️";
-        
-        document.getElementById('result-comment').innerText = comment;
+        let msg = score >= 80 ? "Tuyệt vời! Bạn đã làm chủ các hành động rồi đó! ✨" : score >= 50 ? "Khá lắm! Bạn đang tiến bộ rất nhanh. 💪" : "Đừng nản lòng, hãy cùng cô Nga ôn lại nhé! ❤️";
+        document.getElementById('result-msg').innerText = msg;
     }
 </script>
 </body>
