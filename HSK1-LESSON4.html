@@ -3,103 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài 4: 她是我的汉语老师 - Giáo viên Nga Học HSK</title>
+    <title>HSK1 - Bài 4: 她是我的汉语老师</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --ghibli-green: #9dc183;
             --ghibli-dark-green: #4f7942;
-            --ghibli-wood: #8b5a2b;
+            --ghibli-sky: #d0f0f7;
             --ghibli-leaf: #7fb069;
         }
 
         body { 
             font-family: 'Quicksand', sans-serif; 
-            background: linear-gradient(180deg, #d0f0f7 0%, #e8f5e9 100%);
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--ghibli-sky);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0)), url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-attachment: fixed;
+            height: 100vh; margin: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center;
         }
 
-        .chinese-container { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
-        .pinyin { font-size: 0.7rem; color: #6b7280; font-weight: 400; margin-bottom: 2px; }
-        .hanzi { font-family: 'Noto Sans SC', sans-serif; font-size: 1.4rem; color: #1f2937; }
+        .pinyin { font-size: 0.75rem; color: #555; font-weight: 400; display: block; line-height: 1; margin-bottom: 2px; }
+        .hanzi { font-family: 'Noto Sans SC', sans-serif; font-size: 1.4rem; display: block; line-height: 1; }
         
-        .leaf {
-            position: absolute; width: 15px; height: 15px; background: var(--ghibli-leaf);
-            opacity: 0.6; border-radius: 50% 0 50% 0; animation: fall linear infinite; pointer-events: none;
-        }
-        @keyframes fall {
-            0% { opacity: 0; top: -10px; transform: translateX(0px) rotate(0deg); }
-            10% { opacity: 0.6; }
-            100% { opacity: 0; top: 100vh; transform: translateX(100px) rotate(720deg); }
-        }
-
         .btn-ghibli {
-            background-color: white;
-            border: 3px solid var(--ghibli-dark-green);
-            border-radius: 20px;
-            box-shadow: 0 5px 0 var(--ghibli-dark-green);
-            transition: all 0.1s;
-            color: var(--ghibli-dark-green);
-            cursor: pointer;
+            background: white; border: 3px solid var(--ghibli-dark-green);
+            border-radius: 18px; box-shadow: 0 4px 0 var(--ghibli-dark-green);
+            transition: all 0.1s; color: var(--ghibli-dark-green); cursor: pointer;
         }
-        .btn-ghibli:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ghibli-dark-green); }
+        .btn-ghibli:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--ghibli-dark-green); }
 
         .option-card {
-            background: white; border: 3px solid #e9edc9; border-radius: 15px;
-            padding: 15px; text-align: center; cursor: pointer; transition: 0.2s;
+            background: rgba(255, 255, 255, 0.9); border: 2px solid #ccd5ae; border-radius: 15px;
+            padding: 10px; text-align: center; cursor: pointer; transition: 0.2s;
         }
-        .option-card:hover { transform: scale(1.02); border-color: var(--ghibli-green); }
+        .option-card:hover { transform: scale(1.03); border-color: var(--ghibli-green); background: white; }
 
-        .progress-container {
-            width: 100%; height: 12px; background: rgba(255,255,255,0.5);
-            border-radius: 10px; border: 2px solid var(--ghibli-dark-green); overflow: hidden;
-        }
-
-        .slide-up { transform: translateY(-100%); transition: 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
+        .progress-bar-fill { height: 100%; background: var(--ghibli-green); transition: width 0.3s ease; }
+        .slide-up { transform: translateY(-100%); transition: 0.6s ease-in; }
     </style>
 </head>
 <body>
 
-    <div id="leaves"></div>
-
     <div id="intro-slide" class="fixed inset-0 z-[100] bg-[#fefae0] flex flex-col items-center justify-center p-8 text-center">
-        <div class="text-7xl mb-4">👩‍🏫</div>
-        <h1 class="text-4xl font-black text-[#4f7942] mb-2 text-shadow">HSK 1 - BÀI 4</h1>
-        <p class="text-[#8b5a2b] font-bold text-2xl mb-1">Giáo viên: Nga Học HSK</p>
-        <p class="text-gray-500 mb-8 italic">"Chào mừng các bạn đến với bài kiểm tra từ vựng!"</p>
-        <button onclick="startGame()" class="btn-ghibli px-12 py-4 text-2xl font-bold uppercase tracking-wider">Bắt đầu học</button>
+        <div class="text-7xl mb-4">🏫</div>
+        <h1 class="text-4xl font-black text-[#4f7942] mb-2">Bài 4: 她是我的汉语老师</h1>
+        <p class="text-[#8b5a2b] font-bold text-xl mb-6 text-shadow">Giáo viên: Nga Học HSK</p>
+        <button onclick="startGame()" class="btn-ghibli px-14 py-4 text-2xl font-bold">VÀO HỌC THÔI! ✨</button>
     </div>
 
-    <div id="game-container" class="w-full max-w-2xl h-screen flex flex-col p-4 opacity-0 transition-opacity duration-500">
-        <header class="flex flex-col gap-2 py-4">
-            <div class="flex justify-between items-center">
-                <a href="index.html" class="btn-ghibli p-2 text-xl" title="Về khu vườn">🏠</a>
-                <div class="text-[#4f7942] font-black text-xl" id="score-val">Điểm: 0</div>
+    <div id="game-container" class="w-full max-w-2xl h-screen flex flex-col p-4 opacity-0 transition-opacity">
+        <header class="py-4">
+            <div class="flex justify-between items-center mb-2">
+                <a href="index.html" class="btn-ghibli p-2 px-4 text-xl">🏠</a>
                 <div class="font-bold text-[#4f7942]" id="progress-text">1/20</div>
+                <div class="text-[#4f7942] font-black text-xl" id="score-val">Score: 0</div>
             </div>
-            <div class="progress-container">
-                <div id="progress-bar" class="h-full bg-[#9dc183] transition-all" style="width: 0%"></div>
+            <div class="w-full h-3 bg-white/50 rounded-full border-2 border-[#4f7942] overflow-hidden">
+                <div id="progress-bar" class="progress-bar-fill" style="width: 5%"></div>
             </div>
         </header>
 
-        <div class="flex-grow flex flex-col gap-6 overflow-y-auto px-2">
-            <div class="bg-white/90 rounded-3xl p-6 border-2 border-white shadow-sm text-center">
-                <p id="question-type" class="text-xs font-bold text-[#8b5a2b] uppercase tracking-widest mb-2 opacity-70"></p>
-                <h2 id="question-text" class="text-2xl font-bold text-[#333] leading-relaxed"></h2>
+        <div class="flex-grow flex flex-col gap-4 overflow-y-auto">
+            <div class="bg-white/80 rounded-3xl p-6 text-center shadow-sm">
+                <h2 id="question-text" class="text-xl font-bold text-[#333]"></h2>
             </div>
 
-            <div id="answer-zone" class="min-h-[110px] flex flex-wrap gap-2 justify-center p-4 bg-white/40 rounded-2xl border-2 border-dashed border-[#ccd5ae]"></div>
-            <div id="options-zone" class="flex flex-wrap gap-3 justify-center"></div>
+            <div id="answer-zone" class="min-h-[120px] flex flex-wrap gap-2 justify-center p-4 bg-white/30 rounded-2xl border-2 border-dashed border-white"></div>
+
+            <div id="options-zone" class="flex flex-wrap gap-3 justify-center p-2"></div>
         </div>
 
-        <footer class="py-6 flex justify-center">
-            <button id="action-btn" onclick="handleAction()" class="btn-ghibli px-16 py-4 bg-[#9dc183] text-white text-xl flex-grow font-bold tracking-widest">KIỂM TRA</button>
+        <footer class="py-6">
+            <button id="action-btn" onclick="handleAction()" class="btn-ghibli w-full py-4 bg-[#9dc183] text-white text-xl font-bold">KIỂM TRA</button>
         </footer>
     </div>
 
@@ -113,114 +88,95 @@
     </div>
 
     <script>
-        // Hiệu ứng lá bay
-        const leavesCont = document.getElementById('leaves');
-        for(let i=0; i<15; i++) {
-            const leaf = document.createElement('div');
-            leaf.className = 'leaf';
-            leaf.style.left = Math.random() * 100 + '%';
-            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            leaf.style.animationDelay = Math.random() * 5 + 's';
-            leavesCont.appendChild(leaf);
-        }
-
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSfx(type) {
+        function playSfx(freq, type = 'sine') {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            const now = audioCtx.currentTime;
-            if (type === 'click') {
-                osc.frequency.setValueAtTime(600, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(); osc.stop(now + 0.1);
-            } else if (type === 'correct') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523, now);
-                osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc.start(); osc.stop(now + 0.3);
-            }
+            osc.type = type; osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.2);
         }
 
-        // Dữ liệu câu hỏi chuẩn Bài 4
         const quizData = [
-            { type: "choice", q: "Đại từ 'Cô ấy' trong tiếng Trung là gì?", options: ["他 (tā)", "她 (tā)", "你 (nǐ)"], correct: "彼女 (tā)" },
-            { type: "fill", q: "她___谁？ (Cô ấy là ai?)", options: ["是", "哪", "呢"], correct: "是" },
-            { type: "scramble", q: "Dịch: Cô ấy là cô giáo tiếng Trung của tôi.", ans: ["她", "是", "我", "khì", "汉语", "老师"], pinyin: ["tā", "shì", "wǒ", "de", "Hànyǔ", "lǎoshī"], trans: "Tā shì wǒ de Hànyǔ lǎoshī." },
-            { type: "choice", q: "Từ '汉语' (Hànyǔ) nghĩa là gì?", options: ["Tiếng Anh", "Tiếng Trung", "Tiếng Nhật"], correct: "Tiếng Trung" },
-            { type: "fill", q: "你是___国人？ (Bạn là người nước nào?)", options: ["哪", "谁", "什么"], correct: "哪" },
-            { type: "scramble", q: "Dịch: Tôi là người Mỹ. Còn bạn?", ans: ["我", "是", "美国", "人", "。", "你", "呢", "？"], pinyin: ["wǒ", "shì", "Měiguó", "rén", "", "nǐ", "ne", ""], trans: "Wǒ shì Měiguó rén. Nǐ ne?" },
-            { type: "choice", q: "Từ '同学' (tóngxué) nghĩa là gì?", options: ["Bạn bè", "Giáo viên", "Bạn cùng lớp"], correct: "Bạn cùng lớp" },
-            { type: "fill", q: "他是我___。 (Anh ấy là bạn học của tôi)", options: ["同学", "朋友", "老师"], correct: "同学" },
-            { type: "choice", q: "Đại từ 'Anh ấy' (Nam) là chữ nào?", options: ["她", "他", "它"], correct: "他" },
-            { type: "scramble", q: "Dịch: Cô ấy là bạn của tôi.", ans: ["她", "是", "我", "khì", "朋友"], pinyin: ["tā", "shì", "wǒ", "de", "péngyou"], trans: "Tā shì wǒ de péngyou." },
-            { type: "fill", q: "她不是我同学，她是我的___。", options: ["老师", "朋友", "哪"], correct: "朋友" },
-            { type: "choice", q: "Trợ từ dùng để hỏi 'Còn... thì sao?'", options: ["吗", "呢", "吧"], correct: "呢" },
-            { type: "fill", q: "我不是老师，我是___。", options: ["学生", "美国人", "同学"], correct: "学生" },
-            { type: "scramble", q: "Dịch: Thầy giáo bạn là người nước nào?", ans: ["你", "khì", "老师", "是", "哪", "国", "人", "？"], pinyin: ["nǐ", "de", "lǎoshī", "shì", "nǎ", "guó", "rén", ""], trans: "Nǐ de lǎoshī shì nǎ guó rén?" },
-            { type: "choice", q: "Câu '他是谁？' dùng để hỏi về điều gì?", options: ["Tên", "Quốc tịch", "Danh tính người"], correct: "Danh tính người" },
-            { type: "fill", q: "她是___ (Cô ấy tên là Lý Nguyệt)", options: ["叫李月", "是李月", "李月"], correct: "叫李月" },
-            { type: "choice", q: "Từ '朋友' (péngyou) nghĩa là gì?", options: ["Bạn bè", "Bạn học", "Người Mỹ"], correct: "Bạn bè" },
-            { type: "scramble", q: "Dịch: Anh ấy là bạn cùng lớp của tôi.", ans: ["他", "是", "我", "同学"], pinyin: ["tā", "shì", "wǒ", "tóngxué"], trans: "Tā shì wǒ tóngxué." },
-            { type: "fill", q: "我是中国人。你___？", options: ["吗", "呢", "哪"], correct: "呢" },
-            { type: "choice", q: "Giáo viên Nga: Bạn đã sẵn sàng kết thúc bài học chưa?", options: ["Sẵn sàng!", "Rất sẵn sàng!"], correct: "Sẵn sàng" }
+            { type: "scramble", q: "Sắp xếp: Cô ấy là ai?", ans: ["她", "是", "谁", "？"], py: ["tā", "shì", "shéi", ""] },
+            { type: "choice", q: "Nghĩa của '汉语' là gì?", options: [{h:"汉语", p:"Hànyǔ", n:"Tiếng Trung"}, {h:"韩语", p:"Hányǔ", n:"Tiếng Hàn"}, {h:"英语", p:"Yīngyǔ", n:"Tiếng Anh"}], correct: "Tiếng Trung" },
+            { type: "scramble", q: "Sắp xếp: Cô ấy là cô giáo tiếng Trung của tôi.", ans: ["她", "是", "我", "khì", "汉语", "老师"], py: ["tā", "shì", "wǒ", "de", "Hànyǔ", "lǎoshī"] },
+            { type: "choice", q: "Chọn chữ 'Bạn cùng lớp':", options: [{h:"朋友", p:"péngyou"}, {h:"同学", p:"tóngxué"}, {h:"老师", p:"lǎoshī"}], correct: "同学" },
+            { type: "scramble", q: "Sắp xếp: Bạn là người nước nào?", ans: ["你", "是", "哪", "国", "人", "？"], py: ["nǐ", "shì", "nǎ", "guó", "rén", ""] },
+            { type: "choice", q: "Điền vào chỗ trống: 我是美国人，你___？", options: [{h:"吗", p:"ma"}, {h:"呢", p:"ne"}, {h:"谁", p:"shéi"}], correct: "呢" },
+            { type: "scramble", q: "Sắp xếp: Cô ấy tên là Lý Nguyệt.", ans: ["她", "叫", "李月"], py: ["tā", "jiào", "Lǐ Yuè"] },
+            { type: "choice", q: "Chữ 'Nào' (đại từ nghi vấn) là chữ nào?", options: [{h:"哪", p:"nǎ"}, {h:"那", p:"nà"}, {h:"这", p:"zhè"}], correct: "哪" },
+            { type: "scramble", q: "Sắp xếp: Anh ấy là bạn của tôi.", ans: ["他", "是", "我", "khì", "朋友"], py: ["tā", "shì", "wǒ", "de", "péngyou"] },
+            { type: "choice", q: "'老师' có Pinyin là gì?", options: [{h:"lǎoshī", p:""}, {h:"lǎoshì", p:""}, {h:"lāoshī", p:""}], correct: "lǎoshī" },
+            { type: "scramble", q: "Sắp xếp: Còn cô ấy thì sao?", ans: ["她", "呢", "？"], py: ["tā", "ne", ""] },
+            { type: "choice", q: "Điền: 他___我同学，他是我朋友。", options: [{h:"是", p:"shì"}, {h:"不是", p:"bú shì"}, {h:"呢", p:"ne"}], correct: "不是" },
+            { type: "scramble", q: "Sắp xếp: Cô giáo bạn là người nước nào?", ans: ["你", "khì", "老师", "是", "哪", "国", "人", "？"], py: ["nǐ", "de", "lǎoshī", "shì", "nǎ", "guó", "rén", ""] },
+            { type: "choice", q: "Từ nào chỉ quốc gia 'Trung Quốc'?", options: [{h:"美国", p:"Měiguó"}, {h:"中国", p:"Zhōngguó"}, {h:"哪国", p:"nǎguó"}], correct: "中国" },
+            { type: "scramble", q: "Sắp xếp: Tôi là người Trung Quốc.", ans: ["我", "shì", "中国", "人"], py: ["wǒ", "shì", "Zhōngguó", "rén"] },
+            { type: "choice", q: "Phát âm của '谁' có thể là 'shéi' hoặc?", options: [{h:"shuí", p:""}, {h:"shí", p:""}, {h:"suí", p:""}], correct: "shuí" },
+            { type: "scramble", q: "Sắp xếp: Anh ấy là ai?", ans: ["他", "是", "谁", "？"], py: ["tā", "shì", "shéi", ""] },
+            { type: "choice", q: "Chữ 'đích' (của) dùng để biểu thị sở hữu là chữ nào?", options: [{h:"的", p:"de"}, {h:"得", p:"de"}, {h:"地", p:"de"}], correct: " have " }, // fix logic
+            { type: "scramble", q: "Sắp xếp: Anh ấy là bạn học của tôi.", ans: ["他", "是", "我", "同学"], py: ["tā", "shì", "wǒ", "tóngxué"] },
+            { type: "choice", q: "Bạn thấy bài học hôm nay thế nào?", options: [{h:"Vui", p:"Hao"}, {h:"Rất vui", p:"Hen hao"}], correct: "Vui" }
         ];
 
-        // Chuẩn hóa dữ liệu 'khì' -> '的'
+        // Chuẩn hóa dữ liệu
         quizData.forEach(q => {
-            if(q.ans) q.ans = q.ans.map(w => w === 'khì' ? 'đích' : w).map(w => w === 'đích' ? '的' : w);
-            if(q.options) q.options = q.options.map(o => o === '彼女 (tā)' ? '彼女' : o).map(o => o === '彼女' ? '她 (tā)' : o);
+            if(q.ans) q.ans = q.ans.map(w => w === 'khì' ? '的' : w === 'shì' ? 's' : w).map(w => w === 's' ? 'shì' : w).map(w => w === 'shì' ? '是' : w);
+            if(q.correct === ' have ') q.correct = '的';
         });
 
-        let currentIdx = 0, score = 0, userSelection = [], selectedOption = null;
+        let currentIdx = 0, score = 0, userSelection = [];
 
         function startGame() {
-            playSfx('click');
+            playSfx(440);
             document.getElementById('intro-slide').classList.add('slide-up');
-            document.getElementById('game-container').classList.remove('opacity-0');
+            document.getElementById('game-container').style.opacity = '1';
             renderQuestion();
         }
 
         function renderQuestion() {
             const q = quizData[currentIdx];
-            document.getElementById('progress-text').innerText = `${currentIdx + 1}/${quizData.length}`;
-            document.getElementById('progress-bar').style.width = `${(currentIdx / quizData.length) * 100}%`;
+            document.getElementById('progress-text').innerText = `${currentIdx + 1}/20`;
+            document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / 20) * 100}%`;
             document.getElementById('question-text').innerText = q.q;
             
             const answerZone = document.getElementById('answer-zone');
             const optionsZone = document.getElementById('options-zone');
             answerZone.innerHTML = ''; optionsZone.innerHTML = '';
-            userSelection = []; selectedOption = null;
+            userSelection = [];
 
             if (q.type === "scramble") {
-                document.getElementById('question-type').innerText = "Ghép câu đúng (Nghe lời Giáo viên Nga)";
+                answerZone.style.display = 'flex';
                 const pool = [...q.ans].sort(() => Math.random() - 0.5);
                 pool.forEach((word) => {
-                    const py = q.pinyin[q.ans.indexOf(word)] || "";
+                    const pyIndex = q.ans.indexOf(word);
+                    const py = q.py[pyIndex] || "";
                     const btn = document.createElement('button');
-                    btn.className = 'btn-ghibli p-2 m-1 min-w-[70px] bg-white';
-                    btn.innerHTML = `<div class="chinese-container"><span class="pinyin">${py}</span><span class="hanzi">${word}</span></div>`;
+                    btn.className = 'btn-ghibli p-2 px-3 m-1 bg-white';
+                    btn.innerHTML = `<span class="pinyin">${py}</span><span class="hanzi">${word}</span>`;
                     btn.onclick = () => {
-                        playSfx('click');
-                        userSelection.push({w: word, p: py});
+                        playSfx(600);
+                        userSelection.push({w: word, p: py, originalBtn: btn});
                         btn.style.visibility = 'hidden';
                         renderScrambleResult();
                     };
                     optionsZone.appendChild(btn);
                 });
             } else {
-                document.getElementById('question-type').innerText = "Chọn đáp án đúng nhất";
+                answerZone.style.display = 'none';
                 q.options.forEach(opt => {
                     const card = document.createElement('div');
-                    card.className = 'option-card w-full max-w-[200px] text-xl font-bold text-[#4f7942]';
-                    card.innerText = opt;
+                    card.className = 'option-card w-[140px] flex flex-col items-center';
+                    card.innerHTML = `<span class="pinyin">${opt.p}</span><span class="hanzi">${opt.h}</span><span class="text-xs text-gray-400 mt-1">${opt.n || ""}</span>`;
                     card.onclick = () => {
-                        playSfx('click');
-                        document.querySelectorAll('.option-card').forEach(c => c.classList.remove('border-[#9dc183]', 'bg-[#f1f8e9]'));
-                        card.classList.add('border-[#9dc183]', 'bg-[#f1f8e9]');
-                        selectedOption = opt;
+                        playSfx(600);
+                        document.querySelectorAll('.option-card').forEach(c => c.style.borderColor = '#ccd5ae');
+                        card.style.borderColor = '#9dc183';
+                        userSelection = [opt];
                     };
                     optionsZone.appendChild(card);
                 });
@@ -232,69 +188,37 @@
             answerZone.innerHTML = '';
             userSelection.forEach((item, idx) => {
                 const span = document.createElement('div');
-                span.className = 'bg-[#9dc183] text-white p-2 rounded-xl cursor-pointer m-1 flex flex-col items-center shadow-sm';
+                span.className = 'bg-[#9dc183] text-white p-2 px-3 rounded-xl cursor-pointer shadow-sm flex flex-col items-center';
                 span.innerHTML = `<span class="text-[10px] opacity-90">${item.p}</span><span class="text-lg">${item.w}</span>`;
                 span.onclick = () => {
-                    const back = userSelection.splice(idx, 1)[0];
-                    const btns = document.getElementById('options-zone').querySelectorAll('button');
-                    for(let b of btns) {
-                        if(b.querySelector('.hanzi').innerText === back.w && b.style.visibility === 'hidden') {
-                            b.style.visibility = 'visible'; break;
-                        }
-                    }
+                    // Trả lại từ khi bấm nhầm
+                    playSfx(300);
+                    item.originalBtn.style.visibility = 'visible';
+                    userSelection.splice(idx, 1);
                     renderScrambleResult();
                 };
                 answerZone.appendChild(span);
             });
-            if(userSelection.length === 0) answerZone.innerHTML = '<p class="text-gray-400 italic text-sm">Chạm từ phía dưới để ghép câu...</p>';
         }
 
         function handleAction() {
             const q = quizData[currentIdx];
             let isCorrect = false;
+
             if (q.type === "scramble") {
                 isCorrect = userSelection.map(i => i.w).join('') === q.ans.join('');
             } else {
-                isCorrect = selectedOption && (selectedOption.includes(q.correct) || (q.correct === 'Sẵn sàng' && selectedOption.includes('Sẵn sàng')));
+                isCorrect = userSelection[0] && (userSelection[0].h === q.correct || userSelection[0].n === q.correct || userSelection[0].h.includes(q.correct));
             }
 
             const modal = document.getElementById('result-modal');
             if (isCorrect) {
-                playSfx('correct'); score += 10;
-                document.getElementById('modal-emoji').innerText = "🌟";
-                document.getElementById('modal-title').innerText = "Rất tốt!";
-                document.getElementById('modal-feedback').innerHTML = `<p class="italic text-gray-500 mb-2">${q.trans || ""}</p><p class="text-green-600 font-bold">Giáo viên Nga cộng bạn 10 điểm!</p>`;
+                playSfx(880, 'triangle'); score += 10;
+                document.getElementById('modal-emoji').innerText = "🌸";
+                document.getElementById('modal-title').innerText = "Đúng rồi!";
+                document.getElementById('modal-feedback').innerText = "+10 điểm. Tuyệt vời!";
             } else {
-                document.getElementById('modal-emoji').innerText = "🍵";
-                document.getElementById('modal-title').innerText = "Cần cố gắng hơn!";
-                const correctDisplay = q.type === 'scramble' ? q.ans.join(' ') : q.correct;
-                document.getElementById('modal-feedback').innerHTML = `<p>Đáp án đúng của bài học là:</p><p class="text-2xl font-bold text-red-500 mt-2">${correctDisplay}</p>`;
-            }
-            document.getElementById('score-val').innerText = `Điểm: ${score}`;
-            modal.classList.remove('hidden');
-        }
-
-        function nextStep() {
-            document.getElementById('result-modal').classList.add('hidden');
-            currentIdx++;
-            if (currentIdx < quizData.length) renderQuestion();
-            else showEnding();
-        }
-
-        function showEnding() {
-            document.getElementById('game-container').innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full text-center p-8 bg-white/50 rounded-3xl">
-                    <div class="text-8xl mb-6">🎓</div>
-                    <h2 class="text-4xl font-black text-[#4f7942] mb-4">Hoàn Thành Bài Kiểm Tra!</h2>
-                    <p class="text-xl text-[#8b5a2b] mb-4">Bạn đã hoàn thành bài học từ Giáo viên Nga Học HSK.</p>
-                    <div class="text-6xl font-black text-[#4f7942] mb-10">${score} Điểm</div>
-                    <div class="flex flex-col gap-4 w-full max-w-xs">
-                        <button onclick="location.reload()" class="btn-ghibli py-4 text-xl font-bold">LÀM LẠI BÀI</button>
-                        <a href="index.html" class="text-[#4f7942] font-bold underline text-lg">VỀ KHU VƯỜN</a>
-                    </div>
-                </div>
-            `;
-        }
-    </script>
-</body>
-</html>
+                playSfx(200, 'sawtooth');
+                document.getElementById('modal-emoji').innerText = "🍃";
+                document.getElementById('modal-title').innerText = "Tiếc quá...";
+                const correctText = q.type === 'scramble' ? q.ans.
