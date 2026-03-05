@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSK1 - Bài 4: Kiểm tra toàn diện</title>
+    <title>HSK1 - Bài 4: 她 market là cô giáo của tôi</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -30,7 +30,6 @@
             padding: 20px;
         }
 
-        /* Nút Quay Về Cố Định */
         .exit-button {
             position: fixed;
             top: 20px;
@@ -41,16 +40,12 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.9rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             border: 2px solid var(--ghibli-green);
             z-index: 1000;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
-        .exit-button:hover { background: var(--ghibli-green); color: white; transform: scale(1.05); }
+        .exit-button:hover { background: var(--ghibli-green); color: white; }
 
         .game-container {
             background: rgba(255, 255, 255, 0.96);
@@ -67,10 +62,11 @@
         #score-display { color: var(--ghibli-wood); font-size: 1.2rem; }
         #quiz-screen, #result-screen { display: none; }
         
-        .progress-bar { width: 100%; height: 12px; background: #eee; border-radius: 6px; margin-bottom: 20px; overflow: hidden; border: 1px solid #ddd; }
+        .progress-bar { width: 100%; height: 12px; background: #eee; border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
         #progress { height: 100%; background: linear-gradient(90deg, var(--ghibli-green), var(--ghibli-leaf)); width: 0%; transition: width 0.4s ease; }
 
-        .question-text { font-size: 1.4rem; color: var(--ghibli-wood); margin-bottom: 25px; font-weight: 600; }
+        .question-text { font-size: 1.4rem; color: var(--ghibli-wood); margin-bottom: 25px; font-weight: 600; line-height: 1.6; }
+        .pinyin-sub { display: block; font-size: 0.9rem; color: #666; font-weight: 400; margin-top: -5px; }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .option-btn { background: white; border: 2px solid var(--ghibli-leaf); padding: 15px 10px; border-radius: 15px; font-size: 1.1rem; cursor: pointer; transition: 0.2s; font-family: inherit; font-weight: 600; }
@@ -78,13 +74,13 @@
         .option-btn.correct { background: var(--ghibli-dark-green) !important; color: white !important; }
         .option-btn.wrong { background: #ff7675 !important; color: white !important; }
 
-        .btn-main { background: var(--ghibli-wood); color: white; border: none; padding: 12px 35px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 25px; font-weight: bold; box-shadow: 0 4px 0 #5d3d1d; transition: 0.2s; }
-        .btn-main:active { transform: translateY(3px); box-shadow: none; }
-
+        .btn-main { background: var(--ghibli-wood); color: white; border: none; padding: 12px 35px; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 25px; font-weight: bold; box-shadow: 0 4px 0 #5d3d1d; }
+        
         .rank-badge { font-size: 5rem; margin: 15px 0; display: block; }
         .evaluation-box { background: var(--ghibli-sky); padding: 15px; border-radius: 15px; margin: 20px 0; font-style: italic; color: var(--ghibli-dark-green); }
-        
-        @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr; } .exit-button { top: 10px; left: 10px; padding: 8px 12px; } }
+
+        ruby { ruby-align: center; }
+        rt { font-size: 0.6em; color: #666; }
     </style>
 </head>
 <body>
@@ -92,11 +88,10 @@
 <a href="index.html" class="exit-button">🏠 Quay về vườn</a>
 
 <div class="game-container">
-    
     <div id="intro-screen">
         <div style="background: var(--ghibli-pink); color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">🌸 Nga Học HSK</div>
-        <h1>Bài 4: 她 là cô giáo của tôi</h1>
-        <p>Thử thách 20 câu hỏi về từ vựng & hội thoại.<br>
+        <h1><ruby>Bài<rt>bà i</rt></ruby> 4: <ruby>她是我的汉语老师<rt>Tā shì wǒ de Hànyǔ lǎoshī</rt></ruby></h1>
+        <p>Thử thách 20 câu hỏi về từ vựng & hội thoại Bài 4.<br>
         <b style="color: var(--ghibli-dark-green);">Đúng +10đ</b> | <b style="color: #d63031;">Sai -5đ</b></p>
         <button class="btn-main" onclick="startQuiz()">Bắt đầu ngay 🌿</button>
     </div>
@@ -107,7 +102,7 @@
             <span id="score-display">Điểm: 0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
-        <div class="question-text" id="question-text">Đang tải...</div>
+        <div class="question-text" id="question-text"></div>
         <div class="options-grid" id="options-grid"></div>
         <div id="feedback" style="margin-top: 15px; font-weight: bold; min-height: 24px;"></div>
         <button id="next-btn" class="btn-main" style="display: none;" onclick="nextQuestion()">Câu tiếp theo ➡</button>
@@ -118,7 +113,7 @@
         <span class="rank-badge" id="rank-icon">🌱</span>
         <div style="font-size: 2.5rem; font-weight: bold; color: var(--ghibli-dark-green);" id="final-score">0đ</div>
         <div id="correct-count" style="font-weight: bold; margin-top: 10px;">Đúng: 0/20</div>
-        <div class="evaluation-box" id="evaluation-text">Đang đánh giá...</div>
+        <div class="evaluation-box" id="evaluation-text"></div>
         <button class="btn-main" onclick="location.reload()">Chơi lại 🔄</button>
     </div>
 </div>
@@ -137,26 +132,26 @@
     }
 
     const questions = [
-        { q: "Từ 'Cô ấy' (tā) viết như thế nào?", options: ["他", "她", "我", "你"], a: 1 },
-        { q: "Từ '谁 shéi' nghĩa là gì?", options: ["Cái gì", "Ở đâu", "Ai", "Nào"], a: 2 },
-        { q: "Tiếng Trung Quốc (Hànyǔ) là:", options: ["英语", "汉语", "国", "老师"], a: 1 },
-        { q: "Bạn cùng lớp (tóngxué) là:", options: ["同学", "朋友", "老师", "学生"], a: 0 },
-        { q: "Điền: 她是__的汉语老师 (Cô ấy là cô giáo tôi)", options: ["你", "他", "我", "谁"], a: 2 },
-        { q: "Trợ từ hỏi lại 'Còn bạn thì sao?': 你__?", options: ["的", "吗", "呢", "不"], a: 2 },
-        { q: "Bạn bè (péngyou) là:", options: ["美国人", "朋友", "家", "老师"], a: 1 },
-        { q: "Từ 'Quốc gia/Đất nước' (guó):", options: ["哪", "国", "人", "美"], a: 1 },
-        { q: "Dịch: 'Cô ấy là ai?'", options: ["她是哪国人?", "她是谁?", "他是谁?", "她叫李月."], a: 1 },
-        { q: "Bạn là người nước nào?: 你是__国人?", options: ["哪", "那", "谁", "呢"], a: 0 },
-        { q: "Tôi là người Mỹ: 我是__国人", options: ["中", "哪", "美", "大"], a: 2 },
-        { q: "Anh ấy/Ông ấy (tā) dùng chữ nào?", options: ["她", "他", "我", "你"], a: 1 },
-        { q: "Cô ấy tên là Lý Nguyệt: 她__李月", options: ["是", "叫", "的", "呢"], a: 1 },
-        { q: "Sở hữu 'của tôi': wǒ __", options: ["不", "吗", "的", "呢"], a: 2 },
-        { q: "Cô ấy KHÔNG PHẢI bạn học tôi: 她__是我同学", options: ["不", "没", "的", "呢"], a: 0 },
-        { q: "Đây là bạn tôi: 这是 wǒ ____", options: ["lǎoshī", "Hànyǔ", "péngyou", "guó"], a: 2 },
-        { q: "Pinyin của '哪' (Nào):", options: ["nà", "nǎ", "ne", "nǐ"], a: 1 },
-        { q: "Tā shì wǒ tóngxué:", options: ["Cô ấy là cô giáo tôi", "Anh ấy là bạn học tôi", "Bạn là người nước nào", "Ai là bạn tôi"], a: 1 },
-        { q: "Trong câu 'Nǐ ne?', 'ne' dùng để làm gì?", options: ["Hỏi tên", "Hỏi ngược lại", "Chào hỏi", "Phủ định"], a: 1 },
-        { q: "Bức ảnh (zhàopiàn) là chữ nào?", options: ["同学", "照片", "汉语", "谁"], a: 1 }
+        { q: "Từ 'Cô ấy' viết là <ruby>她<rt>tā</rt></ruby>, vậy 'Anh ấy' viết là gì?", options: ["<ruby>他<rt>tā</rt></ruby>", "<ruby>你<rt>nǐ</rt></ruby>", "<ruby>我<rt>wǒ</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>"], a: 0 },
+        { q: "Nghĩa của từ <ruby>谁<rt>shéi</rt></ruby> là gì?", options: ["Cái gì", "Ai", "Ở đâu", "Nào"], a: 1 },
+        { q: "Chọn chữ Hán cho 'Tiếng Trung': <ruby>Hànyǔ<rt></rt></ruby>", options: ["<ruby>英语<rt>Yīngyǔ</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>国<rt>guó</rt></ruby>", "<ruby>老师<rt>lǎoshī</rt></ruby>"], a: 1 },
+        { q: "Bạn cùng lớp được viết là gì?", options: ["<ruby>同学<rt>tóngxué</rt></ruby>", "<ruby>朋友<rt>péngyou</rt></ruby>", "<ruby>老师<rt>lǎoshī</rt></ruby>", "<ruby>学生<rt>xuésheng</rt></ruby>"], a: 0 },
+        { q: "Điền từ: <ruby>她 是<rt>Tā shì</rt></ruby> ___ <ruby>的 汉语 老师<rt>de Hànyǔ lǎoshī</rt></ruby> (Cô ấy là cô giáo tiếng Trung của tôi)", options: ["<ruby>你<rt>nǐ</rt></ruby>", "<ruby>他<rt>tā</rt></ruby>", "<ruby>我<rt>wǒ</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>"], a: 2 },
+        { q: "Trợ từ dùng để hỏi ngược lại 'Còn bạn thì sao?': <ruby>你<rt>nǐ</rt></ruby> ___ ?", options: ["<ruby>的<rt>de</rt></ruby>", "<ruby>吗<rt>ma</rt></ruby>", "<ruby>呢<rt>ne</rt></ruby>", "<ruby>不<rt>bù</rt></ruby>"], a: 2 },
+        { q: "Nghĩa của từ <ruby>朋友<rt>péngyou</rt></ruby> là gì?", options: ["Người Mỹ", "Bạn bè", "Người Trung Quốc", "Thầy giáo"], a: 1 },
+        { q: "Từ <ruby>国<rt>guó</rt></ruby> có nghĩa là gì?", options: ["Người", "Nào", "Quốc gia", "Đẹp"], a: 2 },
+        { q: "Dịch: 'Cô ấy là ai?'", options: ["<ruby>她是哪国人？<rt>Tā shì nǎ guó rén?</rt></ruby>", "<ruby>她是谁？<rt>Tā shì shéi?</rt></ruby>", "<ruby>他是谁？<rt>Tā shì shéi?</rt></ruby>", "<ruby>她叫李月。<rt>Tā jiào Lǐ Yuè.</rt></ruby>"], a: 1 },
+        { q: "Điền từ: <ruby>你 是<rt>Nǐ shì</rt></ruby> ___ <ruby>国 人<rt>guó rén</rt></ruby>? (Bạn là người nước nào?)", options: ["<ruby>哪<rt>nǎ</rt></ruby>", "<ruby>那<rt>nà</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>", "<ruby>呢<rt>ne</rt></ruby>"], a: 0 },
+        { q: "Điền chữ: <ruby>我是<rt>Wǒ shì</rt></ruby> ___ <ruby>国人<rt>guó rén</rt></ruby> (Tôi là người Mỹ)", options: ["<ruby>中<rt>Zhōng</rt></ruby>", "<ruby>哪<rt>nǎ</rt></ruby>", "<ruby>美<rt>Měi</rt></ruby>", "<ruby>大<rt>dà</rt></ruby>"], a: 2 },
+        { q: "Đại từ dùng cho nam giới (Anh ấy/Ông ấy) là:", options: ["<ruby>她<rt>tā</rt></ruby>", "<ruby>他<rt>tā</rt></ruby>", "<ruby>我<rt>wǒ</rt></ruby>", "<ruby>你<rt>nǐ</rt></ruby>"], a: 1 },
+        { q: "Dịch: Cô ấy tên là Lý Nguyệt.", options: ["<ruby>她叫李月。<rt>Tā jiào Lǐ Yuè.</rt></ruby>", "<ruby>她是李月。<rt>Tā shì Lǐ Yuè.</rt></ruby>", "<ruby>她叫月亮。<rt>Tā jiào yuèliang.</rt></ruby>", "<ruby>他是李月。<rt>Tā shì Lǐ Yuè.</rt></ruby>"], a: 0 },
+        { q: "Trợ từ <ruby>的<rt>de</rt></ruby> trong bài 4 dùng để làm gì?", options: ["Hỏi", "Phủ định", "Biểu thị sở hữu", "Cảm thán"], a: 2 },
+        { q: "Cô ấy KHÔNG PHẢI bạn học tôi: <ruby>她<rt>Tā</rt></ruby> ___ <ruby>是 我 同学<rt>shì wǒ tóngxué</rt></ruby>", options: ["<ruby>不<rt>bù</rt></ruby>", "<ruby>没<rt>méi</rt></ruby>", "<ruby>的<rt>de</rt></ruby>", "<ruby>呢<rt>ne</rt></ruby>"], a: 0 },
+        { q: "Dịch pinyin: péngyou", options: ["<ruby>老师<rt>lǎoshī</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>朋友<rt>péngyou</rt></ruby>", "<ruby>国<rt>guó</rt></ruby>"], a: 2 },
+        { q: "Pinyin của chữ <ruby>哪<rt></rt></ruby> là gì?", options: ["nà", "nǎ", "ne", "nǐ"], a: 1 },
+        { q: "Nghĩa của câu: <ruby>他是我同学。<rt>Tā shì wǒ tóngxué.</rt></ruby>", options: ["Cô ấy là cô giáo tôi", "Anh ấy là bạn học tôi", "Bạn là người nước nào", "Ai là bạn tôi"], a: 1 },
+        { q: "Trong câu '<ruby>你呢？<rt>Nǐ ne?</rt></ruby>', từ '<ruby>呢<rt>ne</rt></ruby>' dùng để:", options: ["Hỏi tên", "Hỏi ngược lại ý đã nêu", "Chào hỏi", "Phủ định"], a: 1 },
+        { q: "Chữ Hán nào có nghĩa là 'Ảnh'?", options: ["<ruby>同学<rt>tóngxué</rt></ruby>", "<ruby>照片<rt>zhàopiàn</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>"], a: 1 }
     ];
 
     let idx = 0, score = 0, correct = 0, answered = false;
@@ -173,7 +168,7 @@
         document.getElementById('feedback').innerText = '';
         const q = questions[idx];
         document.getElementById('question-count').innerText = `Câu: ${idx+1}/${questions.length}`;
-        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('question-text').innerHTML = q.q;
         document.getElementById('progress').style.width = `${(idx/questions.length)*100}%`;
         
         const grid = document.getElementById('options-grid');
@@ -181,7 +176,7 @@
         q.options.forEach((o, i) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerText = o;
+            btn.innerHTML = o;
             btn.onclick = () => check(i, btn);
             grid.appendChild(btn);
         });
