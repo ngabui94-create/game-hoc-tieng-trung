@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSK1 - Bài 4: 她是我的汉语老师</title>
+    <title>HSK1 - Bài 4: Kiểm tra toàn diện</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --ghibli-wood: #8b5a2b;
             --ghibli-leaf: #7fb069;
             --ghibli-pink: #ffb7c5;
+            --ghibli-red: #e67e22;
         }
 
         body {
@@ -31,52 +32,52 @@
         }
 
         .game-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 25px;
             padding: 30px;
             max-width: 700px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
-            border: 4px solid var(--ghibli-green);
+            border: 5px solid var(--ghibli-green);
             position: relative;
         }
 
-        /* Intro Screen */
-        #intro-screen h1 { color: var(--ghibli-dark-green); font-size: 2rem; }
-        .teacher-badge {
-            display: inline-block;
-            background: var(--ghibli-pink);
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 20px;
+        /* Header Info */
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
             font-weight: bold;
-            margin-bottom: 20px;
+            color: var(--ghibli-dark-green);
         }
 
-        /* Quiz Screen */
+        #score-display { color: var(--ghibli-wood); font-size: 1.2rem; }
+
+        /* Screens */
         #quiz-screen, #result-screen { display: none; }
         
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: #eee;
-            border-radius: 5px;
+            border-radius: 6px;
             margin-bottom: 20px;
             overflow: hidden;
+            border: 1px solid #ddd;
         }
         #progress {
             height: 100%;
-            background: var(--ghibli-leaf);
+            background: linear-gradient(90deg, var(--ghibli-green), var(--ghibli-leaf));
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.4s ease;
         }
 
         .question-text {
             font-size: 1.4rem;
             color: var(--ghibli-wood);
-            margin-bottom: 20px;
-            font-weight: 600;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .options-grid {
@@ -88,56 +89,53 @@
         .option-btn {
             background: white;
             border: 2px solid var(--ghibli-leaf);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 15px 10px;
+            border-radius: 15px;
             font-size: 1.1rem;
-            color: #333;
             cursor: pointer;
             transition: all 0.2s;
             font-family: inherit;
             font-weight: 600;
         }
 
-        .option-btn:hover { background: var(--ghibli-green); color: white; }
-        .option-btn.correct { background: var(--ghibli-dark-green) !important; color: white !important; border-color: var(--ghibli-dark-green) !important; }
-        .option-btn.wrong { background: #ff6b6b !important; color: white !important; border-color: #ff6b6b !important; }
+        .option-btn:hover:not(:disabled) { 
+            background: var(--ghibli-sky); 
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct { background: var(--ghibli-dark-green) !important; color: white !important; }
+        .option-btn.wrong { background: #ff7675 !important; color: white !important; border-color: #d63031 !important; }
 
         .btn-main {
             background: var(--ghibli-wood);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 35px;
             font-size: 1.2rem;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
             font-weight: bold;
-            transition: 0.3s;
+            box-shadow: 0 4px 0 #5d3d1d;
         }
-        .btn-main:hover { background: var(--ghibli-dark-green); transform: scale(1.05); }
+        .btn-main:active { transform: translateY(3px); box-shadow: none; }
 
-        .feedback {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 25px;
-        }
-        .feedback.success { color: var(--ghibli-dark-green); }
-        .feedback.error { color: #d63031; }
-
-        /* Return Link */
-        .home-link {
+        /* Result Styles */
+        .rank-badge {
+            font-size: 5rem;
+            margin: 20px 0;
             display: block;
-            margin-top: 20px;
-            color: var(--ghibli-wood);
-            text-decoration: none;
-            font-weight: bold;
         }
-        .home-link:hover { text-decoration: underline; }
+        .final-score-text { font-size: 2.5rem; margin: 10px 0; color: var(--ghibli-dark-green); }
+        .evaluation-box {
+            background: var(--ghibli-sky);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
 
-        @media (max-width: 500px) {
-            .options-grid { grid-template-columns: 1fr; }
-        }
+        .home-link { display: block; margin-top: 20px; color: var(--ghibli-wood); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -145,170 +143,152 @@
 <div class="game-container">
     
     <div id="intro-screen">
-        <div class="teacher-badge">🌸 Giáo viên: Nga Học HSK</div>
+        <div style="background: var(--ghibli-pink); color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">🌸 Nga Học HSK</div>
         <h1>Bài 4: 她是我的汉语老师</h1>
-        <p>Chào mừng bạn đến với bài kiểm tra HSK1 - Bài 4.<br>Cùng ôn lại từ vựng và các đoạn hội thoại nhé!</p>
-        <p><i>Lưu ý: Bật âm thanh để trải nghiệm tốt hơn 🔊</i></p>
-        <button class="btn-main" onclick="startQuiz()">Bắt đầu ngay 🌱</button>
-        <a href="index.html" class="home-link">⬅ Trở về Vườn</a>
+        <p style="font-size: 1.1rem;">Bạn đã sẵn sàng chinh phục 20 câu hỏi?<br>
+        <span style="color: var(--ghibli-dark-green);">✅ Đúng: +10đ</span> | <span style="color: #d63031;">❌ Sai: -5đ</span></p>
+        <button class="btn-main" onclick="startQuiz()">Bắt đầu học tập 🌿</button>
+        <a href="index.html" class="home-link">⬅ Quay lại trang chủ</a>
     </div>
 
     <div id="quiz-screen">
+        <div class="game-stats">
+            <span id="question-count">Câu: 1/20</span>
+            <span id="score-display">Điểm: 0</span>
+        </div>
         <div class="progress-bar"><div id="progress"></div></div>
-        <div id="question-count" style="color: gray; margin-bottom: 10px;">Câu 1 / 20</div>
-        <div class="question-text" id="question-text">Câu hỏi hiển thị ở đây</div>
-        <div class="options-grid" id="options-grid">
-            </div>
-        <div id="feedback" class="feedback"></div>
-        <button id="next-btn" class="btn-main" style="display: none;" onclick="nextQuestion()">Câu tiếp theo ➡</button>
+        <div class="question-text" id="question-text">Đang tải câu hỏi...</div>
+        <div class="options-grid" id="options-grid"></div>
+        <div id="feedback" style="margin-top: 15px; font-weight: bold; min-height: 24px;"></div>
+        <button id="next-btn" class="btn-main" style="display: none;" onclick="nextQuestion()">Tiếp tục ➡</button>
     </div>
 
     <div id="result-screen">
-        <h1>🎉 Hoàn thành xuất sắc!</h1>
-        <h2 id="final-score" style="color: var(--ghibli-dark-green);">Bạn đúng 0/20 câu</h2>
-        <p id="result-message"></p>
-        <button class="btn-main" onclick="location.reload()">Chơi lại 🔄</button>
-        <a href="index.html" class="home-link">⬅ Trở về Vườn</a>
+        <h1 id="result-title">Kết Quả</h1>
+        <span class="rank-badge" id="rank-icon">🌱</span>
+        <div class="final-score-text" id="final-score">0đ</div>
+        <div id="correct-count" style="font-weight: bold;">Đúng: 0/20</div>
+        <div class="evaluation-box" id="evaluation-text">Đang đánh giá...</div>
+        <button class="btn-main" onclick="location.reload()">Thử lại lần nữa 🔄</button>
+        <a href="index.html" class="home-link">⬅ Về vườn học tập</a>
     </div>
 
 </div>
 
 <script>
-    // Cấu hình âm thanh (Web Audio API)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    function playSound(type) {
+    function playSfx(freq1, freq2, type) {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        
-        if (type === 'correct') {
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
-            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.3);
-        } else {
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.2);
-            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.2);
-        }
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = type;
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(freq1, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq2, audioCtx.currentTime + 0.2);
+        g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
     }
 
-    // Danh sách 20 câu hỏi
     const questions = [
-        { q: "Đại từ 'Cô ấy, bà ấy' trong tiếng Trung là gì?", options: ["他 (tā)", "她 (tā)", "我 (wǒ)", "你 (nǐ)"], answer: 1 },
-        { q: "Từ '谁 (shéi)' có nghĩa là gì?", options: ["Cái gì", "Ở đâu", "Ai", "Khi nào"], answer: 2 },
-        { q: "Đâu là từ dùng để chỉ 'Tiếng Trung Quốc'?", options: ["英语 (Yīngyǔ)", "法语 (Fǎyǔ)", "汉语 (Hànyǔ)", "俄语 (Éyǔ)"], answer: 2 },
-        { q: "Pinyin của từ '同学' (Bạn cùng lớp) là gì?", options: ["tóngxué", "péngyou", "lǎoshī", "xuésheng"], answer: 0 },
-        { q: "Điền từ: 她是___的汉语老师。 (Cô ấy là giáo viên tiếng Trung của tôi)", options: ["你 (nǐ)", "他 (tā)", "我 (wǒ)", "哪 (nǎ)"], answer: 2 },
-        { q: "Trợ từ nào được dùng ở cuối câu nghi vấn (Ví dụ: Còn bạn thì sao)?", options: ["的 (de)", "吗 (ma)", "呢 (ne)", "不 (bù)"], answer: 2 },
-        { q: "Từ '朋友 (péngyou)' có nghĩa là gì?", options: ["Học sinh", "Bạn bè", "Giáo viên", "Bác sĩ"], answer: 1 },
-        { q: "Pinyin của từ '国' (Quốc gia) là gì?", options: ["guǒ", "guó", "gūo", "guò"], answer: 1 },
-        { q: "Dịch câu: 'Cô ấy là ai?'", options: ["他是谁？(Tā shì shéi?)", "她是谁？(Tā shì shéi?)", "谁是她？(Shéi shì tā?)", "她是哪？(Tā shì nǎ?)"], answer: 1 },
-        { q: "Điền từ: 你是___国人？ (Bạn là người nước nào?)", options: ["那 (nà)", "哪 (nǎ)", "谁 (shéi)", "的 (de)"], answer: 1 },
-        { q: "Dịch câu: 'Tôi là người Mỹ.'", options: ["我是中国人。(Wǒ shì Zhōngguó rén.)", "我是国人。(Wǒ shì guó rén.)", "我是美国人。(Wǒ shì Měiguó rén.)", "他是我朋友。(Tā shì wǒ péngyou.)"], answer: 2 },
-        { q: "Đại từ '他 (tā)' dùng để chỉ ai?", options: ["Cô ấy", "Bọn họ", "Anh ấy/Ông ấy", "Bạn"], answer: 2 },
-        { q: "Chọn câu đúng: 她___李月。(Cô ấy tên là Lý Nguyệt)", options: ["叫 (jiào)", "是 (shì)", "的 (de)", "好 (hǎo)"], answer: 0 },
-        { q: "Trợ từ '的 (de)' thường được dùng để biểu thị quan hệ gì?", options: ["Phủ định", "Nghi vấn", "Sở hữu", "Cảm thán"], answer: 2 },
-        { q: "Điền từ vào đoạn hội thoại: A: 她呢？她是 你 同学 吗？ B: 她 ___ 是我同学，她是我朋友。", options: ["不 (bù)", "没 (méi)", "的 (de)", "很 (hěn)"], answer: 0 },
-        { q: "Dịch câu: 'Anh ấy là bạn cùng lớp của tôi.'", options: ["她是我同学。(Tā shì wǒ tóngxué.)", "他是我的老师。(Tā shì wǒ de lǎoshī.)", "他是我同学。(Tā shì wǒ tóngxué.)", "他不是我同学。(Tā bú shì wǒ tóngxué.)"], answer: 2 },
-        { q: "Pinyin của từ '哪' (Nào/Cái nào) là gì?", options: ["nà", "nǎ", "ne", "nǐ"], answer: 1 },
-        { q: "Chọn đáp án đúng ứng với: Tā shì shéi?", options: ["他是谁？", "你是谁？", "我是谁？", "她去哪？"], answer: 0 },
-        { q: "Nếu ai đó hỏi '你呢？(Nǐ ne?)', họ đang muốn nói gì?", options: ["Bạn tên gì?", "Bạn đi đâu?", "Còn bạn thì sao?", "Bạn khỏe không?"], answer: 2 },
-        { q: "Từ vựng nào KHÔNG xuất hiện trong Bài 4 HSK1?", options: ["汉语 (Hànyǔ)", "吃 (Chī)", "图书馆 (Túshūguǎn)", "照片 (Zhàopiàn)"], answer: 1 }
+        { q: "Từ 'Cô ấy' trong tiếng Trung là gì?", options: ["他 tā", "她 tā", "我 wǒ", "你 nǐ"], a: 1 },
+        { q: "Từ '谁 shéi' nghĩa là gì?", options: ["Cái gì", "Ở đâu", "Ai", "Nào"], a: 2 },
+        { q: "Tiếng Trung Quốc gọi là gì?", options: ["英语 Yīngyǔ", "汉语 Hànyǔ", "国 guó", "老师 lǎoshī"], a: 1 },
+        { q: "Bạn cùng lớp là từ nào?", options: ["同学 tóngxué", "朋友 péngyou", "老师 lǎoshī", "学生 xuésheng"], a: 0 },
+        { q: "Điền từ: 她是__的汉语老师 (Cô ấy là cô giáo tiếng Trung của tôi)", options: ["你 nǐ", "他 tā", "我 wǒ", "谁 shéi"], a: 2 },
+        { q: "Trợ từ nghi vấn 'Còn... thì sao?'", options: ["的 de", "吗 ma", "呢 ne", "不 bù"], a: 2 },
+        { q: "Từ '朋友 péngyou' nghĩa là gì?", options: ["Người Mỹ", "Bạn bè", "Gia đình", "Thầy giáo"], a: 1 },
+        { q: "Từ 'Quốc gia/Đất nước' là gì?", options: ["哪 nǎ", "国 guó", "人 rén", "美 Měi"], a: 1 },
+        { q: "Dịch: 'Cô ấy là ai?'", options: ["她是哪国人? Tā shì nǎ guó rén?", "她是谁? Tā shì shéi?", "他是谁? Tā shì shéi?", "她叫李月. Tā jiào Lǐ Yuè."], a: 1 },
+        { q: "Điền vào chỗ trống: 你是__国人? (Bạn là người nước nào?)", options: ["哪 nǎ", "那 nà", "谁 shéi", "呢 ne"], a: 0 },
+        { q: "Tôi là người Mỹ: 我是____人", options: ["中国 Zhōngguó", "哪 nǎ", "美国 Měiguó", "同学 tóngxué"], a: 2 },
+        { q: "Anh ấy/Ông ấy dùng đại từ nào?", options: ["她 tā", "他 tā", "我 wǒ", "你 nǐ"], a: 1 },
+        { q: "Cô ấy tên là Lý Nguyệt: 她__李月", options: ["是 shì", "叫 jiào", "的 de", "呢 ne"], a: 1 },
+        { q: "Trợ từ '的 de' đặt ở đâu để chỉ sở hữu?", options: ["Đầu câu", "Cuối câu nghi vấn", "Sau đại từ/danh từ định ngữ", "Trước động từ"], a: 2 },
+        { q: "Cô ấy KHÔNG PHẢI bạn học tôi: 她__是我同学", options: ["不 bù", "没 méi", "的 de", "呢 ne"], a: 0 },
+        { q: "Đây là bạn tôi: 这是我____", options: ["老师 lǎoshī", "汉语 Hànyǔ", "朋友 péngyou", "国 guó"], a: 2 },
+        { q: "Pinyin của '哪' (Nào) là gì?", options: ["nà", "nǎ", "ne", "nǐ"], a: 1 },
+        { q: "Tā shì wǒ tóngxué nghĩa là gì?", options: ["Cô ấy là cô giáo tôi", "Anh ấy là bạn học tôi", "Bạn là người nước nào", "Ai là bạn tôi"], a: 1 },
+        { q: "Trong câu '你呢 Nǐ ne?', từ '呢' dùng để làm gì?", options: ["Hỏi tên", "Hỏi lại vấn đề trước đó", "Chào hỏi", "Phủ định"], a: 1 },
+        { q: "Từ nào nghĩa là 'Ảnh/Bức ảnh'?", options: ["同学 tóngxué", "照片 zhàopiàn", "汉语 Hànyǔ", "谁 shéi"], a: 1 }
     ];
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let answered = false;
+    let idx = 0, score = 0, correct = 0, answered = false;
 
     function startQuiz() {
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('quiz-screen').style.display = 'block';
-        loadQuestion();
+        showQ();
     }
 
-    function loadQuestion() {
+    function showQ() {
         answered = false;
         document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('feedback').innerHTML = '';
-        
-        const q = questions[currentQuestionIndex];
-        document.getElementById('question-count').innerText = `Câu ${currentQuestionIndex + 1} / ${questions.length}`;
+        document.getElementById('feedback').innerText = '';
+        const q = questions[idx];
+        document.getElementById('question-count').innerText = `Câu: ${idx+1}/${questions.length}`;
         document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress').style.width = `${(idx/questions.length)*100}%`;
         
-        // Cập nhật thanh tiến trình
-        const progressPercent = (currentQuestionIndex / questions.length) * 100;
-        document.getElementById('progress').style.width = progressPercent + '%';
-
-        const optionsGrid = document.getElementById('options-grid');
-        optionsGrid.innerHTML = '';
-
-        q.options.forEach((opt, index) => {
+        const grid = document.getElementById('options-grid');
+        grid.innerHTML = '';
+        q.options.forEach((o, i) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index, btn);
-            optionsGrid.appendChild(btn);
+            btn.innerText = o;
+            btn.onclick = () => check(i, btn);
+            grid.appendChild(btn);
         });
     }
 
-    function checkAnswer(selectedIndex, btnElement) {
-        if (answered) return;
+    function check(i, btn) {
+        if(answered) return;
         answered = true;
-        
-        const q = questions[currentQuestionIndex];
-        const buttons = document.querySelectorAll('.option-btn');
-        const feedback = document.getElementById('feedback');
+        const q = questions[idx];
+        const btns = document.querySelectorAll('.option-btn');
+        const fb = document.getElementById('feedback');
 
-        if (selectedIndex === q.answer) {
-            btnElement.classList.add('correct');
-            feedback.innerHTML = '✨ Chính xác!';
-            feedback.className = 'feedback success';
-            score++;
-            playSound('correct');
+        if(i === q.a) {
+            btn.classList.add('correct');
+            score += 10;
+            correct++;
+            fb.innerText = '✨ Tuyệt vời! +10đ';
+            fb.style.color = 'var(--ghibli-dark-green)';
+            playSfx(500, 1000, 'sine');
         } else {
-            btnElement.classList.add('wrong');
-            buttons[q.answer].classList.add('correct');
-            feedback.innerHTML = '❌ Sai rồi! Đáp án đúng màu xanh lá.';
-            feedback.className = 'feedback error';
-            playSound('incorrect');
+            btn.classList.add('wrong');
+            btns[q.a].classList.add('correct');
+            score = Math.max(0, score - 5);
+            fb.innerText = '❌ Tiếc quá! -5đ';
+            fb.style.color = '#d63031';
+            playSfx(200, 100, 'triangle');
         }
-
+        document.getElementById('score-display').innerText = `Điểm: ${score}`;
         document.getElementById('next-btn').style.display = 'inline-block';
     }
 
     function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            loadQuestion();
-        } else {
-            showResult();
-        }
+        idx++;
+        if(idx < questions.length) showQ();
+        else finish();
     }
 
-    function showResult() {
+    function finish() {
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = `Bạn đúng ${score}/${questions.length} câu`;
+        document.getElementById('final-score').innerText = `${score}đ`;
+        document.getElementById('correct-count').innerText = `Đúng: ${correct}/${questions.length}`;
         
-        let msg = "";
-        if(score === 20) msg = "Quá tuyệt vời! Bạn đã thuộc làu bài 4 rồi! 🌸";
-        else if(score >= 15) msg = "Rất tốt! Chỉ một chút nữa là hoàn hảo. 🌿";
-        else msg = "Hãy ôn tập thêm các bài khóa và thử lại nhé! 🌱";
+        let icon = "🌱", text = "";
+        if(score >= 180) { icon = "🌳"; text = "Cấp độ: ĐẠI THỤ TRONG VƯỜN. Bạn đã nắm vững hoàn toàn kiến thức Bài 4 rồi!"; }
+        else if(score >= 120) { icon = "🌿"; text = "Cấp độ: CÂY NON MẠNH MẼ. Kiến thức của bạn rất tốt, hãy duy trì nhé!"; }
+        else if(score >= 60) { icon = "🍀"; text = "Cấp độ: MẦM NHỎ VƯƠN LÊN. Bạn đang tiến bộ, hãy ôn lại các từ vựng sai nhé!"; }
+        else { icon = "🌱"; text = "Cấp độ: HẠT MẦM ĐANG NGỦ. Đừng nản lòng, hãy đọc lại bài khóa và thử lại nào!"; }
         
-        document.getElementById('result-message').innerText = msg;
+        document.getElementById('rank-icon').innerText = icon;
+        document.getElementById('evaluation-text').innerText = text;
     }
 </script>
-
 </body>
 </html>
