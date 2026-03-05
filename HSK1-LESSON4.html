@@ -36,16 +36,16 @@
                 </button>
             </div>
             <div class="bg-white/20 w-16 h-16 rounded-3xl flex items-center justify-center text-4xl mb-6">🏮</div>
-            <h1 class="text-2xl font-black mb-1 uppercase">HSK1 - BÀI 4</h1>
+            <h1 class="text-2xl font-black mb-1 uppercase text-white">HSK1 - BÀI 4</h1>
             <p class="text-yellow-200 font-bold text-xs mb-8 italic">Giáo viên: Nga Học HSK</p>
             
             <div class="mt-auto bg-black/10 p-5 rounded-3xl">
-                <p class="text-[10px] uppercase font-bold opacity-70 mb-2">Tiến độ bài học</p>
+                <p class="text-[10px] uppercase font-bold opacity-70 mb-2 text-white">Tiến độ bài học</p>
                 <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
                     <div id="side-progress" class="w-0 h-full bg-white transition-all duration-700"></div>
                 </div>
             </div>
-            <div class="flex gap-10 mt-6">
+            <div class="flex gap-10 mt-6 text-white">
                 <div><p class="text-[10px] uppercase opacity-50">Điểm số</p><p id="side-score" class="text-3xl font-bold text-yellow-300">0</p></div>
                 <div><p class="text-[10px] uppercase opacity-50">Câu hỏi</p><p id="side-count" class="text-3xl font-bold">1/20</p></div>
             </div>
@@ -59,6 +59,25 @@
             <div id="interaction-zone" class="flex-grow flex flex-col justify-center"></div>
             <div class="mt-6">
                 <button id="check-btn" onclick="checkAnswer()" class="btn-ghibli w-full uppercase tracking-wider">Kiểm tra đáp án ✨</button>
+            </div>
+        </div>
+
+        <div id="screen-result" class="content-area hidden flex flex-col items-center justify-center text-center">
+            <div class="text-8xl mb-4">🏆</div>
+            <h2 class="text-3xl font-black text-gray-800 mb-2">HÀNH TRÌNH HOÀN TẤT!</h2>
+            <p class="text-gray-500 mb-6">Chúc mừng bạn đã vượt qua 20 thử thách Bài 4.</p>
+            
+            <div class="bg-white border-4 border-green-100 rounded-[30px] p-8 w-full max-w-sm shadow-sm mb-8">
+                <div class="text-sm font-bold text-green-600 uppercase mb-1">Tổng điểm đạt được</div>
+                <div id="final-score" class="text-6xl font-black text-gray-800 mb-4">0</div>
+                <hr class="mb-4">
+                <div class="text-[10px] font-bold text-gray-400 uppercase mb-2">Đánh giá từ Giáo viên: Nga Học HSK</div>
+                <div id="final-rank" class="italic text-gray-700 leading-relaxed"></div>
+            </div>
+
+            <div class="flex gap-4 w-full max-w-sm">
+                <button onclick="location.reload()" class="btn-ghibli flex-1 bg-gray-500">THỬ LẠI</button>
+                <button onclick="window.location.href='index.html'" class="btn-ghibli flex-1">VỀ VƯỜN 🏠</button>
             </div>
         </div>
     </div>
@@ -86,26 +105,27 @@
             osc.start(); osc.stop(audioCtx.currentTime + dur);
         }
 
+        // 20 CÂU HỎI BÀI 4 HSK1
         const quizData = [
             { type: "ABCD", q: "Pinyin của 谁 là gì?", options: ["shéi", "shénme", "nǎ", "ne"], correct: "shéi", explain: "谁 (shéi) dùng để hỏi 'Ai'. Ví dụ: 他是谁？" },
             { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là ai?", ans: ["她 (tā)", "是 (shì)", "谁 (shéi)", "？"], correct: "她是谁？", explain: "Cấu trúc: Chủ ngữ + 是 + 谁？" },
             { type: "ABCD", q: "Từ nào nghĩa là 'Bạn học'?", options: ["朋友", "同学", "老师", "学生"], correct: "同学", explain: "同学 (tóngxué) là người cùng học, bạn cùng lớp." },
             { type: "SẮP XẾP", q: "Ghép câu: Bạn là người nước nào?", ans: ["你 (nǐ)", "是 (shì)", "哪 (nǎ)", "国 (guó)", "人 (rén)", "？"], correct: "你是哪国人？", explain: "哪国人 (nǎ guó rén) dùng hỏi quốc tịch." },
             { type: "ABCD", q: "Chữ 汉语 nghĩa là gì?", options: ["Tiếng Nhật", "Tiếng Hán", "Tiếng Anh", "Tiếng Pháp"], correct: "Tiếng Hán", explain: "汉语 (Hànyǔ) chính là tiếng Trung/tiếng Hán." },
-            { type: "SẮP XẾP", q: "Ghép câu: Tôi không phải người Mỹ.", ans: ["我 (wǒ)", "不 (bù)", "shì (shì)", "美国 (Měiguó)", "人 (rén)"], correct: "我不是 may mguo ren", explain: "Phủ định dùng 不 (bù) đứng trước động từ 是 (shì)." },
-            { type: "ABCD", q: "Điền từ: 他____我的汉语老师。", options: ["叫", "是", "哪", "的"], correct: "是", explain: "Dùng 是 để khẳng định nghề nghiệp: 'Anh ấy là giáo viên'." },
-            { type: "SẮP XẾP", q: "Ghép câu: Bạn của tôi.", ans: ["我 (wǒ)", "的 (de)", "朋友 (péngyou)"], correct: "我的朋友", explain: "Cấu trúc sở hữu: A + 的 + B (B của A)." },
+            { type: "SẮP XẾP", q: "Ghép câu: Tôi không phải người Mỹ.", ans: ["我 (wǒ)", "不 (bù)", "是 (shì)", "美国 (Měiguó)", "人 (rén)"], correct: "我不是美国人", explain: "Phủ định dùng 不 (bù) đứng trước động từ 是 (shì)." },
+            { type: "ABCD", q: "Điền từ: 他____我的汉语老师。", options: ["叫", "sì", "是", "的"], correct: "是", explain: "Dùng 是 để khẳng định nghề nghiệp: 'Anh ấy là giáo viên'." },
+            { type: "SẮP XẾP", q: "Ghép câu: Bạn của tôi.", ans: ["我 (wǒ)", " de (de)", "朋友 (péngyou)"], correct: "我的朋友", explain: "Cấu trúc sở hữu: A + 的 + B (B của A)." },
             { type: "ABCD", q: "Pinyin của chữ 哪 là gì?", options: ["nǎ", "nà", "nè", "nā"], correct: "nǎ", explain: "哪 (nǎ) là đại từ nghi vấn dùng để hỏi cái nào, nước nào." },
             { type: "SẮP XẾP", q: "Ghép câu: Cô ấy tên là Lý Nguyệt.", ans: ["她 (tā)", "叫 (jiào)", "李月 (Lǐ Yuè)"], correct: "她叫李月", explain: "Dùng 叫 (jiào) khi giới thiệu tên gọi." },
             { type: "ABCD", q: "Từ 老师 nghĩa là gì?", options: ["Học sinh", "Giáo viên", "Bác sĩ", "Công nhân"], correct: "Giáo viên", explain: "老师 (lǎoshī) là thầy giáo hoặc cô giáo." },
-            { type: "SẮP XẾP", q: "Ghép câu: Đây là sách của tôi.", ans: ["这 (zhè)", "shì (shì)", "我 (wǒ)", "的 (de)", "书 (shū)"], correct: "这是我的书", explain: "Trật tự: Đây + là + của tôi + sách." },
+            { type: "SẮP XẾP", q: "Ghép câu: Đây là sách của tôi.", ans: ["这 (zhè)", "是 (shì)", "我 (wǒ)", "的 (de)", "书 (shū)"], correct: "这是我的书", explain: "Trật tự: Đây + là + của tôi + sách." },
             { type: "ABCD", q: "Chọn chữ Hán cho 'Người nước Mỹ'?", options: ["中国语", "美国人", "英国人", "中国人"], correct: "美国人", explain: "美国 (Měiguó) là nước Mỹ, thêm 人 (rén) để chỉ người." },
-            { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là bạn học của tôi.", ans: ["她 (tā)", "shì (shì)", "我 (wǒ)", "的 (de)", "同学 (tóngxué)"], correct: "她是我的同学", explain: "Kết hợp cả động từ 是 và cấu trúc sở hữu 的." },
+            { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là bạn học của tôi.", ans: ["她 (tā)", "是 (shì)", "我 (wǒ)", "的 (de)", "同学 (tóngxué)"], correct: "她是我的同学", explain: "Kết hợp cả động từ 是 và cấu trúc sở hữu 的." },
             { type: "ABCD", q: "Pinyin của chữ 国 là gì?", options: ["guó", "gǒu", "guǒ", "gē"], correct: "guó", explain: "国 (guó) nghĩa là quốc gia, đất nước." },
             { type: "SẮP XẾP", q: "Ghép câu: Thầy giáo Vương.", ans: ["王 (Wáng)", "老师 (lǎoshī)"], correct: "王老师", explain: "Trong tiếng Trung, Họ luôn đứng trước chức danh." },
             { type: "ABCD", q: "Câu '他是谁？' nghĩa là gì?", options: ["Bạn là ai?", "Anh ấy là ai?", "Cô ấy là ai?", "Họ là ai?"], correct: "Anh ấy là ai?", explain: "他 (tā) bộ Nhân đứng dùng cho nam giới." },
-            { type: "SẮP XẾP", q: "Ghép câu: Tôi cũng là người Trung Quốc.", ans: ["我 (wǒ)", "也 (yě)", "shì (shì)", "中国 (Zhōngguó)", "人 (rén)"], correct: "我也叫中国人", explain: "也 (yě) mang nghĩa là 'cũng', đứng trước động từ." },
-            { type: "ABCD", q: "Chữ 'de' trong tiếng Trung viết là:", options: ["的", "地", "得", "底"], correct: "의", explain: "的 (de) là trợ từ kết cấu biểu thị sự sở hữu." },
+            { type: "SẮP XẾP", q: "Ghép câu: Tôi cũng là người Trung Quốc.", ans: ["我 (wǒ)", "也 (yě)", "是 (shì)", "中国 (Zhōngguó)", "人 (rén)"], correct: "我也叫中国人", explain: "也 (yě) mang nghĩa là 'cũng', đứng trước động từ." },
+            { type: "ABCD", q: "Chữ 'de' trong tiếng Trung viết là:", options: ["的", "地", "得", "底"], correct: "的", explain: "的 (de) là trợ từ kết cấu biểu thị sự sở hữu." },
             { type: "SẮP XẾP", q: "Ghép câu: Bạn tên là gì?", ans: ["你 (nǐ)", "叫 (jiào)", "什么 (shénme)", "名字 (míngzi)", "？"], correct: "你叫什么名字？", explain: "Đây là cách hỏi tên đầy đủ và phổ biến nhất." }
         ];
 
@@ -186,7 +206,7 @@
             if(isCorrect) {
                 playSfx(880, 'sine', 0.4); score += 10;
                 document.getElementById('modal-emoji').innerText = "🌟";
-                document.getElementById('modal-title').innerText = "Đúng rồi! Quá 'chill' luôn!";
+                document.getElementById('modal-title').innerText = "Đúng rồi! Quá chuẩn luôn!";
                 document.getElementById('modal-title').style.color = "#4f7942";
                 box.style.backgroundColor = "#f0fdf4";
                 card.classList.remove('shake');
@@ -207,8 +227,25 @@
             document.getElementById('result-modal').classList.add('hidden');
             document.getElementById('result-modal').classList.remove('flex');
             currentQ++;
-            if(currentQ < 20) loadQuestion();
-            else alert("Chúc mừng! Bạn đã hoàn thành 20 câu Bài 4!");
+            if(currentQ < 20) {
+                loadQuestion();
+            } else {
+                showFinalResult();
+            }
+        }
+
+        function showFinalResult() {
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            
+            let rank = "";
+            if(score >= 180) rank = "Xuất sắc! Bạn đã thực sự làm chủ kiến thức Bài 4 rồi đấy. Đỉnh nóc kịch trần luôn! 🏆";
+            else if(score >= 140) rank = "Rất tốt! Bạn nắm khá vững bài 4, chỉ cần chú ý một chút tiểu tiết nữa thôi. 🌸";
+            else if(score >= 100) rank = "Khá ổn! Bạn có nền tảng nhưng cần ôn tập thêm về các từ nghi vấn nhé. 🍵";
+            else rank = "Đừng nản lòng! Tiếng Trung cần thời gian luyện tập. Hãy xem lại bài giảng và thử lại nhé! 🏮";
+            
+            document.getElementById('final-rank').innerText = rank;
         }
 
         loadQuestion();
