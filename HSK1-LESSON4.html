@@ -21,31 +21,38 @@
         .glass-effect { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); border: 8px solid white; border-radius: 40px; }
         .sidebar { width: 32%; background: var(--ghibli-green-dark); padding: 30px; color: white; display: flex; flex-direction: column; }
         .content-area { width: 68%; padding: 40px; display: flex; flex-direction: column; background: rgba(208, 240, 247, 0.2); }
-        .btn-ghibli { background: var(--ghibli-green-dark); color: white; border-radius: 20px; transition: 0.2s; cursor: pointer; border: 4px solid white; }
+        
+        .pinyin-small { font-size: 0.7rem; color: #555; display: block; line-height: 1; margin-bottom: 2px; }
+        .hanzi-main { font-family: 'Noto Sans SC', sans-serif; font-size: 1.2rem; display: block; }
+        
+        .btn-ghibli { background: var(--ghibli-green-dark); color: white; border-radius: 20px; transition: 0.2s; cursor: pointer; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .btn-ghibli:hover { transform: scale(1.03); background: #3d5e33; }
-        .option-card { background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 15px; cursor: pointer; transition: 0.2s; width: 100%; text-align: left; margin-bottom: 10px; font-weight: bold; }
+        
+        .option-card { background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 12px; cursor: pointer; transition: 0.2s; width: 100%; margin-bottom: 10px; display: flex; flex-direction: column; align-items: center; }
         .option-card:hover { border-color: var(--ghibli-green-light); background: #f0fdf4; }
-        .word-tag { background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 8px 15px; cursor: pointer; font-weight: bold; }
-        .selected-tag { background: var(--ghibli-green-light); color: white; border-radius: 12px; padding: 8px 15px; cursor: pointer; margin: 4px; animation: pop 0.3s; }
+        
+        .word-tag { background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 6px 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+        .selected-tag { background: var(--ghibli-green-light); color: white; border-radius: 12px; padding: 6px 12px; cursor: pointer; margin: 4px; display: flex; flex-direction: column; align-items: center; animation: pop 0.3s; }
+        
         @keyframes pop { from { transform: scale(0.8); } to { transform: scale(1); } }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="main-container" class="w-[95%] max-w-[1050px] h-[620px] flex overflow-hidden glass-effect shadow-2xl">
+    <div id="main-container" class="w-[95%] max-w-[1050px] h-[650px] flex overflow-hidden glass-effect shadow-2xl">
         <div class="sidebar">
             <div class="mb-4">
-                <a href="index.html" class="bg-white/20 px-4 py-2 rounded-full text-[10px] font-bold text-white flex gap-2 items-center w-fit">🏡 QUAY VỀ VƯỜN</a>
+                <button class="bg-white/20 px-4 py-2 rounded-full text-[10px] font-bold text-white flex gap-2 items-center w-fit">🏡 QUAY VỀ VƯỜN</button>
             </div>
-            <div class="bg-white/20 w-16 h-16 rounded-3xl flex items-center justify-center text-4xl mb-6">🌿</div>
-            <h1 class="text-2xl font-black mb-2 leading-tight">Giao tiếp HSK<br>Bài 4</h1>
-            <p class="text-yellow-200 font-bold text-xs mb-10 italic">Giáo viên: Nga Học HSK</p>
+            <div class="bg-white/20 w-16 h-16 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-inner">🌿</div>
+            <h1 class="text-2xl font-black mb-2 leading-tight uppercase">Học HSK1<br>Bài 4 cùng Cô Nga</h1>
+            <p class="text-yellow-200 font-bold text-xs mb-8 italic">Giáo viên: Nga Học HSK</p>
             
             <div class="mt-auto bg-black/10 p-5 rounded-3xl">
-                <p class="text-[10px] uppercase font-bold opacity-70 mb-2">Tiến độ</p>
+                <p class="text-[10px] uppercase font-bold opacity-70 mb-2">Tiến độ bài học</p>
                 <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                    <div id="side-progress" class="w-0 h-full bg-white transition-all"></div>
+                    <div id="side-progress" class="w-0 h-full bg-white transition-all duration-500"></div>
                 </div>
                 <div class="flex justify-between mt-2 text-[10px] font-bold"><span id="side-percent">0%</span></div>
             </div>
@@ -56,9 +63,9 @@
         </div>
 
         <div id="screen-intro" class="content-area items-center justify-center text-center">
-            <h2 class="text-4xl font-black mb-4 text-gray-800">Bắt đầu Bài 4 thôi!</h2>
-            <p class="text-gray-600 mb-10 max-w-sm">Chào mừng bạn quay lại khu vườn. Hãy cùng ôn tập các từ về quốc tịch và bạn bè nhé.</p>
-            <button onclick="startGame()" class="btn-ghibli px-16 py-5 text-xl font-bold uppercase">BẮT ĐẦU HỌC</button>
+            <h2 class="text-4xl font-black mb-4 text-gray-800">Vườn Ghibli mở cửa!</h2>
+            <p class="text-gray-600 mb-10 max-w-sm">Hôm nay chúng mình sẽ học về <b>Quốc tịch & Bạn bè</b>. Mọi chữ Hán đều có Pinyin giúp bạn học nhanh hơn!</p>
+            <button onclick="startGame()" class="btn-ghibli px-16 py-5 text-xl font-bold uppercase tracking-widest">Bắt đầu ngay</button>
         </div>
 
         <div id="screen-game" class="content-area hidden">
@@ -67,20 +74,19 @@
                 <h3 id="q-text" class="text-xl font-bold text-gray-800 mt-3"></h3>
             </div>
 
-            <div id="interaction-zone" class="flex-grow flex flex-col justify-center">
-                </div>
+            <div id="interaction-zone" class="flex-grow flex flex-col justify-center overflow-y-auto"></div>
 
             <div class="mt-4">
-                <button id="check-btn" onclick="checkAnswer()" class="btn-ghibli w-full py-4 text-lg font-bold uppercase">KIỂM TRA</button>
+                <button onclick="checkAnswer()" class="btn-ghibli w-full py-4 text-lg font-bold uppercase">Kiểm tra kết quả 🌿</button>
             </div>
         </div>
 
         <div id="screen-end" class="content-area hidden items-center justify-center text-center">
-            <div class="text-7xl mb-6">🎈</div>
-            <h2 class="text-4xl font-black text-gray-800 mb-2">Hoàn thành!</h2>
-            <p class="text-gray-600 mb-8">Bạn đã chăm sóc khu vườn rất tốt.</p>
+            <div class="text-7xl mb-6">🏆</div>
+            <h2 class="text-4xl font-black text-gray-800 mb-2">Bạn thật tuyệt vời!</h2>
+            <p class="text-gray-600 mb-8">Khu vườn Bài 4 đã nở rực rỡ hoa rồi.</p>
             <div id="final-score" class="text-7xl font-black text-green-700 mb-10">0</div>
-            <button onclick="location.reload()" class="btn-ghibli px-12 py-4 text-xl font-bold">LÀM LẠI</button>
+            <button onclick="location.reload()" class="btn-ghibli px-12 py-4 text-xl font-bold uppercase">Học lại lần nữa</button>
         </div>
     </div>
 
@@ -89,44 +95,60 @@
             <div id="modal-emoji" class="text-6xl text-center mb-4">🌟</div>
             <h3 id="modal-title" class="text-2xl font-black text-center mb-4">Kết quả</h3>
             <div class="bg-gray-50 rounded-2xl p-5 mb-6">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-2">Giải thích:</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Giải thích của Cô Nga:</p>
                 <div id="modal-explanation" class="text-gray-700 text-sm leading-relaxed"></div>
             </div>
-            <button onclick="nextStep()" class="btn-ghibli w-full py-4 text-lg font-bold uppercase">TIẾP THEO</button>
+            <button onclick="nextStep()" class="btn-ghibli w-full py-4 text-lg font-bold uppercase">Câu tiếp theo ⮕</button>
         </div>
     </div>
 
     <script>
         const quizData = [
-            { type: "PINYIN", q: "Chọn Pinyin đúng cho chữ: 谁", options: ["shéi", "shénme", "nǎ"], correct: "shéi", explain: "谁 (shéi) có nghĩa là 'ai', dùng để hỏi về người." },
-            { type: "DỊCH NGHĨA", q: "Chữ '同学' nghĩa là gì?", options: ["Bạn học", "Bạn bè", "Giáo viên"], correct: "Bạn học", explain: "同学 (tóngxué) là bạn cùng học/bạn cùng lớp." },
-            { type: "ĐIỀN TỪ", q: "你是____国人？", options: ["谁", "哪", "什么"], correct: "哪", explain: "Cấu trúc hỏi quốc tịch: 哪 (nào) + 国 (nước) + 人 (người)?" },
-            { type: "PHẢN XẠ", q: "Trả lời câu hỏi: 他是谁？", options: ["他是我的汉语老师", "他是美国人", "他是我的同学"], correct: "Chấp nhận tất cả", isMulti: true, explain: "Cả 3 đều đúng ngữ pháp, nhưng trong bài này ta chọn đáp án phổ biến nhất là '他是我的汉语老师'." },
-            { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là bạn của tôi.", ans: ["她", "是", "我", "的", "朋友"], explain: "Chủ ngữ + 是 + Cụm danh từ sở hữu (Đại từ + 的 + Danh từ)." },
-            { type: "PINYIN", q: "Chọn chữ Hán cho Pinyin: Hànyǔ", options: ["汉语", "英语", "国语"], correct: "汉语", explain: "汉语 (Hànyǔ) là Tiếng Hán / Tiếng Trung." },
-            { type: "DỊCH NGHĨA", q: "Cụm '我的老师' dịch là gì?", options: ["Giáo viên của tôi", "Tôi là giáo viên", "Học sinh của tôi"], correct: "Giáo viên của tôi", explain: "Cấu trúc: A + 的 + B nghĩa là B của A." },
-            { type: "SẮP XẾP", q: "Ghép câu: Bạn là người nước nào?", ans: ["你", "是", "哪", "国", "人", "？"], explain: "Đây là cấu trúc hỏi quốc tịch chuẩn trong Bài 4." },
-            { type: "ĐIỀN TỪ", q: "她___我的汉语老师。", options: ["叫", "是", "哪"], correct: "是", explain: "Sử dụng động từ '是' (là) để giới thiệu nghề nghiệp/quan hệ." },
-            { type: "PHẢN XẠ", q: "Câu '他是我的同学' nghĩa là gì?", options: ["Anh ấy là bạn học của tôi", "Anh ấy là bạn của tôi", "Anh ấy là giáo viên của tôi"], correct: "Anh ấy là bạn học của tôi", explain: "Phân biệt 同学 (bạn học) và 朋友 (bạn bè)." },
-            { type: "PINYIN", q: "Pinyin của chữ '朋友' là gì?", options: ["péngyou", "tóngxué", "lǎoshī"], correct: "péngyou", explain: "朋友 (péngyou) nghĩa là bạn bè." },
-            { type: "SẮP XẾP", q: "Ghép câu: Tôi không phải người Mỹ.", ans: ["我", "不", "shì", "美国", "人"], explain: "Phủ định của '是' là '不是' (bù shì)." },
-            { type: "DỊCH NGHĨA", q: "Chữ '哪' nghĩa là gì?", options: ["Nào", "Ai", "Cái gì"], correct: "Nào", explain: "哪 (nǎ) dùng trong câu hỏi lựa chọn (nào, đâu)." },
-            { type: "PHẢN XẠ", q: "Chọn câu trả lời: 你是哪国人？", options: ["我是美国人", "他是中国人", "谁是美国人"], correct: "我是美国人", explain: "Hỏi 'bạn' (你) thì phải trả lời là 'tôi' (我)." },
-            { type: "ĐIỀN TỪ", q: "他叫____名字？", options: ["谁", "什么", "哪"], correct: "什么", explain: "Cấu trúc hỏi tên: 叫 + 什么 + 名字?" },
-            { type: "PINYIN", q: "Chữ nào có pinyin là 'nǎ'?", options: ["哪", "那", "呢"], correct: "哪", explain: "哪 (nǎ - thanh 3) là 'nào'. Tránh nhầm với 那 (nà - thanh 4) là 'kia'." },
-            { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là người nước nào?", ans: ["她", "shì", "哪", "国", "人", "？"], explain: "Thay '你' bằng '她' để hỏi về quốc tịch của cô ấy." },
-            { type: "DỊCH NGHĨA", q: "'美国人' là người nước nào?", options: ["Người Mỹ", "Người Anh", "Người Trung Quốc"], correct: "Người Mỹ", explain: "美国 (Měiguó) là nước Mỹ." },
-            { type: "ĐIỀN TỪ", q: "我不是老师，我___学生。", options: ["叫", "是", "的"], correct: "偏是", explain: "Sử dụng '是' để khẳng định danh tính." },
-            { type: "SẮP XẾP", q: "Ghép câu: Thầy giáo của tôi là người Trung Quốc.", ans: ["我", "de", "老师", "shì", "中国", "人"], explain: "Cụm danh từ làm chủ ngữ: 'Giáo viên của tôi'." }
+            { type: "CHỌN PINYIN", q: "Pinyin của chữ 谁 là gì?", options: ["shéi (ai)", "shénme (cái gì)", "nǎ (nào)"], correct: "shéi (ai)", explain: "谁 (shéi) dùng để hỏi về người." },
+            { type: "DỊCH NGHĨA", q: "Từ 同学 (tóngxué) có nghĩa là gì?", options: ["Bạn học", "Bạn bè", "Người Mỹ"], correct: "Bạn học", explain: "同学 (tóngxué) chỉ người cùng học một lớp hoặc một trường." },
+            { type: "ĐIỀN TỪ", q: "你是____国人？(Nǐ shì ____ guórén?)", options: ["谁 (shéi)", "哪 (nǎ)", "呢 (ne)"], correct: "哪 (nǎ)", explain: "Dùng 哪 (nǎ) để hỏi 'nào'. 你是哪国人? Bạn là người nước nào?" },
+            { type: "PHẢN XẠ", q: "Trả lời câu: 他是谁？ (Tā shì shéi?)", options: ["他是我的汉语老师 (Tā shì wǒ de Hànyǔ lǎoshī)", "我是中国人 (Wǒ shì Zhōngguórén)", "他是美国 (Tā shì Měiguó)"], correct: "他是我的汉语老师 (Tā shì wǒ de Hànyǔ lǎoshī)", explain: "Hỏi 'Anh ấy là ai' thì trả lời về danh tính của 'Anh ấy'." },
+            { type: "SẮP XẾP", q: "Ghép câu: Cô ấy là bạn tôi.", ans: ["她 (tā)", "是 (shì)", "我 (wǒ)", "的 (de)", "朋友 (péngyou)"], explain: "Cấu trúc: Chủ ngữ + 是 + Cụm danh từ sở hữu." },
+            { type: "CHỌN CHỮ", q: "Chữ Hán nào là 'Hànyǔ' (Tiếng Trung)?", options: ["汉语 (Hànyǔ)", "英语 (Yīngyǔ)", "国语 (Guóyǔ)"], correct: "汉语 (Hànyǔ)", explain: "汉语 (Hànyǔ) là ngôn ngữ của người Hán." },
+            { type: "DỊCH NGHĨA", q: "Cụm '我的老师' (Wǒ de lǎoshī) nghĩa là:", options: ["Giáo viên của tôi", "Tôi là giáo viên", "Bạn học của tôi"], correct: "Giáo viên của tôi", explain: "的 (de) đặt giữa chủ sở hữu và vật sở hữu." },
+            { type: "ĐIỀN TỪ", q: "他不是老师，他___学生。(Tā bú shì lǎoshī, tā ___ xuésheng.)", options: ["叫 (jiào)", "是 (shì)", "哪 (nǎ)"], correct: "是 (shì)", explain: "Dùng 是 (shì) để khẳng định danh tính." },
+            { type: "SẮP XẾP", q: "Ghép câu: Bạn là người nước nào?", ans: ["你 (nǐ)", "base (shì)", "哪 (nǎ)", "国 (guó)", "人 (rén)", "？"], explain: "Đây là mẫu câu hỏi quốc tịch Bài 4." },
+            { type: "PINYIN", q: "Pinyin của chữ 朋友 là gì?", options: ["péngyou", "tóngxué", "míngzi"], correct: "péngyou", explain: "朋友 (péngyou) nghĩa là bạn bè." },
+            { type: "PHẢN XẠ", q: "Bạn của tôi (Wǒ de péngyou) là chữ nào?", options: ["我的朋友", "我的同学", "我的老师"], correct: "我的朋友", explain: "朋友 là bạn bè, 同学 là bạn học." },
+            { type: "ĐIỀN TỪ", q: "她___李月。(Tā ___ Lǐ Yuè.)", options: ["叫 (jiào)", "是 (shì)", "的 (de)"], correct: "叫 (jiào)", explain: "Dùng 叫 (jiào) khi nói về tên gọi." },
+            { type: "SẮP XẾP", q: "Ghép câu: Thầy giáo tiếng Trung.", ans: ["汉语 (Hànyǔ)", "老师 (lǎoshī)"], explain: "Trong tiếng Trung, tính chất đứng trước danh từ." },
+            { type: "DỊCH NGHĨA", q: "中国 (Zhōngguó) là nước nào?", options: ["Trung Quốc", "Mỹ", "Anh"], correct: "Trung Quốc", explain: "中国 (Zhōngguó) nghĩa là Quốc gia ở giữa (Trung Hoa)." },
+            { type: "CHỌN PINYIN", q: "Pinyin của chữ 哪 là gì?", options: ["nǎ (nào)", "nà (kia)", "ne (nhỉ)"], correct: "nǎ (nào)", explain: "哪 (nǎ) là thanh 3 dùng để hỏi." },
+            { type: "ĐIỀN TỪ", q: "你是中国人，我___是中国人。(Nǐ shì Zhōngguórén, wǒ ___ shì Zhōngguórén.)", options: ["也 (yě - cũng)", "不 (bù - không)", "呢 (ne)"], correct: "yě (yě - cũng)", explain: "也 (yě) đứng trước động từ để chỉ sự tương đồng." },
+            { type: "SẮP XẾP", q: "Ghép câu: Tôi là người Mỹ.", ans: ["我 (wǒ)", "shì (shì)", "美国 (Měiguó)", "人 (rén)"], explain: "Tên nước + 人 = Người nước đó." },
+            { type: "PHẢN XẠ", q: "Dịch: Bạn học của tôi.", options: ["我的同学 (Wǒ de tóngxué)", "我的老师 (Wǒ de lǎoshī)", "我的朋友 (Wǒ de péngyou)"], correct: "我的同学 (Wǒ de tóngxué)", explain: "同学 (tóngxué) là bạn học." },
+            { type: "CHỌN CHỮ", q: "Chữ 'Người' là chữ nào?", options: ["人 (rén)", "大 (dà)", "个 (gè)"], correct: "人 (rén)", explain: "人 (rén) mô phỏng hình dáng con người đang đi." },
+            { type: "SẮP XẾP", q: "Ghép câu: Anh ấy là ai?", ans: ["他 (tā)", "shì (shì)", "谁 (shéi)", "？"], explain: "Câu hỏi về danh tính cơ bản nhất." }
         ];
 
-        // Chuẩn hóa s/shì/de
+        // Chuẩn hóa dữ liệu
         quizData.forEach(item => {
-            if(item.ans) item.ans = item.ans.map(w => w === 'shì' ? '是' : w === 'de' ? '的' : w);
-            if(item.correct === '偏 là') item.correct = '是';
+            if(item.ans) {
+                item.ans = item.ans.map(w => {
+                    if(w === "base (shì)" || w === "shì (shì)") return "是 (shì)";
+                    return w;
+                });
+            }
         });
 
         let currentQ = 0, score = 0, userSelection = [];
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(f1, f2, type) {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.type = type; osc.frequency.setValueAtTime(f1, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(f2, audioCtx.currentTime + 0.2);
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
 
         function startGame() {
             document.getElementById('screen-intro').classList.add('hidden');
@@ -149,34 +171,36 @@
             zone.innerHTML = '';
 
             if(data.type === "SẮP XẾP") {
-                const dropZone = document.createElement('div');
-                dropZone.className = "flex flex-wrap gap-2 mb-8 p-4 bg-white/50 rounded-2xl min-h-[80px] border-2 border-dashed border-gray-300";
-                dropZone.id = "drop-zone";
-                zone.appendChild(dropZone);
+                const dropArea = document.createElement('div');
+                dropArea.className = "flex flex-wrap gap-2 mb-6 p-4 bg-white/60 rounded-2xl min-h-[90px] border-2 border-dashed border-green-200";
+                zone.appendChild(dropArea);
 
-                const optionsDiv = document.createElement('div');
-                optionsDiv.className = "flex flex-wrap gap-2 justify-center";
+                const optionsArea = document.createElement('div');
+                optionsArea.className = "flex flex-wrap gap-2 justify-center";
                 let pool = [...data.ans].sort(() => Math.random() - 0.5);
-                pool.forEach(word => {
-                    const tag = document.createElement('button');
-                    tag.className = "word-tag";
-                    tag.innerText = word;
-                    tag.onclick = () => {
-                        userSelection.push({word, btn: tag});
-                        tag.classList.add('opacity-10', 'pointer-events-none');
-                        renderScramble(dropZone);
+                pool.forEach(val => {
+                    const [hz, py] = val.split(' ');
+                    const btn = document.createElement('button');
+                    btn.className = "word-tag shadow-sm";
+                    btn.innerHTML = `<span class="pinyin-small">${py || ""}</span><span class="hanzi-main">${hz}</span>`;
+                    btn.onclick = () => {
+                        playSound(400, 600, 'sine');
+                        userSelection.push({hz, py, btn});
+                        btn.classList.add('opacity-10', 'pointer-events-none');
+                        renderScramble(dropArea);
                     };
-                    optionsDiv.appendChild(tag);
+                    optionsArea.appendChild(btn);
                 });
-                zone.appendChild(optionsDiv);
+                zone.appendChild(optionsArea);
             } else {
                 data.options.forEach(opt => {
                     const btn = document.createElement('button');
-                    btn.className = "option-card";
+                    btn.className = "option-card font-bold text-gray-700 shadow-sm";
                     btn.innerText = opt;
                     btn.onclick = () => {
-                        document.querySelectorAll('.option-card').forEach(b => b.classList.remove('border-green-600', 'bg-green-50'));
-                        btn.classList.add('border-green-600', 'bg-green-50');
+                        playSound(500, 500, 'sine');
+                        document.querySelectorAll('.option-card').forEach(b => b.classList.remove('border-green-500', 'bg-green-50'));
+                        btn.classList.add('border-green-500', 'bg-green-50');
                         userSelection = [opt];
                     };
                     zone.appendChild(btn);
@@ -188,8 +212,8 @@
             zone.innerHTML = '';
             userSelection.forEach((item, idx) => {
                 const div = document.createElement('div');
-                div.className = "selected-tag";
-                div.innerText = item.word;
+                div.className = "selected-tag shadow-md";
+                div.innerHTML = `<span class="text-[9px] opacity-90">${item.py || ""}</span><span class="font-bold">${item.hz}</span>`;
                 div.onclick = () => {
                     item.btn.classList.remove('opacity-10', 'pointer-events-none');
                     userSelection.splice(idx, 1);
@@ -205,27 +229,35 @@
             let isCorrect = false;
 
             if(data.type === "SẮP XẾP") {
-                isCorrect = userSelection.map(i => i.word).join('') === data.ans.join('');
-            } else if(data.isMulti) {
-                isCorrect = true;
+                isCorrect = userSelection.map(i => i.hz).join('') === data.ans.map(v => v.split(' ')[0]).join('');
             } else {
                 isCorrect = userSelection[0] === data.correct;
             }
 
             const modal = document.getElementById('result-modal');
-            document.getElementById('modal-emoji').innerText = isCorrect ? "🌟" : "🏮";
-            document.getElementById('modal-title').innerText = isCorrect ? "Chính xác!" : "Cố gắng lên!";
-            document.getElementById('modal-title').className = isCorrect ? "text-2xl font-black text-center mb-4 text-green-600" : "text-2xl font-black text-center mb-4 text-red-500";
+            if(isCorrect) {
+                playSound(600, 1000, 'triangle');
+                score += 10;
+                document.getElementById('modal-emoji').innerText = "🌟";
+                document.getElementById('modal-title').innerText = "Đúng rồi! Hài hước quá!";
+                document.getElementById('modal-title').style.color = "#4f7942";
+            } else {
+                playSound(300, 100, 'sawtooth');
+                document.getElementById('modal-emoji').innerText = "🏮";
+                document.getElementById('modal-title').innerText = "Oop! Nhầm tý thôi!";
+                document.getElementById('modal-title').style.color = "#d81b60";
+            }
+
+            let correctText = data.type === "SẮP XẾP" ? data.ans.join(' ') : data.correct;
+            document.getElementById('modal-explanation').innerHTML = `<div class="mb-2 font-bold text-green-700">Đáp án đúng: ${correctText}</div>${data.explain}`;
             
-            let correctStr = data.type === "SẮP XẾP" ? data.ans.join(' ') : (data.correct || "Đáp án linh hoạt");
-            document.getElementById('modal-explanation').innerHTML = `<b>Đáp án:</b> <span class="text-green-700 font-bold">${correctStr}</span><br><br>${data.explain}`;
-            
-            if(isCorrect) score += 10;
             modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function nextStep() {
             document.getElementById('result-modal').classList.add('hidden');
+            document.getElementById('result-modal').classList.remove('flex');
             currentQ++;
             if(currentQ < quizData.length) loadQuestion();
             else {
