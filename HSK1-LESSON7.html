@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khu Vườn Tiếng Trung - Nuôi Cây HSK</title>
+    <title>Khu Vườn Tiếng Trung - Hành Trình Của Cây</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -37,37 +37,21 @@
             color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
         }
 
-        /* Layout Chính */
         .main-layout {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            width: 95%;
-            max-width: 1100px;
-            margin: 20px auto;
+            display: flex; flex-direction: row; justify-content: center;
+            align-items: flex-start; gap: 20px; width: 95%; max-width: 1100px; margin: 20px auto;
         }
 
-        /* Khung Game */
         .game-side { flex: 2; max-width: 650px; }
         
-        /* Khung Cây */
+        /* Khung Cây được tối ưu để thấy rõ sự cao lên */
         .tree-side {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.7);
-            border: 3px solid white;
-            border-radius: 25px;
-            height: 450px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            padding-bottom: 40px;
-            position: sticky;
-            top: 100px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
+            flex: 1; background: rgba(255, 255, 255, 0.8);
+            border: 3px solid white; border-radius: 25px;
+            height: 500px; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end; /* Cây mọc từ dưới lên */
+            padding-bottom: 50px; position: sticky; top: 100px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); overflow: hidden;
         }
 
         .status-bar {
@@ -111,13 +95,19 @@
         .word-seed .pinyin { font-size: 0.75rem; color: #777; }
         .word-seed .hanzi { font-size: 1.3rem; font-weight: 600; }
 
-        /* Hiệu ứng Cái Cây */
-        #the-tree { font-size: 100px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: default; user-select: none; }
-        #watering-can {
-            font-size: 40px; position: absolute; top: 20%; right: -50px;
-            transition: 0.5s; opacity: 0;
+        /* Hiệu ứng Cây tiến hóa mượt mà */
+        #the-tree { 
+            font-size: 50px; /* Kích thước cơ bản */
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            display: inline-block;
+            transform-origin: bottom center; /* Cây lớn từ gốc */
         }
-        .watering #watering-can { right: 20%; opacity: 1; transform: rotate(-20deg); }
+
+        #watering-can {
+            font-size: 40px; position: absolute; top: 15%; right: -50px;
+            transition: 0.5s; opacity: 0; z-index: 5;
+        }
+        .watering #watering-can { right: 20%; opacity: 1; transform: rotate(-25deg); }
 
         .controls button {
             background: var(--ghibli-dark-green); color: white; border: none;
@@ -126,6 +116,10 @@
 
         .shake { animation: shake 0.4s; }
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-8px);} 75% {transform: translateX(8px);} }
+
+        /* Màn hình kết quả */
+        .result-screen { display: none; padding: 20px; animation: fadeIn 1s; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 
         @media (max-width: 800px) {
             .main-layout { flex-direction: column; }
@@ -149,11 +143,22 @@
         </div>
 
         <div class="game-container" id="game-box">
-            <div id="hint-box">Đang chuẩn bị hạt giống...</div>
-            <div id="question-area" class="question-display"></div>
-            <div id="drop-zone" class="slot-container"></div>
-            <div id="word-bank" class="options-grid"></div>
-            <div class="controls"><button id="main-btn" onclick="handleButtonClick()">Kiểm tra ✨</button></div>
+            <div id="quiz-area">
+                <div id="hint-box">Gieo hạt mầm đầu tiên...</div>
+                <div id="question-area" class="question-display"></div>
+                <div id="drop-zone" class="slot-container"></div>
+                <div id="word-bank" class="options-grid"></div>
+                <div class="controls">
+                    <button id="main-btn" onclick="handleButtonClick()">Kiểm tra ✨</button>
+                </div>
+            </div>
+
+            <div id="result-area" class="result-screen">
+                <h2 style="color: var(--ghibli-dark-green);">🌸 Chúc mừng Nga! 🌸</h2>
+                <p id="final-stats" style="font-size: 1.2rem; line-height: 1.6;"></p>
+                <button onclick="location.reload()" style="background: var(--ghibli-wood); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">Trồng cây mới 🌿</button>
+            </div>
+            
             <div id="feedback" style="margin-top:10px; font-weight:600; height:20px;"></div>
         </div>
     </div>
@@ -161,20 +166,19 @@
     <div class="tree-side" id="tree-container">
         <div id="watering-can">🚿</div>
         <div id="the-tree">🌱</div>
-        <div style="font-weight: 600; color: var(--ghibli-dark-green); margin-top: 10px;">Cây của Nga</div>
+        <div id="tree-label" style="font-weight: 600; color: var(--ghibli-dark-green); margin-top: 20px;">giúp Nga trồng cây nhé</div>
     </div>
 </div>
 
-<audio id="sfx-click" src="https://cdn.pixabay.com/audio/2022/03/15/audio_790b1e60b4.mp3"></audio>
 <audio id="sfx-win" src="https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3"></audio>
 <audio id="sfx-wrong" src="https://cdn.pixabay.com/audio/2022/03/24/audio_eb3ee10eb8.mp3"></audio>
 
 <script>
     const levels = [
         { type: "scramble", hint: "Dịch: Ngày mai là thứ tư.", correct: ["明天", "星期三"], options: [{h:"明天",p:"míngtiān"},{h:"星期三",p:"xīngqīsān"},{h:"昨天",p:"zuótiān"},{h:"号",p:"hào"}] },
-        { type: "choice", hint: "Chọn từ đúng: Hôm nay ngày 5 tháng 9.", q: "今天9月____。", correct: "5号", options: ["5号", "5月", "星期五", "昨天"] },
-        { type: "pinyin", hint: "Pinyin đúng cho: 学校", q: "学校", correct: "xuéxiào", options: ["xuéxiào", "xuěxiào", "xuéxiǎo", "xuéxiáo"] },
-        { type: "hanzi", hint: "Chữ Hán của 'Trung Quốc' là gì?", q: "Zhōngguó", correct: "中国", options: ["中国", "国中", "中医", "学校"] },
+        { type: "choice", hint: "Chọn từ: Hôm nay ngày 5 tháng 9.", q: "今天9月____。", correct: "5号", options: ["5号", "5月", "星期五", "昨天"] },
+        { type: "pinyin", hint: "Pinyin cho: 学校", q: "学校", correct: "xuéxiào", options: ["xuéxiào", "xuěxiào", "xuéxiǎo", "xuéxiáo"] },
+        { type: "hanzi", hint: "Chữ Hán của 'Trung Quốc':", q: "Zhōngguó", correct: "中国", options: ["中国", "国中", "中医", "学校"] },
         { type: "scramble", hint: "Dịch: Tôi đi trường học xem sách.", correct: ["我", "去", "学校", "看书"], options: [{h:"我",p:"wǒ"},{h:"去",p:"qù"},{h:"学校",p:"xuéxiào"},{h:"看书",p:"kànshū"}] },
         { type: "choice", hint: "Xin hỏi, hôm nay ngày mấy?", q: "请问，今天____？", correct: "几号", options: ["几号", "几月", "星期几", "什么"] },
         { type: "pinyin", hint: "Pinyin của 'Thứ/Tuần':", q: "星期", correct: "xīngqī", options: ["xīngqī", "xíngqī", "xǐngqī", "xìngqī"] },
@@ -187,7 +191,7 @@
         { type: "scramble", hint: "Dịch: Hôm nay là thứ mấy?", correct: ["今天", "星期几"], options: [{h:"今天",p:"jīntiān"},{h:"星期几",p:"xīngqījǐ"},{h:"几号",p:"jǐ hào"}] },
         { type: "choice", hint: "Tôi ____ nhà bạn uống trà.", q: "我____朋友家喝茶。", correct: "去", options: ["去", "是", "叫", "在"] },
         { type: "pinyin", hint: "Pinyin 'Hôm qua':", q: "昨天", correct: "zuótiān", options: ["zuótiān", "zuōtiān", "zuòtiān", "zuǒtiān"] },
-        { type: "hanzi", hint: "Chữ Hán 'Xin hỏi':", q: "qǐngwèn", correct: "请问", options: ["请问", "请教", "问请", "叫请"] },
+        { type: "hanzi", hint: "Chữ Hán 'Xin hỏi':", q: "qǐngwèn", correct: "请问", options: ["请问", "请教", "问請", "叫请"] },
         { type: "scramble", hint: "Dịch: Ngày mai là ngày 1 tháng 9.", correct: ["明天", "9月", "1号"], options: [{h:"明天",p:"míngtiān"},{h:"9月",p:"jiǔyuè"},{h:"1号",p:"yī hào"}] },
         { type: "choice", hint: "Bạn ____ tên là gì?", q: "你____什么名字？", correct: "叫", options: ["叫", "是", "去", "看"] },
         { type: "pinyin", hint: "Pinyin 'Ở đâu/Chỗ nào':", q: "哪儿", correct: "nǎr", options: ["nǎr", "nàr", "nár", "nā"] },
@@ -197,42 +201,37 @@
         { type: "pinyin", hint: "Pinyin 'Cảm ơn':", q: "谢谢", correct: "xièxie", options: ["xièxie", "xiéxié", "xièxiè", "xiéxie"] },
         { type: "hanzi", hint: "Chữ Hán 'Ngày mai':", q: "míngtiān", correct: "明天", options: ["明天", "今天", "昨天", "学校"] },
         { type: "scramble", hint: "Dịch: Cô ấy là giáo viên của tôi.", correct: ["她", "是", "我的", "老师"], options: [{h:"她",p:"tā"},{h:"是",p:"shì"},{h:"我的",p:"wǒde"},{h:"老师",p:"lǎoshī"}] },
-        { type: "choice", hint: "Tôi không đi ____.", q: "我不去____。", correct: "学校", options: ["学校", "看书", "汉语", "中国"] },
-        { type: "pinyin", hint: "Pinyin 'Giáo viên':", q: "老师", correct: "lǎoshī", options: ["lǎoshī", "lǎoshì", "láoshī", "lāoshī"] },
-        { type: "hanzi", hint: "Chữ Hán 'Tạm biệt':", q: "zàijiàn", correct: "再见", options: ["再见", "再看", "见再", "你好"] },
+        { type: "choice", hint: "Tôi không đi ____.", q: "我不去____。", correct: "学校", options: ["学校", "看書", "汉语", "中国"] },
+        { type: "pinyin", hint: "Pinyin 'Giáo viên':", q: "老師", correct: "lǎoshī", options: ["lǎoshī", "lǎoshì", "láoshī", "lāoshī"] },
+        { type: "hanzi", hint: "Chữ Hán 'Tạm biệt':", q: "zàijiàn", correct: "再见", options: ["再見", "再看", "见再", "你好"] },
         { type: "scramble", hint: "Dịch: Thứ hai tôi đi làm.", correct: ["星期一", "我", "去", "工作"], options: [{h:"星期一",p:"xīngqīyī"},{h:"工作",p:"gōngzuò"},{h:"我",p:"wǒ"},{h:"去",p:"qù"}] }
     ];
 
     let currentLevel = 0;
     let score = 0;
-    let treeGrowth = 1; // 1 to 10
+    let treeLevel = 0; // Số câu đúng để tính độ lớn của cây
     let isCorrect = false;
 
-    const treeStages = ["🌱", "🌿", "🍀", "🪴", "🌳", "🌳", "🌲", "🌲", "🌸", "🌸"];
+    // Các biểu tượng cây theo giai đoạn tiến hóa
+    const treeStages = ["🌱", "🌿", "🍀", "🪴", "🌳", "🌸"];
 
-    function playSfx(id) {
-        const s = document.getElementById(id);
-        s.currentTime = 0; s.play().catch(()=>{});
-    }
-
-    function updateTree(isWin) {
-        const treeImg = document.getElementById('the-tree');
-        const container = document.getElementById('tree-container');
-
-        if (isWin) {
-            treeGrowth = Math.min(10, treeGrowth + 1);
-            container.classList.add('watering');
-            setTimeout(() => container.classList.remove('watering'), 1000);
-        } else {
-            treeGrowth = Math.max(1, treeGrowth - 1);
-        }
-
-        const stageIdx = Math.floor((treeGrowth - 1));
-        treeImg.innerText = treeStages[stageIdx] || "🌳";
-        treeImg.style.transform = `scale(${0.5 + treeGrowth * 0.15})`;
+    function updateTreeVisual() {
+        const treeEmoji = document.getElementById('the-tree');
         
-        if (treeGrowth < 3) treeImg.style.filter = "grayscale(0.5)";
-        else treeImg.style.filter = "none";
+        // 1. Tính toán kích thước (Cao dần sau mỗi câu đúng)
+        // Bắt đầu từ 1.0, mỗi câu đúng tăng 0.08 scale
+        const currentScale = 1 + (treeLevel * 0.08);
+        treeEmoji.style.transform = `scale(${currentScale})`;
+
+        // 2. Thay đổi icon cây theo giai đoạn tiến hóa (chia 30 câu cho 6 giai đoạn)
+        const stageIndex = Math.min(Math.floor(treeLevel / 5), treeStages.length - 1);
+        treeEmoji.innerText = treeStages[stageIndex];
+        
+        // 3. Nếu đã nở hoa (câu cuối), thêm hiệu ứng rực rỡ
+        if (treeLevel >= 30) {
+            treeEmoji.innerText = "🌸";
+            treeEmoji.style.filter = "drop-shadow(0 0 10px #ffb7c5)";
+        }
     }
 
     function initLevel() {
@@ -245,7 +244,6 @@
         document.getElementById('hint-box').innerText = lv.hint;
         document.getElementById('feedback').innerText = "";
         document.getElementById('main-btn').innerText = "Kiểm tra ✨";
-        document.getElementById('main-btn').style.background = "var(--ghibli-dark-green)";
         document.getElementById('level-indicator').innerText = `${currentLevel + 1}/${levels.length}`;
         document.getElementById('progress-fill').style.width = `${(currentLevel / levels.length) * 100}%`;
 
@@ -259,7 +257,6 @@
                 s.innerHTML = `<span style="font-size:0.7rem;color:#777"></span><span class="hz" style="font-size:1.4rem;font-weight:bold"></span>`;
                 s.onclick = () => {
                     if (s.querySelector('.hz').innerText !== "") {
-                        playSfx('sfx-click');
                         const origin = document.getElementById(s.dataset.originId);
                         origin.style.visibility = "visible"; origin.style.pointerEvents = "auto";
                         s.querySelector('span').innerText = ""; s.querySelector('.hz').innerText = "";
@@ -276,7 +273,6 @@
                 b.onclick = () => {
                     const empty = Array.from(document.querySelectorAll('.slot')).find(s => s.querySelector('.hz').innerText === "");
                     if (empty) {
-                        playSfx('sfx-click');
                         empty.querySelector('span').innerText = opt.p;
                         empty.querySelector('.hz').innerText = opt.h;
                         empty.classList.add('filled');
@@ -293,8 +289,8 @@
                 b.className = 'word-seed'; b.innerHTML = `<span class="hanzi">${opt}</span>`;
                 b.onclick = () => {
                     if (isCorrect) return;
-                    if (opt === lv.correct) { handleWin(); b.style.background = "#9dc183"; }
-                    else { handleLoss(); b.style.background = "#ffb7c5"; }
+                    if (opt === lv.correct) handleWin();
+                    else handleLoss();
                 };
                 wordBank.appendChild(b);
             });
@@ -303,30 +299,38 @@
 
     function handleWin() {
         if (isCorrect) return;
-        playSfx('sfx-win');
-        score += 20; isCorrect = true;
+        document.getElementById('sfx-win').play();
+        score += 20; treeLevel++; 
+        isCorrect = true;
         document.getElementById('score').innerText = score;
-        document.getElementById('feedback').innerHTML = "<span style='color:green'>Chính xác! Cây đang lớn lên! 🚿</span>";
+        document.getElementById('feedback').innerHTML = "<span style='color:green'>Chính xác! Cây cao thêm rồi! 🚿</span>";
         document.getElementById('main-btn').innerText = "Tiếp theo ➔";
-        document.getElementById('main-btn').style.background = "var(--ghibli-leaf)";
-        updateTree(true);
+        
+        // Hiệu ứng tưới nước
+        const container = document.getElementById('tree-container');
+        container.classList.add('watering');
+        setTimeout(() => {
+            container.classList.remove('watering');
+            updateTreeVisual(); // Cây lớn lên sau khi tưới
+        }, 800);
     }
 
     function handleLoss() {
-        playSfx('sfx-wrong');
-        score = Math.max(-500, score - 10);
+        document.getElementById('sfx-wrong').play();
+        score = Math.max(0, score - 5);
+        treeLevel = Math.max(0, treeLevel - 1); // Trả lời sai cây bị nhỏ lại
         document.getElementById('score').innerText = score;
         document.getElementById('game-box').classList.add('shake');
         setTimeout(() => document.getElementById('game-box').classList.remove('shake'), 400);
-        document.getElementById('feedback').innerHTML = "<span style='color:red'>Sai rồi! Cây bị héo đi một chút... 🥀</span>";
-        updateTree(false);
+        document.getElementById('feedback').innerHTML = "<span style='color:red'>Sai rồi! Cố gắng câu sau nhé 🥀</span>";
+        updateTreeVisual();
     }
 
     function handleButtonClick() {
         if (isCorrect) {
             currentLevel++;
             if (currentLevel < levels.length) initLevel();
-            else { alert("Cây đã nở hoa rực rỡ! Nga thật tuyệt vời!"); location.reload(); }
+            else showFinalResult();
             return;
         }
         if (levels[currentLevel].type === "scramble") {
@@ -334,6 +338,23 @@
             if (JSON.stringify(user) === JSON.stringify(levels[currentLevel].correct)) handleWin();
             else handleLoss();
         }
+    }
+
+    function showFinalResult() {
+        document.getElementById('quiz-area').style.display = "none";
+        document.getElementById('result-area').style.display = "block";
+        document.getElementById('tree-label').innerText = "Cây của Nga đã nở hoa!";
+        
+        let rank = "";
+        if (score >= 550) rank = "Chuyên gia làm vườn 👑";
+        else if (score >= 400) rank = "Người yêu cây xanh 🌿";
+        else rank = "Người mới bắt đầu 🌱";
+
+        document.getElementById('final-stats').innerHTML = `
+            Kết quả: <b>${score} điểm</b><br>
+            Danh hiệu: <b>${rank}</b><br><br>
+            Cây thần kỳ đã đạt đến trạng thái rực rỡ nhất.<br>Hẹn gặp lại Nga ở bài học sau nhé!
+        `;
     }
 
     window.onload = initLevel;
