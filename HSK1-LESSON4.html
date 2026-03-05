@@ -20,7 +20,8 @@
         .drop-zone { border: 2px dashed #cbd5e1; border-radius: 20px; min-height: 100px; padding: 15px; background: #f8fafc; display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .word-tag { background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
         .selected-tag { background: var(--ghibli-light); color: white; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; animation: pop 0.3s; }
-        .btn-ghibli { background: var(--ghibli-green); color: white; border-radius: 50px; padding: 15px; font-weight: 700; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; }
+        .btn-ghibli { background: var(--ghibli-green); color: white; border-radius: 50px; padding: 15px; font-weight: 700; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
+        .btn-ghibli:hover { transform: scale(1.02); filter: brightness(1.1); }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
         .shake { animation: shake 0.4s; }
         .hidden { display: none !important; }
@@ -36,18 +37,18 @@
                 </button>
             </div>
             <div class="bg-white/20 w-16 h-16 rounded-3xl flex items-center justify-center text-4xl mb-6">🏮</div>
-            <h1 class="text-2xl font-black mb-1">HSK1 - BÀI 4</h1>
+            <h1 class="text-2xl font-black mb-1 uppercase">HSK1 - BÀI 4</h1>
             <p class="text-yellow-200 font-bold text-xs mb-8 italic">Giáo viên: Nga Học HSK</p>
             
             <div class="mt-auto bg-black/10 p-5 rounded-3xl">
-                <p class="text-[10px] uppercase font-bold opacity-70 mb-2">Tiến độ vườn hoa</p>
+                <p class="text-[10px] uppercase font-bold opacity-70 mb-2">Tiến độ bài học</p>
                 <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden">
                     <div id="side-progress" class="w-0 h-full bg-white transition-all duration-700"></div>
                 </div>
             </div>
             <div class="flex gap-10 mt-6">
-                <div><p class="text-[10px] uppercase opacity-50">Điểm</p><p id="side-score" class="text-3xl font-bold text-yellow-300">0</p></div>
-                <div><p class="text-[10px] uppercase opacity-50">Câu</p><p id="side-count" class="text-3xl font-bold">1/20</p></div>
+                <div><p class="text-[10px] uppercase opacity-50">Điểm số</p><p id="side-score" class="text-3xl font-bold text-yellow-300">0</p></div>
+                <div><p class="text-[10px] uppercase opacity-50">Câu hỏi</p><p id="side-count" class="text-3xl font-bold">1/20</p></div>
             </div>
         </div>
 
@@ -68,11 +69,13 @@
     <div id="result-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 items-center justify-center p-6">
         <div id="modal-card" class="bg-white rounded-[40px] p-8 max-w-md w-full text-center border-[8px] border-white shadow-2xl">
             <div id="modal-emoji" class="text-7xl mb-4"></div>
-            <h3 id="modal-title" class="text-2xl font-black mb-4"></h3>
-            <div class="bg-gray-50 rounded-2xl p-5 mb-6 text-left">
-                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Lời nhắn từ Giáo viên:</p>
-                <div id="modal-explanation" class="text-gray-700 text-sm leading-relaxed"></div>
+            <h3 id="modal-title" class="text-2xl font-black mb-2"></h3>
+            
+            <div id="modal-result-box" class="rounded-2xl p-5 mb-6 text-left">
+                <p class="text-[10px] font-bold opacity-50 uppercase mb-1">Giải thích đáp án:</p>
+                <div id="modal-explanation" class="text-gray-700 font-medium leading-relaxed"></div>
             </div>
+
             <button onclick="nextStep()" class="btn-ghibli w-full uppercase">Tiếp tục hành trình ⮕</button>
         </div>
     </div>
@@ -89,9 +92,20 @@
         }
 
         const quizData = [
-            { type: "ABCD", q: "Pinyin của chữ 谁 (Ai) là gì?", options: ["shéi", "shénme", "nǎ", "ne"], correct: "shéi", explain: "Đúng rồi! 谁 (shéi) dùng để hỏi ai đó là ai. Đỉnh nóc kịch trần luôn! 🌟" },
-            { type: "SẮP XẾP", q: "Ghép câu: Bạn là người nước nào?", ans: ["你 (nǐ)", "是 (shì)", "哪 (nǎ)", "国 (guó)", "人 (rén)", "？"], explain: "Quá chuẩn! Đây là câu 'hành nghề' cơ bản nhất để kết bạn nước ngoài đó! ✈️" }
-            // Tương tự cho 20 câu...
+            { 
+                type: "ABCD", 
+                q: "Pinyin của chữ 谁 (Ai) là gì?", 
+                options: ["shéi", "shénme", "nǎ", "ne"], 
+                correct: "shéi", 
+                explain: "谁 (shéi) là đại từ nghi vấn dùng để hỏi về người. Ví dụ: 他是谁？(Anh ấy là ai?)" 
+            },
+            { 
+                type: "SẮP XẾP", 
+                q: "Ghép câu: Bạn là người nước nào?", 
+                ans: ["你 (nǐ)", " audition (shì)", "哪 (nǎ)", "国 (guó)", "人 (rén)", "？"], 
+                correct_string: "你是哪国人？",
+                explain: "Cấu trúc hỏi quốc tịch: Chủ ngữ + 是 + 哪国人？" 
+            }
         ];
 
         let currentQ = 0, score = 0, userSelection = [];
@@ -113,9 +127,10 @@
                 zone.appendChild(drop);
                 const opts = document.createElement('div'); opts.className = "flex flex-wrap gap-2 justify-center";
                 [...data.ans].sort(() => Math.random() - 0.5).forEach(val => {
-                    const [hz, py] = val.split(' ');
+                    const parts = val.split(' ');
+                    const hz = parts[0], py = parts[1] || "";
                     const btn = document.createElement('div'); btn.className = "word-tag shadow-sm";
-                    btn.innerHTML = `<span class="pinyin">${py || ""}</span><span class="hanzi">${hz}</span>`;
+                    btn.innerHTML = `<span class="pinyin">${py}</span><span class="hanzi">${hz}</span>`;
                     btn.onclick = () => {
                         userSelection.push({hz, py, btn}); btn.classList.add('opacity-20', 'pointer-events-none');
                         renderScramble(drop);
@@ -125,10 +140,9 @@
                 zone.appendChild(opts);
             } else {
                 const grid = document.createElement('div'); grid.className = "grid-abcd";
-                const labels = ['A', 'B', 'C', 'D'];
                 data.options.forEach((opt, i) => {
                     const card = document.createElement('div'); card.className = "card-abcd";
-                    card.innerHTML = `<div class="bg-green-700 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold">${labels[i]}</div><div class="font-bold text-gray-700">${opt}</div>`;
+                    card.innerHTML = `<div class="bg-green-700 text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs">${String.fromCharCode(65+i)}</div><div class="font-bold text-gray-700">${opt}</div>`;
                     card.onclick = () => {
                         document.querySelectorAll('.card-abcd').forEach(c => c.classList.remove('active'));
                         card.classList.add('active'); userSelection = [opt];
@@ -143,7 +157,7 @@
             zone.innerHTML = '';
             userSelection.forEach((item, idx) => {
                 const div = document.createElement('div'); div.className = "selected-tag shadow-md";
-                div.innerHTML = `<span class="text-[10px]">${item.py || ""}</span><span class="font-bold">${item.hz}</span>`;
+                div.innerHTML = `<span class="text-[10px]">${item.py}</span><span class="font-bold">${item.hz}</span>`;
                 div.onclick = () => {
                     item.btn.classList.remove('opacity-20', 'pointer-events-none');
                     userSelection.splice(idx, 1); renderScramble(zone);
@@ -155,24 +169,31 @@
         function checkAnswer() {
             if(userSelection.length === 0) return;
             const data = quizData[currentQ % quizData.length];
-            let isCorrect = data.type === "SẮP XẾP" ? 
-                userSelection.map(i => i.hz).join('') === data.ans.map(v => v.split(' ')[0]).join('') : 
-                userSelection[0].includes(data.correct);
+            let isCorrect = false;
+
+            if(data.type === "SẮP XẾP") {
+                isCorrect = userSelection.map(i => i.hz).join('') === data.correct_string.replace(/[？?]/g, '');
+            } else {
+                isCorrect = userSelection[0] === data.correct;
+            }
 
             const modal = document.getElementById('result-modal');
             const card = document.getElementById('modal-card');
+            const resBox = document.getElementById('modal-result-box');
             
             if(isCorrect) {
                 playSfx(880, 'sine', 0.4); score += 10;
                 document.getElementById('modal-emoji').innerText = "🌟";
-                document.getElementById('modal-title').innerText = "Đúng rồi! Quá 'chill' luôn!";
+                document.getElementById('modal-title').innerText = "Đúng rồi! Quá chuẩn luôn!";
                 document.getElementById('modal-title').style.color = "#4f7942";
+                resBox.style.backgroundColor = "#f0fdf4";
                 card.classList.remove('shake');
             } else {
                 playSfx(220, 'sawtooth', 0.3);
                 document.getElementById('modal-emoji').innerText = "🏮";
                 document.getElementById('modal-title').innerText = "Cứu tui với, nhầm rồi!";
                 document.getElementById('modal-title').style.color = "#dc2626";
+                resBox.style.backgroundColor = "#fef2f2";
                 card.classList.add('shake');
             }
 
