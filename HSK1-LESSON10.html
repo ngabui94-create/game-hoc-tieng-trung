@@ -65,7 +65,13 @@
 
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stats { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; color: var(--ghibli-wood); }
+        .stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 600; color: var(--ghibli-wood); }
+
+        .exit-btn {
+            background: #ffebee; color: var(--error-color); border: 1px solid #ffcdd2;
+            padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+        }
+        .exit-btn:hover { background: var(--error-color); color: white; }
 
         .progress-bar { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-bottom: 25px; overflow: hidden; }
         .progress-inner { height: 100%; background: var(--ghibli-pink); width: 0%; transition: width 0.5s; }
@@ -126,7 +132,6 @@
         .error { background: #ffebee; color: var(--error-color); border: 2px solid var(--error-color); }
         .explanation-box { margin-top: 15px; padding: 15px; background: #e3f2fd; border-left: 5px solid var(--info-color); border-radius: 10px; text-align: left; display: none; }
 
-        /* Style cho phần tổng kết điểm ngữ pháp */
         .score-circle {
             width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--ghibli-green);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -145,11 +150,10 @@
 
 <header class="header">
     <h1>Khu Vườn Bài 10: 我能坐这儿吗？ 🌿</h1>
-    <a href="#" onclick="location.reload()" class="home-btn">🏡 Trang chủ</a>
+    <a href="index.html" class="home-btn">🏡 Trang chủ</a>
 </header>
 
 <div class="game-wrapper">
-    <!-- Menu chính -->
     <div id="main-menu">
         <h2 style="color: var(--ghibli-dark-green); margin-bottom: 10px;">Chào mừng bạn đến với bài ôn tập!</h2>
         <button class="menu-btn" onclick="startVocabulary()">
@@ -168,11 +172,10 @@
         </button>
     </div>
 
-    <!-- Game Từ vựng -->
     <div id="vocab-game" class="game-container">
         <div class="stats">
-            <span>Bài 10: Từ vựng</span>
             <span><span id="vocab-current">1</span>/12</span>
+            <button class="exit-btn" onclick="goToMenu()">Thoát game 🚪</button>
         </div>
         <div class="progress-bar"><div id="vocab-progress" class="progress-inner"></div></div>
         
@@ -205,7 +208,6 @@
         </div>
     </div>
 
-    <!-- Kết quả từ vựng -->
     <div id="vocab-result" class="game-container">
         <h2 class="summary-title">Kết quả ôn tập 🌿</h2>
         
@@ -227,15 +229,14 @@
         </div>
         <div class="btn-group">
             <button class="btn btn-secondary" onclick="startVocabulary()">Ôn lại từ đầu</button>
-            <button class="btn btn-primary" onclick="location.reload()">Quay lại Menu</button>
+            <button class="btn btn-primary" onclick="goToMenu()">Về trang Bài 10</button>
         </div>
     </div>
 
-    <!-- Game Ngữ pháp -->
     <div id="grammar-game" class="game-container">
         <div class="stats">
-            <span>Câu hỏi: <span id="grammar-current">1</span>/20</span>
-            <span>Điểm: <span id="score-val">0</span></span>
+            <span>Câu <span id="grammar-current">1</span>/20 | Điểm: <span id="score-val">0</span></span>
+            <button class="exit-btn" onclick="goToMenu()">Thoát game 🚪</button>
         </div>
         <div class="progress-bar"><div id="grammar-progress" class="progress-inner"></div></div>
         <div id="grammar-content">
@@ -255,7 +256,6 @@
         </div>
     </div>
 
-    <!-- Kết quả ngữ pháp -->
     <div id="grammar-result" class="game-container">
         <h2 class="summary-title">Hoàn thành Thử thách! 🏆</h2>
         <div class="score-circle">
@@ -265,12 +265,13 @@
         <p id="grammar-comment" style="font-weight: 600; color: var(--ghibli-dark-green); margin-bottom: 20px;"></p>
         <div class="btn-group">
             <button class="btn btn-secondary" onclick="startGrammar()">Thử lại</button>
-            <button class="btn btn-primary" onclick="location.reload()">Quay lại Menu</button>
+            <button class="btn btn-primary" onclick="goToMenu()">Về trang Bài 10</button>
         </div>
     </div>
 </div>
 
 <script>
+    // DỮ LIỆU BÀI HỌC
     const vocabulary = [
         {cn: '桌子', p: 'zhuōzi', vi: 'cái bàn', ex_c: '桌子上有什么？', ex_p: 'Zhuōzi shàng yǒu shénme?', ex_v: 'Trên bàn có cái gì?'},
         {cn: '上', p: 'shàng', vi: 'trên, phía trên', ex_c: '电脑在桌子上', ex_p: 'Diànnǎo zài zhuōzi shàng', ex_v: 'Máy tính ở trên bàn'},
@@ -290,18 +291,18 @@
         { q: 'Từ nào sau đây có nghĩa là "cái bàn"?', opt: ['桌子', '椅子', '电脑', '杯子'], ans: '桌子', exp: '桌子 (zhuōzi) là cái bàn.' },
         { q: 'Pinyin của từ "电脑" (máy tính) là gì?', opt: ['diànnǎo', 'diànshì', 'diànhuà', 'diànyǐng'], ans: 'diànnǎo', exp: '电脑 (diànnǎo) là máy tính.' },
         { q: 'Sắp xếp câu: "Tôi có thể ngồi đây không?"', opt: ['我', '能', '坐', '这儿', '吗', '？'], ans: '我能坐这儿吗？', exp: 'Cấu trúc xin phép: Chủ ngữ + 能 + Động từ + Địa điểm + 吗?' },
-        { q: '桌子___有一本书 (Trên bàn có một quyển sách)', opt: ['上', '里', '下', '前'], ans: '上', exp: 'Dùng "上" (shàng) để chỉ vị trí bên trên.' },
+        { q: '桌子___有一本书', opt: ['上', '里', '下', '前'], ans: '上', exp: 'Dùng "上" (shàng) để chỉ vị trí bên trên.' },
         { q: 'Lượng từ "本" (běn) dùng cho đồ vật nào?', opt: ['书', '人', '猫', '桌子'], ans: '书', exp: '本 (běn) là lượng từ dùng cho sách, vở.' },
         { q: 'Sắp xếp câu: "Tôi và bạn của tôi."', opt: ['我', '和', '我的', '朋友'], ans: '我和我的朋友', exp: 'Cấu trúc: A 和 B (A và B).' },
         { q: 'Hán tự "里" (lǐ) có nghĩa là gì?', opt: ['Bên trong', 'Bên trên', 'Phía trước', 'Phía sau'], ans: 'Bên trong', exp: '里 (lǐ) chỉ vị trí bên trong.' },
         { q: 'Từ nào trái nghĩa với "前面" (phía trước)?', opt: ['后面', '上面', '里面', '哪儿'], ans: '后面', exp: '前面 (qiánmiàn - trước) đối lập với 后面 (hòumiàn - sau).' },
-        { q: 'Dịch câu hỏi: "Ở đây có người không?"', opt: ['这儿有人吗？', '那儿有人吗？', '这儿没有人。', '谁在那儿？'], ans: '这儿有人吗？', exp: '这儿 (zhèr) là ở đây, 有 (yǒu) là có, 人 (rén) là người.' },
+        { q: 'Dịch: "Ở đây có người không?"', opt: ['这儿有人吗？', '那儿有人吗？', '这儿没有人。', '谁在那儿？'], ans: '这儿有人吗？', exp: '这儿 (zhèr) là ở đây, 有 (yǒu) là có, 人 (rén) là người.' },
         { q: 'Hán tự của từ "Ngồi" là gì?', opt: ['坐', '做', '工作', '这儿'], ans: '坐', exp: '坐 (zuò) là ngồi.' },
-        { q: '电脑和书 đều ở bàn ___ (bên trên).', opt: ['上', '里', '前', '本'], ans: '上', exp: 'Đồ vật để "trên" bàn (桌子上).' },
+        { q: '电脑和书 đều ở bàn ___', opt: ['上', '里', '前', '本'], ans: '上', exp: 'Đồ vật để "trên" bàn (桌子上).' },
         { q: 'Dịch: "这儿没有电脑。"', opt: ['Ở đây không có máy tính', 'Đây là máy tính', 'Máy tính ở kia', 'Tôi không máy tính'], ans: 'Ở đây không có máy tính', exp: '这儿 (ở đây) + 没有 (không có) + 电脑 (máy tính).' },
-        { q: 'Câu nào dùng từ "和" đúng nhất?', opt: ['我有爸爸和妈妈', '我和去学校', '桌子和椅子里', '他在和书'], ans: '我有爸爸和妈妈', exp: '和 (hé) dùng nối danh từ hoặc đại từ (ví dụ: bố và mẹ).' },
+        { q: 'Câu nào dùng từ "和" đúng nhất?', opt: ['我有爸爸和妈妈', '我和去学校', '桌子和椅子里', '他在和书'], ans: '我有爸爸和妈妈', exp: '和 (hé) dùng nối danh từ hoặc đại từ.' },
         { q: 'Trong cụm "五本书", từ "本" là gì?', opt: ['Lượng từ', 'Danh từ', 'Động từ', 'Tính từ'], ans: 'Lượng từ', exp: '本 là lượng từ cho sách.' },
-        { q: 'Sắp xếp cụm từ: "Người đó ở phía trước"', opt: ['前面', '那个人'], ans: '前面那个人', exp: 'Trật tự: Phương vị từ đứng trước hoặc đứng sau để xác định vị trí.' },
+        { q: 'Sắp xếp cụm từ: "Người đó ở phía trước"', opt: ['前面', '那个人'], ans: '前面那个人', exp: 'Trật tự: Phương vị từ xác định vị trí.' },
         { q: 'Pinyin của "这儿" (ở đây) là gì?', opt: ['zhèr', 'nǎr', 'nàr', 'shénme'], ans: 'zhèr', exp: '这儿 phát âm là zhèr.' },
         { q: 'Mời ngồi: "请___。"', opt: ['坐', '喝', '读', '叫'], ans: '坐', exp: '请坐 (qǐng zuò) là mời ngồi.' },
         { q: 'Dịch: "桌子里面有一本书。"', opt: ['Trong bàn có một quyển sách', 'Trên bàn có sách', 'Dưới bàn có sách', 'Sau bàn có sách'], ans: 'Trong bàn có một quyển sách', exp: '里面 (lǐmiàn) là bên trong.' },
@@ -313,6 +314,16 @@
     let memoryStatus = new Array(vocabulary.length).fill(null);
 
     function playSnd(id) { const s = document.getElementById(id); if(s) { s.currentTime = 0; s.play().catch(()=>{}); } }
+
+    // ĐIỀU HƯỚNG QUAY LẠI TRANG CHỌN (MENU BÀI 10)
+    function goToMenu() {
+        document.getElementById('vocab-game').style.display = 'none';
+        document.getElementById('grammar-game').style.display = 'none';
+        document.getElementById('vocab-result').style.display = 'none';
+        document.getElementById('grammar-result').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'flex';
+        playSnd('snd-flip');
+    }
 
     // --- LOGIC TỪ VỰNG ---
     function startVocabulary() {
@@ -387,7 +398,6 @@
         perLearning.innerText = lPer;
         barMastered.style.width = mPer + '%';
         barLearning.style.width = lPer + '%';
-
         msg.style.display = (lCount === 0) ? 'block' : 'none';
     }
 
