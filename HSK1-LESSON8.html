@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK 1 - Bài 8: Đồng bộ Pinyin - Nga Học HSK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghibli-green: #9dc183;
+            --ghibli-dark-green: #4f7942;
+            --ghibli-sky: #d0f0f7;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--ghibli-sky);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0)), url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-attachment: fixed;
+            color: #333; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        header {
+            text-align: center; padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.85); width: 100%;
+            border-bottom: 5px solid var(--ghibli-green); backdrop-filter: blur(8px);
+            box-sizing: border-box; z-index: 10;
+        }
+
+        h1 { margin: 0; color: var(--ghibli-dark-green); font-size: 2rem; }
+
+        .sub-title-box {
+            display: inline-block; margin: 8px 0; padding: 5px 20px;
+            border: 2px dashed var(--ghibli-dark-green); border-radius: 15px;
+            background-color: rgba(255, 183, 197, 0.3); color: var(--ghibli-dark-green); font-weight: 600;
+        }
+
+        .card { perspective: 1000px; cursor: pointer; height: 110px; }
+        .card-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; height: 100%; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            backface-visibility: hidden; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 1rem; font-weight: 600; padding: 0.5rem; text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .card-front { background: white; color: #cbd5e1; border: 2px solid #f1f5f9; font-size: 1.5rem; }
+        .card-back { background: var(--ghibli-green); color: white; transform: rotateY(180deg); }
+        .card.matched .card-back { background: var(--ghibli-dark-green); border: 2px solid #fff; }
+
+        #game-container {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            border-radius: 25px; margin: 20px; width: 95%; max-width: 850px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; z-index: 5;
+        }
+
+        .active-tab {
+            color: var(--ghibli-dark-green) !important;
+            border-bottom: 4px solid var(--ghibli-dark-green) !important;
+            background: rgba(157, 193, 131, 0.1);
+        }
+
+        .answer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (max-width: 640px) { .answer-grid { grid-template-columns: 1fr; } }
+
+        .timer-bar { height: 10px; background: #e2e8f0; width: 100%; border-radius: 5px; overflow: hidden; margin-top: 10px; }
+        .timer-fill { height: 100%; background: #10b981; width: 100%; transition: width 1s linear; }
+
+        .explain-box {
+            border-left: 4px solid #3b82f6; background: #eff6ff;
+            padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; color: #1e40af;
+            text-align: left;
+        }
+
+        .rule-box {
+            background: #fdf2f8; border: 1px solid #fbcfe8;
+            padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem;
+            color: #9d174d; text-align: center;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-it { animation: shake 0.4s ease-in-out; }
+        
+        .pinyin-sub { font-size: 0.7rem; color: #e2e8f0; font-weight: normal; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Khu Vườn Tiếng Trung 🌿</h1>
+    <div class="sub-title-box">Bài 8: 你想喝什么？ (Nǐ xiǎng hē shénme?)</div>
+    <p class="text-gray-600 font-sm">GV: Nga Học HSK</p>
+</header>
+
+<div id="game-container">
+    <div class="flex border-b">
+        <button onclick="switchTab('vocab')" id="tab-vocab" class="flex-1 py-4 font-bold text-gray-400 border-b-4 border-transparent active-tab">🧠 Từ Vựng</button>
+        <button onclick="switchTab('grammar')" id="tab-grammar" class="flex-1 py-4 font-bold text-gray-400 border-b-4 border-transparent">📝 Ngữ Pháp</button>
+    </div>
+
+    <div class="p-4 md:p-6">
+        <!-- SCREEN: VOCAB -->
+        <div id="screen-vocab" class="block">
+            <div class="rule-box">
+                <b>Luật chơi:</b> Ghép cặp Chữ Hán (có Pinyin) với Nghĩa tiếng Việt tương ứng.
+            </div>
+
+            <div class="mb-6 bg-white/50 p-4 rounded-2xl shadow-sm border border-white">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Thời gian: <span id="time-text" class="text-red-500 font-mono text-lg">03:00</span></span>
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm">Ghép: <span id="vocab-pairs">0</span>/12</span>
+                </div>
+                <div class="timer-bar"><div id="vocab-timer-fill" class="timer-fill"></div></div>
+            </div>
+
+            <div id="vocab-grid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
+            
+            <div id="vocab-message" class="hidden text-center py-10">
+                <div id="vocab-msg-icon" class="text-6xl mb-4"></div>
+                <h3 id="vocab-msg-text" class="text-xl font-bold mb-6"></h3>
+                <button onclick="initVocabGame()" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold">Chơi lại</button>
+            </div>
+        </div>
+
+        <!-- SCREEN: GRAMMAR -->
+        <div id="screen-grammar" class="hidden">
+            <div id="grammar-play">
+                <div class="flex justify-between items-center mb-6 bg-white/50 p-4 rounded-xl border border-white">
+                    <span class="font-bold text-gray-600">Câu <span id="current-q">1</span>/15</span>
+                    <span id="live-score" class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg font-bold">0</span>
+                </div>
+                
+                <div id="feedback-display" class="hidden mb-6 p-4 rounded-xl shadow-md border"></div>
+                <div id="question-area" class="mb-8"></div>
+                <div id="answer-area"></div>
+            </div>
+            
+            <div id="grammar-result" class="hidden text-center py-10">
+                <div class="text-6xl mb-4">🏆</div>
+                <h3 id="grammar-final-title" class="text-2xl font-bold mb-2">Kết quả</h3>
+                <p id="grammar-final-score-text" class="text-4xl font-black text-green-700 mb-6"></p>
+                <button onclick="restartGrammar()" class="bg-green-600 text-white px-10 py-3 rounded-xl font-bold">Làm lại bài tập</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="py-6 text-green-800 font-medium text-sm">© 2026 - Nga Học HSK</footer>
+
+<script>
+    const vocabulary = [
+        { cn: "想", py: "xiǎng", vi: "muốn" }, { cn: "喝", py: "hē", vi: "uống" }, { cn: "茶", py: "chá", vi: "trà" },
+        { cn: "吃", py: "chī", vi: "ăn" }, { cn: "米饭", py: "mǐfàn", vi: "cơm" }, { cn: "下午", py: "xiàwǔ", vi: "buổi chiều" },
+        { cn: "商店", py: "shāngdiàn", vi: "cửa hàng" }, { cn: "买", py: "mǎi", vi: "mua" }, { cn: "个", py: "gè", vi: "lượng từ" },
+        { cn: "杯子", py: "bēizi", vi: "cái ly" }, { cn: "这", py: "zhè", vi: "đây/này" }, { cn: "多少", py: "duōshao", vi: "bao nhiêu" },
+        { cn: "钱", py: "qián", vi: "tiền" }, { cn: "块", py: "kuài", vi: "đồng (tệ)" }, { cn: "那", py: "nà", vi: "kia/đó" }
+    ];
+
+    const grammarQuestions = [
+        { 
+            type: 'mc', q: "Tôi muốn uống trà.", 
+            opts: ["A. 我想喝茶 (Wǒ xiǎng hē chá)", "B. 我喝想茶 (Wǒ hē xiǎng chá)", "C. 我想茶喝 (Wǒ xiǎng chá hē)", "D. 我不喝想茶 (Wǒ bù hē xiǎng chá)"], 
+            ans: 0, explain: "Cấu trúc: Chủ ngữ + 想 (xiǎng) + Động từ. '想' đứng trước '喝'. 🍵"
+        },
+        { 
+            type: 'mc', q: "Cái ly này bao nhiêu tiền?", 
+            opts: ["A. 这个杯子多少钱？ (Zhè ge bēizi duōshao qián?)", "B. 那个杯子多少钱？ (Nà ge bēizi duōshao qián?)", "C. 这个杯子多少？ (Zhè ge bēizi duōshao?)", "D. 这个杯子钱多少？ (Zhè ge bēizi qián duōshao?)"], 
+            ans: 0, explain: "Hỏi giá tiền cho vật ở gần: [这个 + Vật] + 多少钱? 💰"
+        },
+        { 
+            type: 'mc', q: "Gia đình có 3 người, dùng lượng từ nào?", 
+            opts: ["A. 三个人 (Sān gè rén)", "B. 三个口 (Sān gè kǒu)", "C. 三口人 (Sān kǒu rén)", "D. 三块人 (Sān kuài rén)"], 
+            ans: 2, explain: "Dùng '口' (kǒu) chuyên dụng cho nhân khẩu gia đình. 👨‍👩‍👧"
+        },
+        { 
+            type: 'sort', q: "Sắp xếp câu: Tôi muốn ăn cơm.", 
+            words: ["想 (xiǎng)", "我 (wǒ)", "吃 (chī)", "米饭 (mǐfàn)"], 
+            correct: "我想吃米饭", explain: "Tôi (我) + Muốn (想) + Ăn (吃) + Cơm (米饭). 🍚"
+        },
+        { 
+            type: 'mc', q: "Chiều nay bạn muốn đi đâu?", 
+            opts: ["A. 下午你想去哪儿？ (Xiàwǔ nǐ xiǎng qù nǎr?)", "B. 你去哪儿下午？ (Nǐ qù nǎr xiàwǔ?)", "C. 下午去哪儿你想？ (Xiàwǔ qù nǎr nǐ xiǎng?)", "D. 下午你想去什么？ (Xiàwǔ nǐ xiǎng qù shénme?)"], 
+            ans: 0, explain: "Thời gian đứng trước hoặc sau chủ ngữ. 🏃‍♂️"
+        },
+        { 
+            type: 'mc', q: "Lượng từ cho '杯子' (bēizi - cái ly) là gì?", 
+            opts: ["A. 一个 (yī gè)", "B. 一口 (yī kǒu)", "C. 一块 (yī kuài)", "D. 一朵 (yī duǒ)"], 
+            ans: 0, explain: "Dùng lượng từ '个' (gè) thông dụng cho cái ly. 🥤"
+        },
+        { 
+            type: 'mc', q: "Hỏi số lượng lớn hoặc hỏi giá tiền dùng gì?", 
+            opts: ["A. 几 (jǐ)", "B. 多少 (duōshao)", "C. 什么 (shénme)", "D. 哪儿 (nǎr)"], 
+            ans: 1, explain: "Dùng '多少' (duōshao) khi hỏi giá hoặc số lượng lớn. 🔢"
+        },
+        { 
+            type: 'sort', q: "Sắp xếp câu: Cái ly kia bao nhiêu tiền?", 
+            words: ["多少钱 (duōshao qián)", "那 (nà)", "个 (gè)", "杯子 (bēizi)"], 
+            correct: "那个杯子多少钱", explain: "Kia (那) + Lượng từ (个) + Ly (杯子) + Bao nhiêu tiền (多少钱). 💸"
+        },
+        { 
+            type: 'mc', q: "Tôi muốn mua cái ly này.", 
+            opts: ["A. 我想买这个杯子 (Wǒ xiǎng mǎi zhè ge bēizi)", "B. 我买想这个杯子 (Wǒ mǎi xiǎng zhè ge bēizi)", "C. 我想这个杯子买 (Wǒ xiǎng zhè ge bēizi mǎi)", "D. 这个杯子我想买 (Zhè ge bēizi wǒ xiǎng mǎi)"], 
+            ans: 0, explain: "Cấu trúc chuẩn: S + 想 + V + O. 🚫"
+        },
+        { 
+            type: 'mc', q: "35 đồng (tệ) - Khẩu ngữ nói thế nào?", 
+            opts: ["A. 三十五块钱 (Sānshíwǔ kuài qián)", "B. 三十五块个 (Sānshíwǔ kuài gè)", "C. 三十五个钱 (Sānshíwǔ gè qián)", "D. 三十五元个 (Sānshíwǔ yuán gè)"], 
+            ans: 0, explain: "Văn nói dùng '块' (kuài). Đừng quên đơn vị tiền tệ này! 💵"
+        },
+        { 
+            type: 'mc', q: "Phủ định của '想' (xiǎng - muốn) là gì?", 
+            opts: ["A. 不想 (bù xiǎng)", "B. 没想 (méi xiǎng)", "C. 不买 (bù mǎi)", "D. 想不 (xiǎng bù)"], 
+            ans: 0, explain: "Dùng '不想' (bù xiǎng) để nói không muốn làm gì đó. ☕"
+        },
+        { 
+            type: 'mc', q: "Từ nào nghĩa là 'Cửa hàng'?", 
+            opts: ["A. 商店 (shāngdiàn)", "B. 学校 (xuéxiào)", "C. 医院 (yīyuàn)", "D. 家 (jiā)"], 
+            ans: 0, explain: "商店 (shāngdiàn) là 'Thương Điếm' - Cửa hàng. 🛒"
+        },
+        { 
+            type: 'sort', q: "Sắp xếp câu: Chiều nay tôi đi cửa hàng.", 
+            words: ["去 (qù)", "商店 (shāngdiàn)", "下午 (xiàwǔ)", "我 (wǒ)"], 
+            correct: "下午我去商店", explain: "Thời gian (下午) + Chủ ngữ (我) + Động từ (去) + Địa điểm (商店). 🛍️"
+        },
+        { 
+            type: 'mc', q: "Bạn muốn mua gì?", 
+            opts: ["A. 你想买什么？ (Nǐ xiǎng mǎi shénme?)", "B. 你想喝什么？ (Nǐ xiǎng hē shénme?)", "C. 你想吃什么？ (Nǐ xiǎng chī shénme?)", "D. 你去哪儿？ (Nǐ qù nǎr?)"], 
+            ans: 0, explain: "Mua là '买' (mǎi). Hỏi vật là '什么' (shénme). 🛒"
+        },
+        { 
+            type: 'mc', q: "Cái nào là cấu trúc đúng của Số + Lượng + Danh?", 
+            opts: ["A. 三口人 (Sān kǒu rén)", "B. 三个杯子 (Sān gè bēizi)", "C. 三块钱 (Sān kuài qián)", "D. Tất cả đều đúng"], 
+            ans: 3, explain: "Hệ thống lượng từ trong tiếng Trung rất quan trọng. Rất tốt! ✨"
+        }
+    ];
+
+    let flippedCards = [], matchedCount = 0, currentGrammarIndex = 0, grammarScore = 0, sortSequence = [], vocabTimer, timeLeft = 180, gameStarted = false;
+    let audioCtx = null;
+
+    function playSound(type) {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === 'correct') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.1);
+            gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'wrong') {
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(40, now + 0.2);
+            gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+            osc.start(now); osc.stop(now + 0.2);
+        } else if (type === 'tick') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+            gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+            osc.start(now); osc.stop(now + 0.05);
+        }
+    }
+
+    function switchTab(tab) {
+        clearInterval(vocabTimer);
+        document.querySelectorAll('button[id^="tab-"]').forEach(b => b.classList.remove('active-tab'));
+        document.getElementById(`tab-${tab}`).classList.add('active-tab');
+        document.getElementById('screen-vocab').classList.add('hidden');
+        document.getElementById('screen-grammar').classList.add('hidden');
+        document.getElementById(`screen-${tab}`).classList.remove('hidden');
+        if (tab === 'vocab') initVocabGame(); else restartGrammar();
+    }
+
+    function initVocabGame() {
+        clearInterval(vocabTimer);
+        const grid = document.getElementById('vocab-grid');
+        grid.innerHTML = ''; grid.classList.remove('hidden');
+        document.getElementById('vocab-message').classList.add('hidden');
+        flippedCards = []; matchedCount = 0; timeLeft = 180; gameStarted = false;
+        document.getElementById('vocab-pairs').innerText = '0';
+        updateTimerUI();
+
+        const selected = [...vocabulary].sort(() => 0.5 - Math.random()).slice(0, 12);
+        const deck = [];
+        selected.forEach((item, idx) => {
+            deck.push({ text: item.cn, py: item.py, type: 'cn', id: idx });
+            deck.push({ text: item.vi, py: '', type: 'vi', id: idx });
+        });
+        deck.sort(() => 0.5 - Math.random());
+
+        deck.forEach(data => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<div class="card-inner" data-id="${data.id}" data-type="${data.type}"><div class="card-front">?</div><div class="card-back">${data.py ? `<span class="pinyin-sub">${data.py}</span>` : ''}<span class="text-sm font-bold">${data.text}</span></div></div>`;
+            card.onclick = () => handleCardClick(card);
+            grid.appendChild(card);
+        });
+    }
+
+    function startVocabTimer() {
+        if (gameStarted) return;
+        gameStarted = true;
+        vocabTimer = setInterval(() => {
+            timeLeft--;
+            updateTimerUI();
+            if (timeLeft < 15 && timeLeft > 0) playSound('tick');
+            if (timeLeft <= 0) { clearInterval(vocabTimer); showVocabEnd(false); }
+        }, 1000);
+    }
+
+    function updateTimerUI() {
+        const fill = document.getElementById('vocab-timer-fill');
+        const text = document.getElementById('time-text');
+        text.innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
+        fill.style.width = `${(timeLeft/180)*100}%`;
+    }
+
+    function handleCardClick(card) {
+        if (!gameStarted) startVocabTimer();
+        const inner = card.querySelector('.card-inner');
+        if (card.classList.contains('flipped') || flippedCards.length >= 2 || card.classList.contains('matched')) return;
+        card.classList.add('flipped'); flippedCards.push(inner);
+        if (flippedCards.length === 2) {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.id === c2.dataset.id && c1.dataset.type !== c2.dataset.type) {
+                c1.parentElement.classList.add('matched'); c2.parentElement.classList.add('matched');
+                matchedCount++; document.getElementById('vocab-pairs').innerText = matchedCount;
+                flippedCards = []; if (matchedCount === 12) { clearInterval(vocabTimer); showVocabEnd(true); }
+            } else { setTimeout(() => { c1.parentElement.classList.remove('flipped'); c2.parentElement.classList.remove('flipped'); flippedCards = []; }, 800); }
+        }
+    }
+
+    function showVocabEnd(success) {
+        document.getElementById('vocab-grid').classList.add('hidden');
+        const msg = document.getElementById('vocab-message');
+        msg.classList.remove('hidden');
+        document.getElementById('vocab-msg-icon').innerText = success ? "🥳" : "🤡";
+        document.getElementById('vocab-msg-text').innerText = success ? "Tuyệt đỉnh Pinyin! Bạn đã thắng!" : "Hết giờ! Xem lại Pinyin và thử lại nhé!";
+    }
+
+    function restartGrammar() {
+        currentGrammarIndex = 0; grammarScore = 0;
+        document.getElementById('live-score').innerText = '0';
+        document.getElementById('grammar-play').classList.remove('hidden');
+        document.getElementById('grammar-result').classList.add('hidden');
+        loadGrammarQuestion();
+    }
+
+    function loadGrammarQuestion() {
+        const q = grammarQuestions[currentGrammarIndex];
+        document.getElementById('current-q').innerText = currentGrammarIndex + 1;
+        const qArea = document.getElementById('question-area');
+        const aArea = document.getElementById('answer-area');
+        qArea.innerHTML = ''; aArea.innerHTML = '';
+        document.getElementById('feedback-display').classList.add('hidden');
+
+        if (q.type === 'mc') {
+            qArea.innerHTML = `<p class="text-lg font-bold text-center text-green-900 bg-white/60 p-5 rounded-2xl border border-white/50">${q.q}</p>`;
+            const grid = document.createElement('div'); grid.className = "answer-grid";
+            q.opts.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 text-left border-2 border-green-50 bg-white rounded-xl font-bold shadow-sm transition-all hover:border-green-300 transform active:scale-95";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx === q.ans, q.explain);
+                grid.appendChild(btn);
+            });
+            aArea.appendChild(grid);
+        } else {
+            qArea.innerHTML = `<p class="text-center text-gray-500 mb-3 italic">${q.q}</p><div id="sort-bucket" class="min-h-[100px] p-4 bg-white/60 rounded-xl border-2 border-dashed border-green-200 flex flex-wrap gap-2 justify-center items-center text-green-800 font-bold text-lg cursor-pointer"></div>`;
+            const pool = document.createElement('div'); pool.className = "flex flex-wrap gap-2 justify-center mt-6";
+            sortSequence = [];
+            document.getElementById('sort-bucket').onclick = () => { if(sortSequence.length>0) { const last = sortSequence.pop(); pool.querySelector(`[data-uid="${last.uid}"]`).classList.remove('hidden'); renderSortBucket(); } };
+            
+            [...q.words].sort(() => 0.5 - Math.random()).forEach((w, idx) => {
+                const uid = `w-${idx}`;
+                const pill = document.createElement('span');
+                pill.className = "px-4 py-3 bg-white border border-green-100 rounded-lg font-bold shadow-sm cursor-pointer hover:bg-green-50 text-sm";
+                pill.innerText = w; pill.dataset.uid = uid;
+                pill.onclick = () => { pill.classList.add('hidden'); sortSequence.push({ uid, text: w.split(' ')[0], display: w }); renderSortBucket(); };
+                pool.appendChild(pill);
+            });
+            const sub = document.createElement('button'); sub.className = "w-full mt-6 p-4 bg-green-600 text-white rounded-xl font-bold shadow-lg";
+            sub.innerText = "Kiểm tra đáp án! ✅";
+            sub.onclick = () => checkAnswer(sortSequence.map(s => s.text).join('') === q.correct.replace(/\s/g, '').replace(/[a-zA-Z\(\)]/g, ''), q.explain);
+            aArea.append(pool, sub);
+        }
+    }
+
+    function renderSortBucket() {
+        const bucket = document.getElementById('sort-bucket');
+        bucket.innerHTML = sortSequence.map(i => `<span class="px-3 py-1 bg-green-100 border border-green-200 rounded-lg text-xs leading-tight">${i.display}</span>`).join('');
+    }
+
+    function checkAnswer(isCorrect, explain) {
+        const display = document.getElementById('feedback-display');
+        const container = document.getElementById('game-container');
+        display.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-red-50', 'text-red-800', 'border-red-200');
+        
+        if (isCorrect) {
+            grammarScore += 10; playSound('correct');
+            display.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+            display.innerHTML = `<div class="font-bold">✨ CHÍNH XÁC! (+10đ)</div><div class="explain-box">${explain}</div>`;
+        } else {
+            grammarScore -= 5; playSound('wrong');
+            container.classList.add('shake-it'); setTimeout(() => container.classList.remove('shake-it'), 400);
+            display.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+            display.innerHTML = `<div class="font-bold">💀 SAI MẤT RỒI! (-5đ)</div><div class="explain-box">${explain}</div>`;
+        }
+        
+        document.getElementById('live-score').innerText = grammarScore;
+        document.querySelectorAll('#answer-area button').forEach(b => b.disabled = true);
+        
+        const nextBtn = document.createElement('button');
+        nextBtn.className = "w-full mt-4 p-4 bg-indigo-600 text-white rounded-xl font-bold shadow-lg";
+        nextBtn.innerText = "Câu tiếp theo ➔";
+        nextBtn.onclick = () => {
+            currentGrammarIndex++;
+            if (currentGrammarIndex < grammarQuestions.length) loadGrammarQuestion(); else showGrammarResult();
+        };
+        document.getElementById('answer-area').appendChild(nextBtn);
+    }
+
+    function showGrammarResult() {
+        document.getElementById('grammar-play').classList.add('hidden');
+        document.getElementById('grammar-result').classList.remove('hidden');
+        document.getElementById('grammar-final-score-text').innerText = `${grammarScore} ĐIỂM`;
+        document.getElementById('grammar-final-title').innerText = grammarScore > 80 ? "Bậc thầy HSK 1! 👑" : "Cần luyện tập thêm! 📚";
+    }
+
+    window.onload = initVocabGame;
+</script>
+</body>
+</html>
