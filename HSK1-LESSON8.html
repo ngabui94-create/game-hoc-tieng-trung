@@ -38,7 +38,7 @@
         }
 
         /* Card Styles for Vocab */
-        .card { perspective: 1000px; cursor: pointer; height: 110px; }
+        .card { perspective: 1000px; cursor: pointer; height: 130px; } /* Tăng chiều cao card */
         .card-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; height: 100%; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .card-front, .card-back {
@@ -47,13 +47,13 @@
             border-radius: 1rem; font-weight: 600; padding: 0.5rem; text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-        .card-front { background: white; color: #cbd5e1; border: 2px solid #f1f5f9; font-size: 1.5rem; }
+        .card-front { background: white; color: #cbd5e1; border: 2px solid #f1f5f9; font-size: 2rem; }
         .card-back { background: var(--ghibli-green); color: white; transform: rotateY(180deg); }
         .card.matched .card-back { background: var(--ghibli-dark-green); border: 2px solid #fff; }
 
         #game-container {
             background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
-            border-radius: 25px; margin: 20px; width: 95%; max-width: 850px;
+            border-radius: 25px; margin: 20px; width: 95%; max-width: 900px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; z-index: 5;
         }
 
@@ -63,40 +63,19 @@
             background: rgba(157, 193, 131, 0.1);
         }
 
-        .answer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        @media (max-width: 640px) { .answer-grid { grid-template-columns: 1fr; } }
-
         .timer-bar { height: 10px; background: #e2e8f0; width: 100%; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .timer-fill { height: 100%; background: #10b981; width: 100%; transition: width 1s linear; }
 
-        .explain-box {
-            border-left: 4px solid #3b82f6; background: #eff6ff;
-            padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; color: #1e40af;
-            text-align: left;
-        }
+        /* Cỡ chữ trong Card - TĂNG KÍCH THƯỚC */
+        .pinyin-sub { font-size: 0.95rem; color: #f8fafc; font-weight: bold; margin-bottom: 2px; }
+        .vocab-text-cn { font-size: 2.2rem; font-weight: 700; line-height: 1.1; } /* Chữ Hán to */
+        .vocab-text-vi { font-size: 1.3rem; font-weight: 700; } /* Chữ Việt to */
 
         .rule-box {
             background: #fdf2f8; border: 1px solid #fbcfe8;
             padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem;
             color: #9d174d; text-align: center;
         }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-        .shake-it { animation: shake 0.4s ease-in-out; }
-        
-        .pinyin-sub { font-size: 0.7rem; color: #e2e8f0; font-weight: normal; margin-bottom: 2px; }
-
-        /* Sort Area Styles */
-        #sort-bucket {
-            transition: all 0.2s;
-        }
-        #sort-bucket:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -122,13 +101,13 @@
 
             <div class="mb-6 bg-white/50 p-4 rounded-2xl shadow-sm border border-white">
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs font-bold text-gray-500 uppercase">Thời gian: <span id="time-text" class="text-red-500 font-mono text-lg">03:00</span></span>
+                    <span class="text-xs font-bold text-gray-500 uppercase">Thời gian: <span id="time-text" class="text-red-500 font-mono text-lg">05:00</span></span>
                     <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold text-sm">Ghép: <span id="vocab-pairs">0</span>/12</span>
                 </div>
                 <div class="timer-bar"><div id="vocab-timer-fill" class="timer-fill"></div></div>
             </div>
 
-            <div id="vocab-grid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
+            <div id="vocab-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
             
             <div id="vocab-message" class="hidden text-center py-10">
                 <div id="vocab-msg-icon" class="text-6xl mb-4"></div>
@@ -137,119 +116,128 @@
             </div>
         </div>
 
-        <!-- SCREEN: GRAMMAR -->
+        <!-- SCREEN: GRAMMAR (Giữ nguyên cấu trúc nhưng sửa text Giản thể) -->
         <div id="screen-grammar" class="hidden">
             <div id="grammar-play">
                 <div class="flex justify-between items-center mb-6 bg-white/50 p-4 rounded-xl border border-white">
                     <span class="font-bold text-gray-600">Câu <span id="current-q">1</span>/15</span>
                     <span id="live-score" class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg font-bold">0</span>
                 </div>
-                
                 <div id="feedback-display" class="hidden mb-6 p-4 rounded-xl shadow-md border"></div>
                 <div id="question-area" class="mb-8"></div>
                 <div id="answer-area"></div>
             </div>
-            
             <div id="grammar-result" class="hidden text-center py-10">
                 <div class="text-6xl mb-4">🏆</div>
                 <h3 id="grammar-final-title" class="text-2xl font-bold mb-2">Kết quả</h3>
                 <p id="grammar-final-score-text" class="text-4xl font-black text-green-700 mb-6"></p>
-                <button onclick="restartGrammar()" class="bg-green-600 text-white px-10 py-3 rounded-xl font-bold">Làm lại bài tập</button>
+                <button onclick="restartGrammar()" class="bg-green-600 text-white px-10 py-3 rounded-xl font-bold">Làm lại</button>
             </div>
         </div>
     </div>
 </div>
 
-<footer class="py-6 text-green-800 font-medium text-sm">© 2026 - Nga Học HSK</footer>
+<footer class="py-6 text-green-800 font-medium text-sm text-center">© 2026 - Nga Học HSK</footer>
 
 <script>
+    // DATA: Đã chuyển toàn bộ sang GIẢN THỂ (Simplified Chinese)
     const vocabulary = [
-        { cn: "想", py: "xiǎng", vi: "muốn" }, { cn: "喝", py: "hē", vi: "uống" }, { cn: "茶", py: "chá", vi: "trà" },
-        { cn: "吃", py: "chī", vi: "ăn" }, { cn: "米饭", py: "mǐfàn", vi: "cơm" }, { cn: "下午", py: "xiàwǔ", vi: "buổi chiều" },
-        { cn: "商店", py: "shāngdiàn", vi: "cửa hàng" }, { cn: "买", py: "mǎi", vi: "mua" }, { cn: "个", py: "gè", vi: "lượng từ" },
-        { cn: "杯子", py: "bēizi", vi: "cái ly" }, { cn: "这", py: "zhè", vi: "đây/này" }, { cn: "多少", py: "duōshao", vi: "bao nhiêu" },
-        { cn: "钱", py: "qián", vi: "tiền" }, { cn: "块", py: "kuài", vi: "đồng (tệ)" }, { cn: "那", py: "nà", vi: "kia/đó" }
+        { cn: "想", py: "xiǎng", vi: "muốn" }, 
+        { cn: "喝", py: "hē", vi: "uống" }, 
+        { cn: "茶", py: "chá", vi: "trà" },
+        { cn: "吃", py: "chī", vi: "ăn" }, 
+        { cn: "米饭", py: "mǐfàn", vi: "cơm" }, 
+        { cn: "下午", py: "xiàwǔ", vi: "buổi chiều" },
+        { cn: "商店", py: "shāngdiàn", vi: "cửa hàng" }, 
+        { cn: "买", py: "mǎi", vi: "mua" }, 
+        { cn: "个", py: "gè", vi: "lượng từ" },
+        { cn: "杯子", py: "bēizi", vi: "cái ly" }, 
+        { cn: "这", py: "zhè", vi: "đây/này" }, 
+        { cn: "多少", py: "duōshao", vi: "bao nhiêu" },
+        { cn: "钱", py: "qián", vi: "tiền" }, 
+        { cn: "块", py: "kuài", vi: "đồng (tệ)" }, 
+        { cn: "那", py: "nà", vi: "kia/đó" }
     ];
 
     const grammarQuestions = [
         { 
             type: 'mc', q: "Tôi muốn uống trà.", 
             opts: ["A. 我想喝茶 (Wǒ xiǎng hē chá)", "B. 我喝想茶 (Wǒ hē xiǎng chá)", "C. 我想茶喝 (Wǒ xiǎng chá hē)", "D. 我不喝想茶 (Wǒ bù hē xiǎng chá)"], 
-            ans: 0, explain: "Cấu trúc: Chủ ngữ + 想 (xiǎng) + Động từ. '想' đứng trước '喝'. 🍵"
+            ans: 0, explain: "Cấu trúc: S + 想 + V. '想' đứng trước '喝'."
         },
         { 
             type: 'mc', q: "Cái ly này bao nhiêu tiền?", 
             opts: ["A. 这个杯子多少钱？ (Zhè ge bēizi duōshao qián?)", "B. 那个杯子多少钱？ (Nà ge bēizi duōshao qián?)", "C. 这个杯子多少？ (Zhè ge bēizi duōshao?)", "D. 这个杯子钱多少？ (Zhè ge bēizi qián duōshao?)"], 
-            ans: 0, explain: "Dùng [这个 + Danh từ] + 多少钱？ 💰"
+            ans: 0, explain: "Cấu trúc: 这/那 + 个 + Danh từ + 多少钱？"
         },
         { 
             type: 'mc', q: "Gia đình có 3 người, dùng lượng từ nào?", 
             opts: ["A. 三个人 (Sān gè rén)", "B. 三个口 (Sān gè kǒu)", "C. 三口人 (Sān kǒu rén)", "D. 三块人 (Sān kuài rén)"], 
-            ans: 2, explain: "Dùng '口' (kǒu) cho nhân khẩu gia đình. 👨‍👩‍👧"
+            ans: 2, explain: "Dùng '口' (kǒu) cho nhân khẩu gia đình."
         },
         { 
-            type: 'sort', q: "Sắp xếp câu: Tôi muốn ăn cơm.", 
+            type: 'sort', q: "Tôi muốn ăn cơm.", 
             words: ["想 (xiǎng)", "我 (wǒ)", "吃 (chī)", "米饭 (mǐfàn)"], 
-            correct: "我想吃米饭", explain: "Cấu trúc: Chủ ngữ (我) + 想 (xiǎng) + Động từ (吃) + Tân ngữ (米饭). 🍚"
+            correct: "我想吃米饭", explain: "S + 想 + V + O."
         },
         { 
             type: 'mc', q: "Chiều nay bạn muốn đi đâu?", 
             opts: ["A. 下午你想去哪儿？ (Xiàwǔ nǐ xiǎng qù nǎr?)", "B. 你去哪儿下午？ (Nǐ qù nǎr xiàwǔ?)", "C. 下午去哪儿你想？ (Xiàwǔ qù nǎr nǐ xiǎng?)", "D. 下午你想去什么？ (Xiàwǔ nǐ xiǎng qù shénme?)"], 
-            ans: 0, explain: "Thời gian đứng trước hoặc sau chủ ngữ đều được. 🏃‍♂️"
+            ans: 0, explain: "Trạng ngữ chỉ thời gian đứng đầu câu hoặc trước động từ."
         },
         { 
-            type: 'mc', q: "Lượng từ cho '杯子' (bēizi - cái ly) là gì?", 
+            type: 'mc', q: "Lượng từ cho '杯子' (bēizi) là gì?", 
             opts: ["A. 一个 (yī gè)", "B. 一口 (yī kǒu)", "C. 一块 (yī kuài)", "D. 一朵 (yī duǒ)"], 
-            ans: 0, explain: "Dùng lượng từ '个' (gè) cho cốc/ly. 🥤"
+            ans: 0, explain: "Dùng '个' (gè) cho đồ vật thông dụng như ly/cốc."
         },
         { 
-            type: 'mc', q: "Hỏi số lượng lớn hoặc hỏi giá tiền dùng gì?", 
+            type: 'mc', q: "Hỏi giá tiền dùng từ nào?", 
             opts: ["A. 几 (jǐ)", "B. 多少 (duōshao)", "C. 什么 (shénme)", "D. 哪儿 (nǎr)"], 
-            ans: 1, explain: "Dùng '多少' (duōshao) để hỏi giá. 🔢"
+            ans: 1, explain: "Dùng '多少' (duōshao) để hỏi giá cả."
         },
         { 
-            type: 'sort', q: "Sắp xếp câu: Cái ly kia bao nhiêu tiền?", 
+            type: 'sort', q: "Cái ly kia bao nhiêu tiền?", 
             words: ["多少钱 (duōshao qián)", "那 (nà)", "个 (gè)", "杯子 (bēizi)"], 
-            correct: "那个杯子多少钱", explain: "Cấu trúc: [那 + Lượng + Danh] + 多少钱？ 💸"
+            correct: "那个杯子多少钱", explain: "[那 + Lượng + Danh] + 多少钱？"
         },
         { 
             type: 'mc', q: "Tôi muốn mua cái ly này.", 
-            opts: ["A. 我想买这个杯子 (Wǒ xiǎng mǎi zhè ge bēizi)", "B. 我买想 cái này", "C. 我想 hē cái ly", "D. 我想买 cái ly kia"], 
-            ans: 0, explain: "Mua là '买' (mǎi), cái ly này là '这个杯子'. 🛒"
+            opts: ["A. 我想买这个杯子 (Wǒ xiǎng mǎi zhè ge bēizi)", "B. 我买想这个杯子", "C. 我想喝这个杯子", "D. 我想买那个杯子"], 
+            ans: 0, explain: "Mua là '买' (mǎi), cái này là '这个'."
         },
         { 
             type: 'mc', q: "35 đồng (tệ) - Khẩu ngữ nói thế nào?", 
-            opts: ["A. 三十五块钱 (Sānshíwǔ kuài qián)", "B. 三十五元 (Sānshíwǔ yuán)", "C. 三十五个 (Sānshíwǔ gè)", "D. 三十五钱 (Sānshíwǔ qián)"], 
-            ans: 0, explain: "Văn nói dùng '块' (kuài). 💵"
+            opts: ["A. 三十五块钱 (Sānshíwǔ kuài qián)", "B. 三十五元 (Sānshíwǔ yuán)", "C. 三十五个", "D. 三十五钱"], 
+            ans: 0, explain: "Khẩu ngữ dùng '块' (kuài)."
         },
         { 
             type: 'mc', q: "Phủ định của '想' (muốn) là gì?", 
-            opts: ["A. 不想 (bù xiǎng)", "B. 没想 (méi xiǎng)", "C. 不买 (bù mǎi)", "D. 想不 (xiǎng bù)"], 
-            ans: 0, explain: "Không muốn là '不想' (bù xiǎng). ☕"
+            opts: ["A. 不想 (bù xiǎng)", "B. 没想", "C. 不买", "D. 想不"], 
+            ans: 0, explain: "Không muốn là '不想' (bù xiǎng)."
         },
         { 
             type: 'mc', q: "Từ nào nghĩa là 'Cửa hàng'?", 
-            opts: ["A. 商店 (shāngdiàn)", "B. 学校 (xuéxiào)", "C. 医院 (yīyuàn)", "D. 家 (jiā)"], 
-            ans: 0, explain: "商店 (shāngdiàn) nghĩa là Cửa hàng. 🛒"
+            opts: ["A. 商店 (shāngdiàn)", "B. 学校", "C. 医院", "D. 家"], 
+            ans: 0, explain: "商店 (shāngdiàn) là cửa hàng."
         },
         { 
-            type: 'sort', q: "Sắp xếp câu: Chiều nay tôi đi cửa hàng.", 
+            type: 'sort', q: "Chiều nay tôi đi cửa hàng.", 
             words: ["去 (qù)", "商店 (shāngdiàn)", "下午 (xiàwǔ)", "我 (wǒ)"], 
-            correct: "下午我去商店", explain: "Thời gian + S + V + O. 🛍️"
+            correct: "下午我去商店", explain: "Thời gian + Chủ ngữ + Động từ + Tân ngữ."
         },
         { 
             type: 'mc', q: "Bạn muốn mua gì?", 
             opts: ["A. 你想买什么？ (Nǐ xiǎng mǎi shénme?)", "B. 你想喝什么？", "C. 你想吃什么？", "D. 你去哪儿？"], 
-            ans: 0, explain: "Mua là '买', gì là '什么'. 🛒"
+            ans: 0, explain: "Mua (买 mǎi), Cái gì (什么 shénme)."
         },
         { 
-            type: 'mc', q: "Cái nào là cấu trúc đúng của Số + Lượng + Danh?", 
+            type: 'mc', q: "Cấu trúc Số + Lượng + Danh đúng là:", 
             opts: ["A. 三口人", "B. 三个杯子", "C. 三块钱", "D. Tất cả đều đúng"], 
-            ans: 3, explain: "Cả 3 đều là cấu trúc [Số + Lượng + Danh] chuẩn. ✨"
+            ans: 3, explain: "Cả 3 đều tuân theo cấu trúc chuẩn."
         }
     ];
 
-    let flippedCards = [], matchedCount = 0, currentGrammarIndex = 0, grammarScore = 0, sortSequence = [], vocabTimer, timeLeft = 180, gameStarted = false;
+    let flippedCards = [], matchedCount = 0, currentGrammarIndex = 0, grammarScore = 0, sortSequence = [], vocabTimer, timeLeft = 300, gameStarted = false;
     let audioCtx = null;
 
     function playSound(type) {
@@ -268,10 +256,6 @@
             osc.frequency.exponentialRampToValueAtTime(40, now + 0.2);
             gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
             osc.start(now); osc.stop(now + 0.2);
-        } else if (type === 'tick') {
-            osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
-            gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-            osc.start(now); osc.stop(now + 0.05);
         }
     }
 
@@ -290,7 +274,7 @@
         const grid = document.getElementById('vocab-grid');
         grid.innerHTML = ''; grid.classList.remove('hidden');
         document.getElementById('vocab-message').classList.add('hidden');
-        flippedCards = []; matchedCount = 0; timeLeft = 180; gameStarted = false;
+        flippedCards = []; matchedCount = 0; timeLeft = 300; gameStarted = false;
         document.getElementById('vocab-pairs').innerText = '0';
         updateTimerUI();
 
@@ -305,7 +289,15 @@
         deck.forEach(data => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `<div class="card-inner" data-id="${data.id}" data-type="${data.type}"><div class="card-front">?</div><div class="card-back">${data.py ? `<span class="pinyin-sub">${data.py}</span>` : ''}<span class="text-sm font-bold">${data.text}</span></div></div>`;
+            const isCN = data.type === 'cn';
+            card.innerHTML = `
+                <div class="card-inner" data-id="${data.id}" data-type="${data.type}">
+                    <div class="card-front">?</div>
+                    <div class="card-back">
+                        ${data.py ? `<span class="pinyin-sub">${data.py}</span>` : ''}
+                        <span class="${isCN ? 'vocab-text-cn' : 'vocab-text-vi'}">${data.text}</span>
+                    </div>
+                </div>`;
             card.onclick = () => handleCardClick(card);
             grid.appendChild(card);
         });
@@ -317,7 +309,6 @@
         vocabTimer = setInterval(() => {
             timeLeft--;
             updateTimerUI();
-            if (timeLeft < 15 && timeLeft > 0) playSound('tick');
             if (timeLeft <= 0) { clearInterval(vocabTimer); showVocabEnd(false); }
         }, 1000);
     }
@@ -326,7 +317,7 @@
         const fill = document.getElementById('vocab-timer-fill');
         const text = document.getElementById('time-text');
         text.innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
-        fill.style.width = `${(timeLeft/180)*100}%`;
+        fill.style.width = `${(timeLeft/300)*100}%`;
     }
 
     function handleCardClick(card) {
@@ -369,19 +360,18 @@
         document.getElementById('feedback-display').classList.add('hidden');
 
         if (q.type === 'mc') {
-            qArea.innerHTML = `<p class="text-lg font-bold text-center text-green-900 bg-white/60 p-5 rounded-2xl border border-white/50">${q.q}</p>`;
-            const grid = document.createElement('div'); grid.className = "answer-grid";
+            qArea.innerHTML = `<p class="text-xl font-bold text-center text-green-900 bg-white/60 p-5 rounded-2xl border border-white/50">${q.q}</p>`;
+            const grid = document.createElement('div'); grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
             q.opts.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "p-4 text-left border-2 border-green-50 bg-white rounded-xl font-bold shadow-sm transition-all hover:border-green-300 transform active:scale-95";
+                btn.className = "p-4 text-left border-2 border-green-50 bg-white rounded-xl font-bold shadow-sm transition-all hover:border-green-300 active:scale-95 text-lg";
                 btn.innerText = opt;
                 btn.onclick = () => checkAnswer(idx === q.ans, q.explain);
                 grid.appendChild(btn);
             });
             aArea.appendChild(grid);
         } else {
-            // Sort Question - Đã xóa Hán tự trong câu hỏi (CHỈ HIỆN NGHĨA VIỆT)
-            qArea.innerHTML = `<p class="text-center text-gray-500 mb-3 italic">Hãy sắp xếp các thẻ dưới đây thành câu đúng:</p><p class="text-center font-bold text-green-800 mb-4">${q.q.replace('Sắp xếp câu: ', '')}</p><div id="sort-bucket" class="min-h-[100px] p-4 bg-white/60 rounded-xl border-2 border-dashed border-green-200 flex flex-wrap gap-2 justify-center items-center text-green-800 font-bold text-lg cursor-pointer" title="Bấm vào đây để xóa từ cuối cùng"></div>`;
+            qArea.innerHTML = `<p class="text-center text-gray-500 mb-3">Sắp xếp câu đúng:</p><p class="text-center font-bold text-green-800 mb-4 text-xl">${q.q}</p><div id="sort-bucket" class="min-h-[80px] p-4 bg-white/60 rounded-xl border-2 border-dashed border-green-200 flex flex-wrap gap-2 justify-center items-center text-green-800 font-bold text-lg"></div>`;
             const pool = document.createElement('div'); pool.className = "flex flex-wrap gap-2 justify-center mt-6";
             sortSequence = [];
             
@@ -390,13 +380,13 @@
             [...q.words].sort(() => 0.5 - Math.random()).forEach((w, idx) => {
                 const uid = `w-${idx}`;
                 const pill = document.createElement('span');
-                pill.className = "px-4 py-3 bg-white border border-green-100 rounded-lg font-bold shadow-sm cursor-pointer hover:bg-green-50 text-sm";
+                pill.className = "px-4 py-3 bg-white border border-green-100 rounded-lg font-bold shadow-sm cursor-pointer hover:bg-green-50 text-xl";
                 pill.innerText = w; pill.dataset.uid = uid;
                 pill.onclick = () => { pill.classList.add('hidden'); sortSequence.push({ uid, text: w.split(' ')[0], display: w }); renderSortBucket(); };
                 pool.appendChild(pill);
             });
-            const sub = document.createElement('button'); sub.className = "w-full mt-6 p-4 bg-green-600 text-white rounded-xl font-bold shadow-lg";
-            sub.innerText = "Kiểm tra đáp án! ✅";
+            const sub = document.createElement('button'); sub.className = "w-full mt-6 p-4 bg-green-600 text-white rounded-xl font-bold text-lg";
+            sub.innerText = "Xác nhận ✅";
             sub.onclick = () => checkAnswer(sortSequence.map(s => s.text).join('') === q.correct.replace(/\s/g, '').replace(/[a-zA-Z\(\)]/g, ''), q.explain);
             aArea.append(pool, sub);
         }
@@ -405,38 +395,33 @@
     function renderSortBucket() {
         const bucket = document.getElementById('sort-bucket');
         if (sortSequence.length === 0) {
-            bucket.innerHTML = '<span class="text-gray-300 text-sm">Thứ tự câu của bạn sẽ hiện ở đây...</span>';
+            bucket.innerHTML = '<span class="text-gray-300 text-sm">Bấm từ để ghép câu...</span>';
         } else {
-            bucket.innerHTML = sortSequence.map(i => `<span class="px-3 py-1 bg-green-100 border border-green-200 rounded-lg text-sm">${i.display}</span>`).join('');
+            bucket.innerHTML = sortSequence.map(i => `<span class="px-3 py-1 bg-green-100 border border-green-200 rounded-lg text-lg">${i.display}</span>`).join('');
         }
     }
 
     function checkAnswer(isCorrect, explain) {
         const display = document.getElementById('feedback-display');
-        const container = document.getElementById('game-container');
-        display.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-red-50', 'text-red-800', 'border-red-200');
-        
+        display.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'bg-red-50', 'text-red-800');
         if (isCorrect) {
             grammarScore += 10; playSound('correct');
             display.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
-            display.innerHTML = `<div class="font-bold">✨ CHÍNH XÁC! (+10đ)</div><div class="explain-box">${explain}</div>`;
+            display.innerHTML = `<div class="font-bold">ĐÚNG RỒI! (+10đ)</div><div class="text-sm mt-1">${explain}</div>`;
         } else {
             grammarScore -= 5; playSound('wrong');
-            container.classList.add('shake-it'); setTimeout(() => container.classList.remove('shake-it'), 400);
             display.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
-            display.innerHTML = `<div class="font-bold">💀 SAI MẤT RỒI! (-5đ)</div><div class="explain-box">${explain}</div>`;
+            display.innerHTML = `<div class="font-bold">CHƯA CHÍNH XÁC! (-5đ)</div><div class="text-sm mt-1">${explain}</div>`;
         }
-        
         document.getElementById('live-score').innerText = grammarScore;
-        document.querySelectorAll('#answer-area button').forEach(b => b.disabled = true);
-        
         const nextBtn = document.createElement('button');
-        nextBtn.className = "w-full mt-4 p-4 bg-indigo-600 text-white rounded-xl font-bold shadow-lg";
-        nextBtn.innerText = "Câu tiếp theo ➔";
+        nextBtn.className = "w-full mt-4 p-4 bg-indigo-600 text-white rounded-xl font-bold";
+        nextBtn.innerText = "Tiếp theo";
         nextBtn.onclick = () => {
             currentGrammarIndex++;
             if (currentGrammarIndex < grammarQuestions.length) loadGrammarQuestion(); else showGrammarResult();
         };
+        document.getElementById('answer-area').innerHTML = '';
         document.getElementById('answer-area').appendChild(nextBtn);
     }
 
@@ -444,7 +429,6 @@
         document.getElementById('grammar-play').classList.add('hidden');
         document.getElementById('grammar-result').classList.remove('hidden');
         document.getElementById('grammar-final-score-text').innerText = `${grammarScore} ĐIỂM`;
-        document.getElementById('grammar-final-title').innerText = grammarScore > 100 ? "Tuyệt vời! 👑" : "Cố gắng hơn nữa nhé! 📚";
     }
 
     window.onload = initVocabGame;
