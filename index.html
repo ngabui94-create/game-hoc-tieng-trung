@@ -31,7 +31,41 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative; /* Thêm để chứa hiệu ứng lá */
         }
+
+        /* --- BẮT ĐẦU CSS CHO HIỆU ỨNG LÁ BAY --- */
+        #leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; /* CỰC KỲ QUAN TRỌNG: Không cản trở click chuột */
+            z-index: 0; /* Nằm dưới nội dung nhưng trên background */
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            top: -10%;
+            pointer-events: none;
+            user-select: none;
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(0px) rotate(0deg); }
+            100% { transform: translateX(30px) rotate(45deg); }
+        }
+        /* --- KẾT THÚC CSS HIỆU ỨNG LÁ BAY --- */
 
         header {
             text-align: center;
@@ -45,8 +79,9 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            z-index: 1;
+            z-index: 10; /* Tăng z-index để nổi lên trên lá */
             box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Thêm bóng mờ sinh động */
         }
 
         h1 {
@@ -54,6 +89,11 @@
             color: var(--ghibli-dark-green);
             font-size: 2.5rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        h1:hover {
+            transform: scale(1.05); /* Hiệu ứng phình to nhẹ khi di chuột vào tiêu đề */
         }
 
         .sub-title-box {
@@ -67,6 +107,12 @@
             font-weight: 600;
             font-size: 1.2rem;
             position: relative;
+            animation: float 3s ease-in-out infinite; /* Thêm hiệu ứng nổi nhẹ */
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .sub-title-box::before { content: '🌸'; position: absolute; left: -18px; top: -5px; }
@@ -91,7 +137,8 @@
             max-width: 1200px;
             width: 95%;
             padding-bottom: 50px;
-            z-index: 1;
+            z-index: 10; /* Tăng z-index để nổi lên trên lá */
+            position: relative;
         }
 
         .game-card {
@@ -115,7 +162,16 @@
             box-shadow: 0 15px 30px rgba(79, 121, 66, 0.2);
         }
 
-        .game-icon { font-size: 45px; margin-bottom: 12px; }
+        .game-icon { 
+            font-size: 45px; 
+            margin-bottom: 12px; 
+            transition: transform 0.3s;
+        }
+        
+        .game-card:hover .game-icon {
+            transform: rotate(10deg) scale(1.1); /* Icon nhún nhảy khi hover */
+        }
+
         .game-title { font-weight: 600; font-size: 1.1rem; color: var(--ghibli-wood); }
 
         footer {
@@ -123,10 +179,14 @@
             padding: 20px;
             font-size: 0.9rem;
             color: var(--ghibli-dark-green);
+            z-index: 10;
         }
     </style>
 </head>
 <body>
+
+<!-- Vùng chứa các lá bay rơi -->
+<div id="leaves-container"></div>
 
 <header>
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
@@ -156,8 +216,8 @@
         <div class="game-title">HSK1: Bài 7</div>
     </a>
 
-    <!-- Thêm Bài 8 tại đây với tên file đồng bộ -->
-    <a href="HSK1-LESSON8.html" class="game-card">
+    <!-- Đã cập nhật lại đường link thành HSK1-LESSON8-FIXED.html -->
+    <a href="HSK1-LESSON8-FIXED.html" class="game-card">
         <div class="game-icon">☕</div>
         <div class="game-title">HSK1: Bài 8</div>
     </a>
@@ -166,6 +226,45 @@
 <footer>
     © 2026 - Made with ❤️ for Nga Học HSK
 </footer>
+
+<!-- SCRIPT TẠO LÁ BAY -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById('leaves-container');
+        const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨']; // Thêm nhiều loại icon bay lơ lửng
+        const numLeaves = 30; // Số lượng lá trên màn hình
+
+        for (let i = 0; i < numLeaves; i++) {
+            let leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            
+            // Chọn ngẫu nhiên loại lá
+            leaf.innerText = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+            
+            // Random vị trí bắt đầu theo chiều ngang (0 - 100vw)
+            leaf.style.left = Math.random() * 100 + 'vw';
+            
+            // Random kích thước lá
+            const size = Math.random() * 15 + 10; // 10px - 25px
+            leaf.style.fontSize = size + 'px';
+            
+            // Nếu là lấp lánh (✨), làm mờ bớt
+            if(leaf.innerText === '✨') leaf.style.opacity = '0.6';
+
+            // Random thời gian rơi (8s - 15s) và lắc lư (3s - 6s)
+            const fallDuration = Math.random() * 7 + 8;
+            const swayDuration = Math.random() * 3 + 3;
+            leaf.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+            
+            // Random độ trễ bắt đầu để không rơi cùng một lúc
+            const fallDelay = Math.random() * 10;
+            const swayDelay = Math.random() * 5;
+            leaf.style.animationDelay = `-${fallDelay}s, -${swayDelay}s`; // Số âm giúp lá có sẵn ngay khi mở trang
+            
+            container.appendChild(leaf);
+        }
+    });
+</script>
 
 </body>
 </html>
