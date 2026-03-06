@@ -23,13 +23,23 @@
         }
 
         header {
-            text-align: center; padding: 25px 20px;
+            text-align: center; padding: 20px;
             background: rgba(255, 255, 255, 0.85); width: 100%;
             border-bottom: 5px solid var(--ghibli-green); backdrop-filter: blur(8px);
-            box-sizing: border-box; z-index: 10;
+            box-sizing: border-box; z-index: 10; position: relative;
         }
 
-        h1 { margin: 0; color: var(--ghibli-dark-green); font-size: 2rem; }
+        .back-home-btn {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            background: white; border: 2px solid var(--ghibli-green); color: var(--ghibli-dark-green);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; transition: all 0.3s;
+            display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 0 var(--ghibli-green);
+        }
+
+        .back-home-btn:hover { transform: translateY(-52%); box-shadow: 0 6px 0 var(--ghibli-green); }
+        .back-home-btn:active { transform: translateY(-48%); box-shadow: 0 2px 0 var(--ghibli-green); }
+
+        h1 { margin: 0; color: var(--ghibli-dark-green); font-size: 1.8rem; }
 
         .sub-title-box {
             display: inline-block; margin: 8px 0; padding: 5px 20px;
@@ -38,7 +48,7 @@
         }
 
         /* Card Styles for Vocab */
-        .card { perspective: 1000px; cursor: pointer; height: 130px; } /* Tăng chiều cao card */
+        .card { perspective: 1000px; cursor: pointer; height: 130px; }
         .card-inner { transition: transform 0.6s; transform-style: preserve-3d; position: relative; height: 100%; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
         .card-front, .card-back {
@@ -66,24 +76,33 @@
         .timer-bar { height: 10px; background: #e2e8f0; width: 100%; border-radius: 5px; overflow: hidden; margin-top: 10px; }
         .timer-fill { height: 100%; background: #10b981; width: 100%; transition: width 1s linear; }
 
-        /* Cỡ chữ trong Card - TĂNG KÍCH THƯỚC */
+        /* Cỡ chữ trong Card */
         .pinyin-sub { font-size: 0.95rem; color: #f8fafc; font-weight: bold; margin-bottom: 2px; }
-        .vocab-text-cn { font-size: 2.2rem; font-weight: 700; line-height: 1.1; } /* Chữ Hán to */
-        .vocab-text-vi { font-size: 1.3rem; font-weight: 700; } /* Chữ Việt to */
+        .vocab-text-cn { font-size: 2.2rem; font-weight: 700; line-height: 1.1; }
+        .vocab-text-vi { font-size: 1.3rem; font-weight: 700; }
 
         .rule-box {
             background: #fdf2f8; border: 1px solid #fbcfe8;
             padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 0.9rem;
             color: #9d174d; text-align: center;
         }
+
+        @media (max-width: 640px) {
+            .back-home-btn { position: static; transform: none; margin: 0 auto 10px; width: fit-content; }
+            h1 { font-size: 1.4rem; }
+        }
     </style>
 </head>
 <body>
 
 <header>
+    <a href="/" class="back-home-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Quay về vườn
+    </a>
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
     <div class="sub-title-box">Bài 8: 你想喝什么？ (Nǐ xiǎng hē shénme?)</div>
-    <p class="text-gray-600 font-sm">GV: Nga Học HSK</p>
+    <p class="text-gray-600 text-sm">GV: Nga Học HSK</p>
 </header>
 
 <div id="game-container">
@@ -116,7 +135,7 @@
             </div>
         </div>
 
-        <!-- SCREEN: GRAMMAR (Giữ nguyên cấu trúc nhưng sửa text Giản thể) -->
+        <!-- SCREEN: GRAMMAR -->
         <div id="screen-grammar" class="hidden">
             <div id="grammar-play">
                 <div class="flex justify-between items-center mb-6 bg-white/50 p-4 rounded-xl border border-white">
@@ -140,7 +159,6 @@
 <footer class="py-6 text-green-800 font-medium text-sm text-center">© 2026 - Nga Học HSK</footer>
 
 <script>
-    // DATA: Đã chuyển toàn bộ sang GIẢN THỂ (Simplified Chinese)
     const vocabulary = [
         { cn: "想", py: "xiǎng", vi: "muốn" }, 
         { cn: "喝", py: "hē", vi: "uống" }, 
@@ -187,7 +205,7 @@
         },
         { 
             type: 'mc', q: "Lượng từ cho '杯子' (bēizi) là gì?", 
-            opts: ["A. 一个 (yī gè)", "B. 一口 (yī kǒu)", "C. 一块 (yī kuài)", "D. 一朵 (yī duǒ)"], 
+            opts: ["A. Một chiếc (yī gè)", "B. Một miệng", "C. Một tệ", "D. Một đóa"], 
             ans: 0, explain: "Dùng '个' (gè) cho đồ vật thông dụng như ly/cốc."
         },
         { 
@@ -202,12 +220,12 @@
         },
         { 
             type: 'mc', q: "Tôi muốn mua cái ly này.", 
-            opts: ["A. 我想买这个杯子 (Wǒ xiǎng mǎi zhè ge bēizi)", "B. 我买想这个杯子", "C. 我想喝这个杯子", "D. 我想买那个杯子"], 
+            opts: ["A. 我想买这个杯子 (Wǒ xiǎng mǎi zhè ge bēizi)", "B. 我买想 cái này cái ly", "C. Tôi muốn uống cái ly này", "D. Tôi muốn mua cái ly kia"], 
             ans: 0, explain: "Mua là '买' (mǎi), cái này là '这个'."
         },
         { 
             type: 'mc', q: "35 đồng (tệ) - Khẩu ngữ nói thế nào?", 
-            opts: ["A. 三十五块钱 (Sānshíwǔ kuài qián)", "B. 三十五元 (Sānshíwǔ yuán)", "C. 三十五个", "D. 三十五钱"], 
+            opts: ["A. 三十五块钱 (Sānshíwǔ kuài qián)", "B. 三十五元", "C. 三十五个", "D. 三十五 tiền"], 
             ans: 0, explain: "Khẩu ngữ dùng '块' (kuài)."
         },
         { 
@@ -227,7 +245,7 @@
         },
         { 
             type: 'mc', q: "Bạn muốn mua gì?", 
-            opts: ["A. 你想买什么？ (Nǐ xiǎng mǎi shénme?)", "B. 你想喝什么？", "C. 你想吃什么？", "D. 你去哪儿？"], 
+            opts: ["A. 你想买什么？ (Nǐ xiǎng mǎi shénme?)", "B. Bạn muốn uống gì?", "C. Bạn muốn ăn gì?", "D. Bạn đi đâu?"], 
             ans: 0, explain: "Mua (买 mǎi), Cái gì (什么 shénme)."
         },
         { 
@@ -316,8 +334,8 @@
     function updateTimerUI() {
         const fill = document.getElementById('vocab-timer-fill');
         const text = document.getElementById('time-text');
-        text.innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
-        fill.style.width = `${(timeLeft/300)*100}%`;
+        if (text) text.innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
+        if (fill) fill.style.width = `${(timeLeft/300)*100}%`;
     }
 
     function handleCardClick(card) {
