@@ -11,8 +11,9 @@
             --ghibli-dark: #4f7942;
             --accent-pink: #ffb7c5;
             --highlight: #ffd166;
+            --paper: #fdfcf0;
         }
-        body { font-family: 'Quicksand', sans-serif; background: #fdfcf0; margin: 0; padding: 5px; color: #444; }
+        body { font-family: 'Quicksand', sans-serif; background: var(--paper); margin: 0; padding: 5px; color: #444; }
         
         .back-btn { 
             text-decoration: none; color: white; background: var(--ghibli-green); 
@@ -30,19 +31,19 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.08); background: white;
         }
 
-        table { border-collapse: separate; border-spacing: 0; }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
         
         thead th {
             position: sticky; top: 0; z-index: 10;
-            color: white; padding: 6px 2px; font-size: 1.2rem; 
-            border: 1px solid #ffffff33; min-width: 44px;
+            color: white; padding: 6px 2px; font-size: 1.1rem; 
+            border: 1px solid #ffffff33; min-width: 40px;
         }
         
-        /* Nhóm màu Thanh mẫu (Initials) */
-        .group-labial { background: #ffcad4 !important; } /* b p m f */
-        .group-alveolar { background: #ffe5d9 !important; } /* d t n l */
-        .group-velar { background: #ffecb3 !important; } /* g k h */
-        .group-palatal { background: #e2cfea !important; } /* j q x */
+        /* Nhóm màu Thanh mẫu */
+        .group-labial { background: #ffcad4 !important; }
+        .group-alveolar { background: #ffe5d9 !important; }
+        .group-velar { background: #ffecb3 !important; }
+        .group-palatal { background: #e2cfea !important; }
         .group-retroflex { background: #d1e7dd !important; } /* zh ch sh r */
         .group-sibilant { background: #d0f4de !important; } /* z c s */
         .group-zero { background: var(--ghibli-green) !important; }
@@ -51,47 +52,49 @@
             position: sticky; left: 0; z-index: 11;
             background: #f8fbf8 !important; color: var(--ghibli-dark);
             font-weight: bold; padding: 6px 8px;
-            font-size: 1.2rem; border-right: 2px solid var(--ghibli-green);
+            font-size: 1.1rem; border-right: 2px solid var(--ghibli-green);
             text-align: left;
         }
 
         td {
             padding: 6px 2px; text-align: center; 
-            border: 0.5px solid #f0f0f0; font-size: 1.1rem; 
-            min-width: 45px;
+            border: 0.5px solid #f2f2f2; font-size: 1.05rem; 
+            min-width: 42px;
         }
 
-        .syllable { cursor: pointer; color: #444; font-weight: 600; border-radius: 4px; }
-        .syllable:hover, .syllable.active { background: var(--accent-pink) !important; color: white; }
-        .empty { color: #f2f2f2; pointer-events: none; font-size: 0.6rem; }
+        .syllable { cursor: pointer; color: #444; font-weight: 600; border-radius: 4px; transition: 0.1s; }
+        .syllable:hover, .syllable.active { background: var(--accent-pink) !important; color: white; transform: scale(1.05); }
+        .empty { color: #f9f9f9; pointer-events: none; font-size: 0.6rem; }
 
-        /* Menu thanh điệu */
         #toneMenu {
             display: none; position: fixed; background: rgba(255,255,255,0.98);
             border: 2px solid var(--ghibli-green); border-radius: 12px;
-            padding: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.12); z-index: 1000;
+            padding: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 1000;
         }
         
-        .tone-grid { display: flex; gap: 5px; align-items: center; }
+        .tone-grid { display: flex; gap: 5px; align-items: center; justify-content: center; }
         .t-btn { 
-            border: none; background: #f4f9f3; padding: 8px 12px; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.15rem; 
-            color: var(--ghibli-dark); min-width: 45px; transition: 0.2s;
+            border: none; background: #f4f9f3; padding: 10px; 
+            border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; 
+            color: var(--ghibli-dark); min-width: 55px; transition: 0.2s;
+            box-shadow: 0 2px 0 #d4e4d0;
         }
-        .t-btn.playing { background: var(--highlight) !important; transform: scale(1.1); }
+        .t-btn.playing { background: var(--highlight) !important; box-shadow: none; transform: translateY(2px); }
         
         .play-all-btn {
             background: var(--ghibli-green); color: white; border: none;
-            padding: 8px 12px; border-radius: 8px; cursor: pointer;
-            font-size: 1rem; box-shadow: 0 2px 0 var(--ghibli-dark);
+            padding: 10px; border-radius: 8px; cursor: pointer;
+            font-size: 1rem; font-weight: bold;
         }
+
+        #errorLog { display: none; color: #e63946; font-size: 0.75rem; margin-top: 8px; text-align: center; font-weight: bold; line-height: 1.2; }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn">🌿 VỀ VƯỜN</a>
+    <a href="index.html" class="back-btn">🍃 VỀ VƯỜN</a>
     <h1>Cùng Nga Học HSK học Pinyin nhé! 👩‍🏫✨</h1>
-    <div class="instruction">Nhấn vào âm tiết để luyện nghe 4 thanh điệu chuẩn nhé!</div>
+    <div class="instruction">Nhấn vào âm tiết để luyện phát âm. Nhóm Lưỡi đã được cập nhật!</div>
 
     <div class="table-container">
         <table id="pinyinMainTable">
@@ -101,14 +104,15 @@
     </div>
 
     <div id="toneMenu">
-        <div id="toneLabel" style="text-align:center; font-weight:bold; margin-bottom:8px; color:var(--ghibli-dark)"></div>
+        <div id="toneLabel" style="text-align:center; font-size: 1.2rem; font-weight:bold; margin-bottom:10px; color:var(--ghibli-dark)"></div>
         <div class="tone-grid">
-            <button class="t-btn" id="btn-t1" onclick="playSyllable(1)">1</button>
-            <button class="t-btn" id="btn-t2" onclick="playSyllable(2)">2</button>
-            <button class="t-btn" id="btn-t3" onclick="playSyllable(3)">3</button>
-            <button class="t-btn" id="btn-t4" onclick="playSyllable(4)">4</button>
+            <button class="t-btn" id="btn-t1" onclick="handlePlay(1)">1</button>
+            <button class="t-btn" id="btn-t2" onclick="handlePlay(2)">2</button>
+            <button class="t-btn" id="btn-t3" onclick="handlePlay(3)">3</button>
+            <button class="t-btn" id="btn-t4" onclick="handlePlay(4)">4</button>
             <button class="play-all-btn" onclick="playSequentially()" id="playAllBtn">▶️ All</button>
         </div>
+        <div id="errorLog">⚠️ Không tìm thấy file:<br><span id="missingFileName"></span></div>
     </div>
 
     <audio id="audioPlayer"></audio>
@@ -117,7 +121,35 @@
         const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's'];
         const finals = ['a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er', 'i', 'ia', 'iao', 'ie', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng', 'ü', 'üe', 'üan', 'ün'];
         const groupMap = {'': 'group-zero', 'b':'group-labial','p':'group-labial','m':'group-labial','f':'group-labial', 'd':'group-alveolar','t':'group-alveolar','n':'group-alveolar','l':'group-alveolar', 'g':'group-velar','k':'group-velar','h':'group-velar', 'j':'group-palatal','q':'group-palatal','x':'group-palatal', 'zh':'group-retroflex','ch':'group-retroflex','sh':'group-retroflex','r':'group-retroflex', 'z':'group-sibilant','c':'group-sibilant','s':'group-sibilant'};
-        const validData = new Set(['a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er','ba', 'bo', 'bai', 'bei', 'bao', 'ban', 'ben', 'bang', 'beng', 'bi', 'biao', 'bie', 'bian', 'bin', 'bing','pa', 'po', 'pai', 'pei', 'pao', 'pou', 'pan', 'pen', 'pang', 'peng', 'pi', 'piao', 'pie', 'pian', 'pin', 'ping','ma', 'mo', 'me', 'mai', 'mei', 'mao', 'mou', 'man', 'men', 'mang', 'meng', 'mi', 'miao', 'mie', 'miu', 'mian', 'min', 'ming','fa', 'fo', 'fei', 'fou', 'fan', 'fen', 'fang', 'feng','da', 'de', 'dai', 'dei', 'dao', 'dou', 'dan', 'den', 'dang', 'deng', 'dong', 'di', 'diao', 'die', 'diu', 'dian', 'ding', 'du', 'duo', 'dui', 'duan', 'dun','ta', 'te', 'tai', 'tao', 'tou', 'tan', 'tang', 'teng', 'tong', 'ti', 'tiao', 'tie', 'tian', 'ting', 'tu', 'tuo', 'tui', 'tuan', 'tun','na', 'ne', 'nai', 'nei', 'nao', 'nou', 'nan', 'nen', 'nang', 'neng', 'nong', 'ni', 'niao', 'nie', 'niu', 'nian', 'nin', 'niang', 'ning', 'nu', 'nuo', 'nuan', 'nü', 'nüe', 'la', 'le', 'lai', 'lei', 'lao', 'lou', 'lan', 'lang', 'leng', 'long', 'li', 'lia', 'liao', 'lie', 'liu', 'lian', 'lin', 'liang', 'ling', 'lu', 'luo', 'luan', 'lun', 'lü', 'lüe','ga', 'ge', 'gai', 'gei', 'gao', 'gou', 'gan', 'gen', 'gang', 'geng', 'gong', 'gu', 'gua', 'guo', 'guai', 'gui', 'guan', 'gun', 'guang','ka', 'ke', 'kai', 'kei', 'kao', 'kou', 'kan', 'ken', 'kang', 'keng', 'kong', 'ku', 'kua', 'kuo', 'kuai', 'kui', 'kuan', 'kun', 'kuang','ha', 'he', 'hai', 'hei', 'hao', 'hou', 'han', 'hen', 'hang', 'heng', 'hong', 'hu', 'hua', 'huo', 'huai', 'hui', 'huan', 'hun', 'huang','zha', 'zhe', 'zhi', 'zhai', 'zhei', 'zhao', 'zhou', 'zhan', 'zhen', 'zhang', 'zheng', 'zhong', 'zhu', 'zhua', 'zhuo', 'zhuai', 'zhui', 'zhuan', 'zhun', 'zhuang','cha', 'che', 'chi', 'chai', 'chao', 'chou', 'chan', 'chen', 'chang', 'cheng', 'chong', 'chu', 'chua', 'chuo', 'chuai', 'chui', 'chuan', 'chun', 'chuang','sha', 'she', 'shi', 'shai', 'shei', 'shao', 'shou', 'shan', 'shen', 'shang', 'sheng', 'shu', 'shua', 'shuo', 'shuai', 'shui', 'shuan', 'shun', 'shuang','re', 'ri', 'rao', 'rou', 'ran', 'ren', 'rang', 'reng', 'rong', 'ru', 'ruo', 'rui', 'ruan', 'run','za', 'ze', 'zi', 'zai', 'zei', 'zao', 'zou', 'zan', 'zen', 'zang', 'zeng', 'zong', 'zu', 'zuo', 'zui', 'zuan', 'zun','ca', 'ce', 'ci', 'cai', 'cao', 'cou', 'can', 'cen', 'cang', 'ceng', 'cong', 'cu', 'cuo', 'cui', 'cuan', 'cun','sa', 'se', 'si', 'sai', 'sao', 'sou', 'san', 'sen', 'sang', 'seng', 'song', 'su', 'suo', 'sui', 'suan', 'sun','ji', 'jia', 'jiao', 'jie', 'jiu', 'jian', 'jin', 'jiang', 'jing', 'jiong', 'ju', 'jue', 'juan', 'jun','qi', 'qia', 'qiao', 'qie', 'qiu', 'qian', 'qin', 'qiang', 'qing', 'qiong', 'qu', 'que', 'quan', 'qun','xi', 'xia', 'xiao', 'xie', 'xiu', 'xian', 'xin', 'xiang', 'xing', 'xiong', 'xu', 'xue', 'xuan', 'xun','yi', 'ya', 'yao', 'ye', 'you', 'yan', 'yin', 'yang', 'ying', 'yong','wu', 'wa', 'wo', 'wai', 'wei', 'wan', 'wen', 'wang', 'weng','yu', 'yue', 'yuan', 'yun']);
+
+        // DANH SÁCH RÀ SOÁT TỔNG LỰC CHO CÔ NGA (BỔ SUNG CÁC ÂM ĐẦU LƯỠI & QUẤN LƯỠI)
+        const validData = new Set([
+            'a','o','e','ai','ei','ao','ou','an','en','ang','eng','er',
+            'ba','bo','bai','bei','bao','ban','ben','bang','beng','bi','biao','bie','bian','bin','bing',
+            'pa','po','pai','pei','pao','pou','pan','pen','pang','peng','pi','piao','pie','pian','pin','ping',
+            'ma','mo','me','mai','mei','mao','mou','man','men','mang','meng','mi','miao','mie','miu','mian','min','ming',
+            'fa','fo','fei','fou','fan','fen','fang','feng',
+            'da','de','dai','dei','dao','dou','dan','den','dang','deng','dong','di','diao','die','diu','dian','ding','du','duo','dui','duan','dun',
+            'ta','te','tai','tao','tou','tan','tang','teng','tong','ti','tiao','tie','tian','ting','tu','tuo','tui','tuan','tun',
+            'na','ne','nai','nei','nao','nou','nan','nen','nang','neng','nong','ni','niao','nie','niu','nian','nin','niang','ning','nu','nuo','nuan','nü','nüe',
+            'la','le','lai','lei','lao','lou','lan','lang','leng','long','li','lia','liao','lie','liu','lian','lin','liang','ling','lu','luo','luan','lun','lü','lüe',
+            'ga','ge','gai','gei','gao','gou','gan','gen','gang','geng','gong','gu','gua','guo','guai','gui','guan','gun','guang',
+            'ka','ke','kai','kei','kao','kou','kan','ken','kang','keng','kong','ku','kua','kuo','kuai','kui','kuan','kun','kuang',
+            'ha','he','hai','hei','hao','hou','han','hen','hang','heng','hong','hu','hua','huo','huai','hui','huan','hun','huang',
+            // NHÓM QUẤN LƯỠI (RETROFLEX)
+            'zha','zhe','zhi','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhu','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang',
+            'cha','che','chi','chai','chao','chou','chan','chen','chang','cheng','chong','chu','chua','chuo','chuai','chui','chuan','chun','chuang',
+            'sha','she','shi','shai','shei','shao','shou','shan','shen','shang','sheng','shu','shua','shuo','shuai','shui','shuan','shun','shuang',
+            're','ri','rao','rou','ran','ren','rang','reng','rong','ru','ruo','rui','ruan','run',
+            // NHÓM ĐẦU LƯỠI (Sibilants)
+            'za','ze','zi','zai','zei','zao','zou','zan','zen','zang','zeng','zong','zu','zuo','zui','zuan','zun',
+            'ca','ce','ci','cai','cao','cou','can','cen','cang','ceng','cong','cu','cuo','cui','cuan','cun',
+            'sa','se','si','sai','sao','sou','san','sen','sang','seng','song','su','suo','sui','suan','sun',
+            'ji','jia','jiao','jie','jiu','jian','jin','jiang','jing','jiong','ju','jue','juan','jun',
+            'qi','qia','qiao','qie','qiu','qian','qin','qiang','qing','qiong','qu','que','quan','qun',
+            'xi','xia','xiao','xie','xiu','xian','xin','xiang','xing','xiong','xu','xue','xuan','xun',
+            'yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun'
+        ]);
 
         function getToneMarked(s, t) {
             const m = {'a':['ā','á','ǎ','à'],'e':['ē','é','ě','è'],'o':['ō','ó','ǒ','ò'],'i':['ī','í','ǐ','ì'],'u':['ū','ú','ǔ','ù'],'ü':['ǖ','ǘ','ǚ','ǜ']};
@@ -166,46 +198,70 @@
 
         function openTones(e, s, cell) {
             currentSyllable = s; document.getElementById('toneLabel').innerText = s;
+            document.getElementById('errorLog').style.display = 'none';
             for(let t=1; t<=4; t++) document.getElementById(`btn-t${t}`).innerText = getToneMarked(s, t);
             toneMenu.style.display = 'block';
             if (activeCell) activeCell.classList.remove('active');
             activeCell = cell; activeCell.classList.add('active');
             let x = e.clientX, y = e.clientY;
-            if (x + 180 > window.innerWidth) x -= 180;
-            if (y + 120 > window.innerHeight) y -= 120;
+            if (x + 220 > window.innerWidth) x -= 220;
+            if (y + 150 > window.innerHeight) y -= 150;
             toneMenu.style.left = x + 'px'; toneMenu.style.top = y + 'px';
             e.stopPropagation();
         }
 
-        // Phát âm thanh và trả về Promise để đợi
-        function playSyllable(tone) {
+        // Hàm phát âm thanh cốt lõi với khả năng "Thử lại"
+        function playWithFallback(name, tone) {
             return new Promise((resolve) => {
-                let fileName = currentSyllable.replace(/ü/g, 'v') + tone;
-                audioPlayer.src = `audio/${fileName}.mp3`;
-                
-                // Hiệu ứng đèn báo
                 const btn = document.getElementById(`btn-t${tone}`);
                 btn.classList.add('playing');
+                
+                // Thử lần 1: Tên đầy đủ (ví dụ zhi1.mp3)
+                audioPlayer.src = `audio/${name}${tone}.mp3`;
                 
                 audioPlayer.onended = () => {
                     btn.classList.remove('playing');
                     resolve();
                 };
+
                 audioPlayer.onerror = () => {
-                    btn.classList.remove('playing');
-                    console.log("Thiếu file: " + fileName);
-                    resolve(); // Vẫn resolve để không kẹt vòng lặp
+                    // Thử lần 2: Nếu là zhi, chi, shi, zi... thì thử tên ngắn (ví dụ zh1.mp3)
+                    let shortName = name;
+                    if (name.endsWith('i') && ['zhi','chi','shi','ri','zi','ci','si'].includes(name)) {
+                        shortName = name.slice(0, -1);
+                        audioPlayer.src = `audio/${shortName}${tone}.mp3`;
+                        audioPlayer.onerror = () => {
+                            btn.classList.remove('playing');
+                            document.getElementById('missingFileName').innerText = `${name}${tone}.mp3 hoặc ${shortName}${tone}.mp3`;
+                            document.getElementById('errorLog').style.display = 'block';
+                            resolve();
+                        };
+                        audioPlayer.play().catch(resolve);
+                    } else {
+                        btn.classList.remove('playing');
+                        document.getElementById('missingFileName').innerText = `${name}${tone}.mp3`;
+                        document.getElementById('errorLog').style.display = 'block';
+                        resolve();
+                    }
                 };
                 audioPlayer.play().catch(resolve);
             });
+        }
+
+        function handlePlay(tone) {
+            let name = currentSyllable.replace(/ü/g, 'v');
+            if (['ju','qu','xu','jue','que','xue','juan','quan','xuan','jun','qun','xun'].includes(name)) name = name.replace('u', 'v');
+            playWithFallback(name, tone);
         }
 
         async function playSequentially() {
             const btnAll = document.getElementById('playAllBtn');
             btnAll.disabled = true; btnAll.style.opacity = '0.5';
             for (let t = 1; t <= 4; t++) {
-                await playSyllable(t);
-                await new Promise(r => setTimeout(r, 300)); // Nghỉ 0.3s giữa các âm
+                let name = currentSyllable.replace(/ü/g, 'v');
+                if (['ju','qu','xu','jue','que','xue','juan','quan','xuan','jun','qun','xun'].includes(name)) name = name.replace('u', 'v');
+                await playWithFallback(name, t);
+                await new Promise(r => setTimeout(r, 200)); 
             }
             btnAll.disabled = false; btnAll.style.opacity = '1';
         }
