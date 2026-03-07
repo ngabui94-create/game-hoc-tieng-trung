@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khu Vườn Tiếng Trung của Nga 🌿</title>
+    <title>Khu Vườn Học Tập Của Nga - Ghibli Style</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --ghibli-green: #9dc183;
             --ghibli-dark-green: #4f7942;
             --ghibli-sky: #d0f0f7;
             --ghibli-wood: #8b5a2b;
-            --white-glass: rgba(255, 255, 255, 0.85);
+            --ghibli-leaf: #7fb069;
+            --ghibli-pink: #ffb7c5;
         }
 
         body {
@@ -20,235 +20,288 @@
             padding: 0;
             font-family: 'Quicksand', sans-serif;
             background: var(--ghibli-sky);
-            background-image: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0)),
+            background-image: 
+                linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0)),
                 url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-attachment: fixed;
-            background-position: center;
-            min-height: 100vh;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* --- Header Tối ưu --- */
+        /* --- HIỆU ỨNG LÁ BAY --- */
+        #leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            top: -10%;
+            pointer-events: none;
+            user-select: none;
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(0px) rotate(0deg); }
+            100% { transform: translateX(30px) rotate(45deg); }
+        }
+
         header {
             text-align: center;
-            padding: 40px 20px;
-            background: var(--white-glass);
+            padding: 40px 15px;
+            background: rgba(255, 255, 255, 0.75);
             width: 100%;
-            backdrop-filter: blur(10px);
-            border-bottom: 4px solid var(--ghibli-green);
+            margin-bottom: 20px;
+            border-bottom: 5px solid var(--ghibli-green);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
             box-sizing: border-box;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        h1 { 
-            color: var(--ghibli-dark-green); 
-            margin: 0; 
-            font-size: clamp(1.8rem, 5vw, 2.8rem); /* Chữ tự co giãn */
+        h1 {
+            margin: 0;
+            color: var(--ghibli-dark-green);
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sub-title-box {
+            display: inline-block;
+            margin: 12px 0;
+            padding: 6px 20px;
+            border: 2px dashed var(--ghibli-dark-green);
+            border-radius: 15px;
+            background-color: rgba(255, 183, 197, 0.3);
+            color: var(--ghibli-dark-green);
+            font-weight: 600;
+            position: relative;
         }
 
         .welcome-quote {
-            font-size: clamp(0.85rem, 2vw, 1.1rem);
-            margin: 15px 0 25px;
-            color: var(--ghibli-dark-green);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
+            font-weight: 600;
+            font-size: 0.95rem;
+            max-width: 90%;
+            line-height: 1.6;
+            margin: 10px 0 20px 0;
+            background: linear-gradient(45deg, #4f7942, #8b5a2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
         }
 
-        /* --- Thanh Tìm Kiếm & Jiji --- */
+        /* --- SEARCH BOX TOTORO --- */
         .search-wrapper {
             position: relative;
             width: 90%;
-            max-width: 450px; /* Độ dài tối đa trên máy tính */
-            margin: 0 auto;
-        }
-
-        .jiji-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 32px;
-            height: 32px;
-            background-image: url('https://i.pinimg.com/originals/14/7b/9e/147b9e078028972e9a26569130761e01.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            z-index: 10;
-            pointer-events: none;
-            transition: 0.3s;
-        }
-
-        /* Animation Jiji vẫy đuôi */
-        @keyframes jijiWag {
-            0% { transform: translateY(-50%) rotate(0deg); }
-            20% { transform: translateY(-50%) rotate(-12deg); }
-            40% { transform: translateY(-50%) rotate(10deg); }
-            60% { transform: translateY(-50%) rotate(-8deg); }
-            80% { transform: translateY(-50%) rotate(5deg); }
-            100% { transform: translateY(-50%) rotate(0deg); }
-        }
-
-        #gameSearch:focus + .jiji-icon {
-            animation: jijiWag 0.8s ease-in-out infinite;
+            max-width: 350px;
+            margin-bottom: 10px;
+            z-index: 20;
         }
 
         #gameSearch {
             width: 100%;
-            padding: 14px 20px 14px 55px;
+            padding: 12px 20px 12px 55px; /* Chừa chỗ cho Totoro */
             border-radius: 30px;
-            border: 3px solid var(--ghibli-green);
+            border: 2px solid var(--ghibli-green);
             background: white;
             font-family: 'Quicksand', sans-serif;
-            font-size: 16px; /* Chống zoom trên Mobile */
+            font-size: 1rem;
             outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 4px 4px 0px var(--ghibli-green);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
 
         #gameSearch:focus {
             border-color: var(--ghibli-dark-green);
-            box-shadow: 2px 2px 0px var(--ghibli-dark-green);
-            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(79, 121, 66, 0.2);
         }
 
-        /* --- Grid Bài Học (Responsive) --- */
+        .totoro-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px; /* Kích thước ảnh Totoro */
+            height: 40px;
+            background-image: url('https://i.pinimg.com/originals/31/87/3e/31873ea8b31b6019d39f30a0798cd409.jpg'); /* Sử dụng link trực tiếp từ file bạn gửi */
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%; /* Cắt tròn cho cân đối */
+            border: 2px solid var(--ghibli-green);
+        }
+
         .container {
             display: grid;
-            /* Mặc định: 2 cột cho điện thoại */
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
-            width: 90%;
-            max-width: 1100px;
-            padding: 40px 0 60px;
+            max-width: 1200px;
+            width: 92%;
+            padding-bottom: 50px;
+            z-index: 10;
+            position: relative;
         }
 
-        /* Tablet: 3 cột */
-        @media (min-width: 600px) {
-            .container { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        /* Desktop: 4-5 cột */
-        @media (min-width: 900px) {
-            .container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-            .game-card:hover { transform: translateY(-10px) rotate(2deg); }
+        @media (min-width: 768px) {
+            .container { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+            h1 { font-size: 2.5rem; }
         }
 
         .game-card {
-            background: var(--white-glass);
+            background: white;
             border-radius: 20px;
-            padding: 25px 15px;
+            padding: 15px;
             text-align: center;
-            text-decoration: none;
-            color: var(--ghibli-wood);
-            border: 2px solid transparent;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
-            backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
         }
 
         .game-card:hover {
-            border-color: var(--ghibli-green);
-            background: white;
-            box-shadow: 0 10px 25px rgba(157, 193, 131, 0.3);
+            transform: translateY(-5px) scale(1.03);
+            border-color: var(--ghibli-leaf);
         }
 
-        .game-icon { 
-            font-size: clamp(35px, 6vw, 50px); 
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+        .game-icon { font-size: 35px; margin-bottom: 10px; }
+        @media (min-width: 768px) { .game-icon { font-size: 45px; } }
+
+        .game-title { font-weight: 600; font-size: 0.9rem; color: var(--ghibli-wood); }
+        @media (min-width: 768px) { .game-title { font-size: 1.1rem; } }
+
+        .new-badge {
+            position: absolute;
+            top: 8px;
+            right: -28px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 30px;
+            transform: rotate(45deg);
+            font-weight: bold;
         }
 
-        .game-title { 
-            font-weight: 600; 
-            font-size: clamp(0.85rem, 2vw, 1.05rem); 
-            line-height: 1.3;
-        }
-
-        /* Footer nhỏ cho khu vườn */
         footer {
             margin-top: auto;
             padding: 20px;
+            font-size: 0.85rem;
             color: var(--ghibli-dark-green);
-            font-size: 0.8rem;
-            opacity: 0.7;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
 
+<div id="leaves-container"></div>
+
 <header>
-    <h1>Khu Vườn Của Nga 🌿</h1>
+    <h1>Khu Vườn Tiếng Trung 🌿</h1>
+    <div class="sub-title-box">Nga Học HSK</div>
+    
     <p class="welcome-quote">
-        Mỗi ngày học một chút tiếng Trung,<br>như gieo một hạt mầm bình yên vào khu vườn tâm hồn.
+        Chào mừng bạn đến với khu vườn nhỏ của Nga,<br>
+        Nơi tiếng Trung nảy mầm mỗi ngày.
     </p>
 
     <div class="search-wrapper">
-        <input type="text" id="gameSearch" placeholder="Tìm bài học của Nga..." autocomplete="off">
-        <div class="jiji-icon"></div>
+        <div class="totoro-icon"></div>
+        <input type="text" id="gameSearch" placeholder="Tìm bài học">
     </div>
 </header>
 
 <div class="container" id="gameContainer">
-    <a href="BO THU 1.html" class="game-card">
-        <div class="game-icon">🌱</div>
-        <div class="game-title">BỘ THỦ 1</div>
-    </a>
+    <a href="BO THU 1.html" class="game-card"><div class="game-icon">🌱</div><div class="game-title">BỘ THỦ 1</div></a>
+    <a href="BO THU 2.html" class="game-card"><div class="game-icon">🌿</div><div class="game-title">BỘ THỦ 2</div></a>
+    <a href="BO THU 3.html" class="game-card"><div class="game-icon">☘️</div><div class="game-title">BỘ THỦ 3</div></a>
+    <a href="BO THU 4.html" class="game-card"><div class="game-icon">🍀</div><div class="game-title">BỘ THỦ 4</div></a>
+    <a href="BO THU 5.html" class="game-card"><div class="game-icon">🍃</div><div class="game-title">BỘ THỦ 5</div></a>
+    <a href="BO THU 6.html" class="game-card"><div class="game-icon">🌳</div><div class="game-title">BỘ THỦ 6</div></a>
     
+    <a href="HSK1-LESSON1-2.html" class="game-card"><div class="game-icon">📚</div><div class="game-title">HSK1: Bài 1-2</div></a>
+    <a href="HSK1-LESSON3.html" class="game-card"><div class="game-icon">📖</div><div class="game-title">HSK1: Bài 3</div></a>
+    <a href="HSK1-LESSON4.html" class="game-card"><div class="game-icon">🏠</div><div class="game-title">HSK1: Bài 4</div></a>
+    <a href="HSK1-LESSON5.html" class="game-card"><div class="game-icon">👨‍👩‍👧</div><div class="game-title">HSK1: Bài 5</div></a>
+    <a href="HSK1-LESSON6.html" class="game-card"><div class="game-icon">🗣️</div><div class="game-title">HSK1: Bài 6</div></a>
+    <a href="HSK1-LESSON7.html" class="game-card"><div class="game-icon">🗓️</div><div class="game-title">HSK1: Bài 7</div></a>
+    <a href="HSK1-LESSON8.html" class="game-card"><div class="game-icon">☕</div><div class="game-title">HSK1: Bài 8</div></a>
+    <a href="HSK1-LESSON9.html" class="game-card"><div class="game-icon">🐱</div><div class="game-title">HSK1: Bài 9</div></a>
+    <a href="HSK1-LESSON10.html" class="game-card"><div class="game-icon">🪑</div><div class="game-title">HSK1: Bài 10</div></a>
+
     <a href="HSK1-LESSON11.html" class="game-card">
+        <div class="new-badge">MỚI</div>
         <div class="game-icon">⏰</div>
         <div class="game-title">HSK1: Bài 11</div>
     </a>
-
-    <a href="#" class="game-card">
-        <div class="game-icon">🌾</div>
-        <div class="game-title">HSK 1: Từ vựng</div>
-    </a>
-
-    <a href="#" class="game-card">
-        <div class="game-icon">🎋</div>
-        <div class="game-title">Ngữ pháp HSK</div>
-    </a>
-
-    <a href="#" class="game-card">
-        <div class="game-icon">🚲</div>
-        <div class="game-title">Giao tiếp hằng ngày</div>
-    </a>
-
-    <a href="#" class="game-card">
-        <div class="game-icon">🏯</div>
-        <div class="game-title">Văn hóa Trung Hoa</div>
-    </a>
 </div>
 
-<footer>© 2026 - Khu vườn Ghibli của Nga</footer>
+<footer>
+    © 2026 - Khu Vườn Của Nga 🌸 <br>
+    Học tiếng Trung thật vui mỗi ngày!
+</footer>
 
 <script>
-    const searchInput = document.getElementById('gameSearch');
-    const cards = document.querySelectorAll('.game-card');
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- LOGIC TÌM KIẾM ---
+        const searchInput = document.getElementById('gameSearch');
+        const cards = document.querySelectorAll('.game-card');
 
-    searchInput.addEventListener('input', function() {
-        const term = searchInput.value.toLowerCase().trim();
-        
-        cards.forEach(card => {
-            const title = card.querySelector('.game-title').innerText.toLowerCase();
-            // Hiệu ứng ẩn hiện mượt mà
-            if(title.includes(term)) {
-                card.style.display = "flex";
-                card.style.opacity = "1";
-            } else {
-                card.style.display = "none";
-                card.style.opacity = "0";
-            }
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const title = card.querySelector('.game-title').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? "flex" : "none";
+            });
         });
+
+        // --- HIỆU ỨNG LÁ BAY ---
+        const container = document.getElementById('leaves-container');
+        const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨'];
+        const numLeaves = 20;
+
+        for (let i = 0; i < numLeaves; i++) {
+            let leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            leaf.innerText = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+            leaf.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 15 + 10;
+            leaf.style.fontSize = size + 'px';
+            leaf.style.animationDuration = `${Math.random() * 7 + 8}s, ${Math.random() * 3 + 3}s`;
+            leaf.style.animationDelay = `-${Math.random() * 10}s, -${Math.random() * 5}s`;
+            container.appendChild(leaf);
+        }
     });
 </script>
 
