@@ -138,8 +138,7 @@
 
     <div class="glass-container w-full max-w-md relative m-4">
         
-        <!-- Nút quay về vườn -->
-        <a id="back-to-garden" href="#">
+        <a id="back-to-garden" href="index.html">
             <i class="fas fa-leaf mr-2"></i> Vườn của Nga
         </a>
 
@@ -255,6 +254,7 @@
     </div>
 
     <script>
+        // Phần Script giữ nguyên như cũ của bạn...
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx; let isSoundEnabled = true;
         function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
@@ -282,7 +282,7 @@
         }
 
         const dataFlashcards = [
-            { h: "现在", p: "xiànzài", m: "Bây giờ, hiện tại", ex: "现在几点？", exP: "xiànzài jǐ diǎn?", exVi: "Bây giờ mấy giờ?" },
+            { h: "现在", p: "xiànzài", m: "Bây giờ, hiện tại", ex: "Now几点？", exP: "xiànzài jǐ diǎn?", exVi: "Bây giờ mấy giờ?" },
             { h: "点", p: "diǎn", m: "Giờ (mốc thời gian)", ex: "十点", exP: "shí diǎn", exVi: "10 giờ" },
             { h: "分", p: "fēn", m: "Phút", ex: "五分", exP: "wǔ fēn", exVi: "5 phút" },
             { h: "中午", p: "zhōngwǔ", m: "Buổi trưa", ex: "中午十二点", exP: "zhōngwǔ shí'èr diǎn", exVi: "12 giờ trưa" },
@@ -308,17 +308,17 @@
             { q: "住", a: "Ở", options: ["Ăn", "Ở", "Đi", "Về"], exp: "住 (zhù) dùng để chỉ nơi cư trú." },
             { q: "河内", a: "Hà Nội", options: ["Bắc Kinh", "Hà Nội", "Thượng Hải", "Huế"], exp: "河内 (Hénèi) là thủ đô Hà Nội." },
             { q: "北京", a: "Bắc Kinh", options: ["Bắc Kinh", "Hà Nội", "Sài Gòn", "Tokyo"], exp: "北京 (Běijīng) là thủ đô Bắc Kinh." },
-            { q: "Chúng ta", a: "我们", options: ["他们", "你们", "我们", "他"], exp: "我们 là đại từ nhân xưng số nhiều (ngôi thứ nhất)." },
+            { q: "Chúng ta", a: "我们", options: [" họ", "các bạn", "chúng ta", "anh ấy"], exp: "我们 là đại từ nhân xưng số nhiều." },
             { q: "5:30", a: "五点三十分", options: ["五点三十分", "五点", "三点 fēn", "五分三十点"], exp: "Giờ trước phút sau: 5 giờ 30 phút." },
             { q: "前", a: "Trước", options: ["Sau", "Trong", "Trước", "Dưới"], exp: "前 (qián) chỉ vị trí hoặc thời gian phía trước." },
-            { q: "Ăn cơm", a: "吃饭", options: ["喝水", "睡觉", "吃饭", "去玩"], exp: "吃饭 (chī fàn) là hành động ăn uống." }
+            { q: "Ăn cơm", a: "吃饭", options: ["Uống nước", "Ngủ", "Ăn cơm", "Đi chơi"], exp: "吃饭 (chī fàn) là hành động ăn cơm." }
         ];
 
         const grammarPool = [
             { vi: "Bây giờ mấy giờ?", answer: ["现在", "几点", "？"], pool: ["几点", "现在", "？", "点", "分"], exp: "Câu hỏi giờ cơ bản: 现在几点？" },
             { vi: "Tôi ở Bắc Kinh.", answer: ["我", "住", "在", "北京", "。"], pool: ["住", "我", "在", "北京", "。", "回", "点"], exp: "Cấu trúc: S + 住 + 在 + Địa điểm." },
             { vi: "Khi nào bạn về nhà?", answer: ["你", "什么时候", "回", "家", "？"], pool: ["你", "回", "什么时候", "家", "？", "去", "住"], exp: "Từ hỏi thời gian 什么时候 đứng sau chủ ngữ." },
-            { vi: "Chúng tôi đi xem phim.", answer: ["我们", "去", "看", "电影", "。"], pool: ["看", "电影", "。", "去", "回", "我们", "吃"], exp: "Trình tự: S (我们) + V1 (去) + V2 (看) + O (电影)." }
+            { vi: "Chúng tôi đi xem phim.", answer: ["我们", "去", "看", "电影", "。"], pool: ["看", "电影", "。", "去", "回", "我们", "吃"], exp: "Trình tự: S + V1 + V2 + O." }
         ];
 
         let score = 0, currentIndex = 0, currentQuestions = [], flashcardIndex = 0;
