@@ -6,36 +6,22 @@
     <title>Cùng Nga Học Pinyin chuẩn HSK 👩‍🏫🌿</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --ghibli-green: #9dc183; 
-            --ghibli-dark: #4f7942; 
-            --accent-pink: #ffb7c5; 
-            --highlight: #ffd166; 
-            --paper: #fdfcf0; 
-        }
+        :root { --ghibli-green: #9dc183; --ghibli-dark: #4f7942; --accent-pink: #ffb7c5; --highlight: #ffd166; --paper: #fdfcf0; }
         body { font-family: 'Quicksand', sans-serif; background: var(--paper); margin: 0; padding: 5px; color: #444; }
-        .back-btn { text-decoration: none; color: white; background: var(--ghibli-green); padding: 6px 18px; border-radius: 20px; font-weight: bold; display: inline-block; margin: 5px; box-shadow: 0 3px 0 var(--ghibli-dark); font-size: 0.85rem; transition: 0.2s; }
-        .back-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .back-btn { text-decoration: none; color: white; background: var(--ghibli-green); padding: 6px 18px; border-radius: 20px; font-weight: bold; display: inline-block; margin: 5px; box-shadow: 0 3px 0 var(--ghibli-dark); font-size: 0.85rem; }
         h1 { text-align: center; color: var(--ghibli-dark); font-size: 1.4rem; margin: 10px 0; }
         .table-container { width: 100%; max-height: 82vh; overflow: auto; border: 4px solid white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background: white; }
         table { border-collapse: separate; border-spacing: 0; width: 100%; }
         thead th { position: sticky; top: 0; z-index: 10; color: white; padding: 12px 2px; font-size: 1.1rem; border-bottom: 2px solid var(--ghibli-dark); min-width: 50px; }
-        .group-labial { background: #ffcad4 !important; } 
-        .group-alveolar { background: #ffe5d9 !important; } 
-        .group-velar { background: #ffecb3 !important; } 
-        .group-palatal { background: #e2cfea !important; } 
-        .group-retroflex { background: #d1e7dd !important; } 
-        .group-sibilant { background: #d0f4de !important; } 
-        .group-zero { background: var(--ghibli-green) !important; }
+        .group-labial { background: #ffcad4 !important; } .group-alveolar { background: #ffe5d9 !important; } .group-velar { background: #ffecb3 !important; } .group-palatal { background: #e2cfea !important; } .group-retroflex { background: #d1e7dd !important; } .group-sibilant { background: #d0f4de !important; } .group-zero { background: var(--ghibli-green) !important; }
         .final-header { position: sticky; left: 0; z-index: 11; background: #f8fbf8 !important; color: var(--ghibli-dark); font-weight: bold; padding: 10px 8px; font-size: 1.2rem; border-right: 2px solid var(--ghibli-green); text-align: left; }
         td { padding: 12px 2px; text-align: center; border-bottom: 0.5px solid #f0f0f0; font-size: 1.1rem; }
         .syllable { cursor: pointer; color: #444; font-weight: 600; border-radius: 8px; transition: 0.15s; }
         .syllable:hover, .syllable.active { background: var(--accent-pink) !important; color: white !important; transform: scale(1.1); z-index: 5; }
-        .empty { color: #eee; pointer-events: none; font-size: 0.8rem; }
-        #toneMenu { display: none; position: fixed; background: rgba(255,255,255,0.98); border: 3px solid var(--ghibli-green); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1000; min-width: 200px; }
+        .empty { color: #eee; pointer-events: none; }
+        #toneMenu { display: none; position: fixed; background: white; border: 3px solid var(--ghibli-green); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1000; min-width: 220px; }
         .tone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .t-btn { border: none; background: #f0f7ef; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.3rem; color: var(--ghibli-dark); box-shadow: 0 3px 0 #d4e4d0; transition: 0.1s; }
-        .t-btn:active { transform: translateY(2px); box-shadow: none; }
+        .t-btn { border: none; background: #f0f7ef; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.3rem; color: var(--ghibli-dark); box-shadow: 0 3px 0 #d4e4d0; }
         .t-btn.playing { background: var(--highlight) !important; color: #333; }
         #errorLog { display: none; color: #e63946; font-size: 0.8rem; margin-top: 10px; text-align: center; font-weight: bold; }
     </style>
@@ -47,11 +33,7 @@
 
     <div class="table-container">
         <table id="pinyinMainTable">
-            <thead>
-                <tr id="initialHeaders">
-                    <th class="final-header" style="background: var(--ghibli-green) !important; color: white;">V\T</th>
-                </tr>
-            </thead>
+            <thead><tr id="initialHeaders"><th class="final-header" style="background: var(--ghibli-green) !important; color: white;">V\T</th></tr></thead>
             <tbody id="pinyinBody"></tbody>
         </table>
     </div>
@@ -64,7 +46,7 @@
             <button class="t-btn" onclick="playAudio(3)" id="btn-t3">3</button>
             <button class="t-btn" onclick="playAudio(4)" id="btn-t4">4</button>
         </div>
-        <div id="errorLog">⚠️ Không có âm thanh: <span id="missingFileName"></span></div>
+        <div id="errorLog">⚠️ Đang tải âm thanh...</div>
     </div>
 
     <audio id="audioPlayer"></audio>
@@ -73,7 +55,6 @@
         const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's'];
         const finals = ['a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er', 'i', 'ia', 'iao', 'ie', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng', 'ü', 'üe', 'üan', 'ün'];
         const groupMap = {'': 'group-zero', 'b':'group-labial','p':'group-labial','m':'group-labial','f':'group-labial', 'd':'group-alveolar','t':'group-alveolar','n':'group-alveolar','l':'group-alveolar', 'g':'group-velar','k':'group-velar','h':'group-velar', 'j':'group-palatal','q':'group-palatal','x':'group-palatal', 'zh':'group-retroflex','ch':'group-retroflex','sh':'group-retroflex','r':'group-retroflex', 'z':'group-sibilant','c':'group-sibilant','s':'group-sibilant'};
-        
         const validData = new Set(['a','o','e','ai','ei','ao','ou','an','en','ang','eng','er','ba','bo','bai','bei','bao','ban','ben','bang','beng','bi','biao','bie','bian','bin','bing','bu','pa','po','pai','pei','pao','pou','pan','pen','pang','peng','pi','piao','pie','pian','pin','ping','pu','ma','mo','me','mai','mei','mao','mou','man','men','mang','meng','mi','miao','mie','miu','mian','min','ming','mu','fa','fo','fei','fou','fan','fen','fang','feng','fu','da','de','dai','dei','dao','dou','dan','den','dang','deng','dong','di','diao','die','diu','dian','ding','du','duo','dui','duan','dun','ta','te','tai','tao','tou','tan','tang','teng','tong','ti','tiao','tie','tian','ting','tu','tuo','tui','tuan','tun','na','ne','nai','nei','nao','nou','nan','nen','nang','neng','nong','ni','niao','nie','niu','ian','nin','niang','ning','nu','nuo','nuan','nü','nüe','la','le','lai','lei','lao','lou','lan','lang','leng','long','li','lia','liao','lie','liu','lian','lin','liang','ling','lu','luo','luan','lun','lü','lüe','ga','ge','gai','gei','gao','gou','gan','gen','gang','geng','gong','gu','gua','guo','guai','gui','guan','gun','guang','ka','ke','kai','kei','kao','kou','kan','ken','kang','keng','kong','ku','kua','kuo','kuai','kui','kuan','kun','kuang','ha','he','hai','hei','hao','hou','han','hen','hang','heng','hong','hu','hua','huo','huai','hui','huan','hun','huang','zha','zhe','zhi','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhu','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang','cha','che','chi','chai','chao','chou','chan','chen','chang','cheng','chong','chu','chua','chuo','chuai','chui','chuan','chun','chuang','sha','she','shi','shai','shei','shao','shou','shan','shen','shang','sheng','shu','shua','shuo','shuai','shui','shuan','shun','shuang','re','ri','rao','rou','ran','ren','rang','reng','rong','ru','ruo','rui','ruan','run','za','ze','zi','zai','zei','zao','zou','zan','zen','zang','zeng','zong','zu','zuo','zui','zuan','zun','ca','ce','ci','cai','cao','cou','can','cen','cang','ceng','cong','cu','cuo','cui','cuan','cun','sa','se','si','sai','sao','sou','san','sen','sang','seng','song','su','suo','sui','suan','sun','ji','jia','jiao','jie','jiu','jian','jin','jiang','jing','jiong','ju','jue','juan','jun','qi','qia','qiao','qie','qiu','qian','qin','qiang','qing','qiong','qu','que','quan','qun','xi','xia','xiao','xie','xiu','xian','xin','xiang','xing','xiong','xu','xue','xuan','xun','yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun']);
 
         let curS = "", activeC = null;
@@ -81,44 +62,23 @@
 
         function init() {
             const h = document.getElementById('initialHeaders'), b = document.getElementById('pinyinBody');
-            initials.forEach(i => { 
-                const th = document.createElement('th'); 
-                th.className = groupMap[i] || ''; 
-                th.innerText = i===''?'Ø':i; 
-                h.appendChild(th); 
-            });
+            initials.forEach(i => { const th = document.createElement('th'); th.className = groupMap[i] || ''; th.innerText = i===''?'Ø':i; h.appendChild(th); });
             finals.forEach(f => {
-                const tr = document.createElement('tr'); 
-                const th = document.createElement('th'); 
-                th.className = 'final-header'; 
-                th.innerText = f; 
-                tr.appendChild(th);
+                const tr = document.createElement('tr'); const th = document.createElement('th'); th.className = 'final-header'; th.innerText = f; tr.appendChild(th);
                 initials.forEach(i => {
                     const td = document.createElement('td');
                     let displayS = i + f;
-                    if (i === '' && ['i','u','ü'].some(v => f.startsWith(v))) {
-                        displayS = getZ(f);
-                    } else if (['j','q','x'].includes(i) && f.startsWith('ü')) {
-                        displayS = i + f.replace('ü', 'u');
-                    }
-                    if (validData.has(displayS)) { 
-                        td.className = 'syllable'; 
-                        td.innerText = displayS; 
-                        td.onclick = (e) => openMenu(e, displayS, td); 
-                    } else { 
-                        td.className = 'empty'; 
-                        td.innerText = '·'; 
-                    }
+                    if (i === '' && ['i','u','ü'].some(v => f.startsWith(v))) displayS = getZ(f);
+                    else if (['j','q','x'].includes(i) && f.startsWith('ü')) displayS = i + f.replace('ü', 'u');
+                    if (validData.has(displayS)) { td.className = 'syllable'; td.innerText = displayS; td.onclick = (e) => openMenu(e, displayS, td); }
+                    else { td.className = 'empty'; td.innerText = '·'; }
                     tr.appendChild(td);
                 });
                 b.appendChild(tr);
             });
         }
 
-        function getZ(f) { 
-            const m = {'i':'yi','ia':'ya','iao':'yao','ie':'ye','iu':'you','ian':'yan','in':'yin','iang':'yang','ing':'ying','iong':'yong','u':'wu','ua':'wa','uo':'wo','uai':'wai','ui':'wei','uan':'wan','un':'wen','uang':'wang','ueng':'weng','ü':'yu','üe':'yue','üan':'yuan','ün':'yun'}; 
-            return m[f] || f; 
-        }
+        function getZ(f) { const m = {'i':'yi','ia':'ya','iao':'yao','ie':'ye','iu':'you','ian':'yan','in':'yin','iang':'yang','ing':'ying','iong':'yong','u':'wu','ua':'wa','uo':'wo','uai':'wai','ui':'wei','uan':'wan','un':'wen','uang':'wang','ueng':'weng','ü':'yu','üe':'yue','üan':'yuan','ün':'yun'}; return m[f] || f; }
 
         function getToneMarked(s, t) {
             const m = {'a':['ā','á','ǎ','à'],'e':['ē','é','ě','è'],'o':['ō','ó','ǒ','ò'],'i':['ī','í','ǐ','ì'],'u':['ū','ú','ǔ','ù'],'ü':['ǖ','ǘ','ǚ','ǜ']};
@@ -141,59 +101,46 @@
             for(let t=1; t<=4; t++) document.getElementById(`btn-t${t}`).innerText = getToneMarked(s, t);
             menu.style.display = 'block'; 
             if (activeC) activeC.classList.remove('active');
-            activeC = c; 
-            activeC.classList.add('active');
+            activeC = c; activeC.classList.add('active');
             let x = e.clientX, y = e.clientY; 
-            if (x+220 > window.innerWidth) x-=220; 
-            if (y+150 > window.innerHeight) y-=150;
-            menu.style.left = x+'px'; 
-            menu.style.top = y+'px'; 
-            e.stopPropagation();
+            if (x+220 > window.innerWidth) x-=220; if (y+150 > window.innerHeight) y-=150;
+            menu.style.left = x+'px'; menu.style.top = y+'px'; e.stopPropagation();
         }
 
         function playAudio(t) {
             const btn = document.getElementById(`btn-t${t}`);
             const errorLog = document.getElementById('errorLog');
-            const player = document.getElementById('audioPlayer');
-
             btn.classList.add('playing');
-            errorLog.style.display = 'none';
+            errorLog.style.display = 'block';
 
-            let fileName = curS.toLowerCase().replace('ü', 'v');
+            let toneWord = getToneMarked(curS, t);
             
-            // Nguồn âm thanh dự phòng chuẩn
+            // Nguồn 1: Google Translate TTS (Rất ổn định)
+            // Nguồn 2: ChinesePod
             const sources = [
-                `https://resources.allsetlearning.com/pronwiki/resources/pinyin-audio/${t}/${fileName}.mp3`,
-                `https://www.chinesepod.com/tools/pinyin-chart/audio/${fileName}${t}.mp3`,
-                `https://yoyochinese.com/audio/pinyin/${fileName}${t}.mp3`
+                `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(toneWord)}&tl=zh-CN&total=1&idx=0&textlen=10&client=tw-ob&prev=input`,
+                `https://www.chinesepod.com/tools/pinyin-chart/audio/${curS.toLowerCase().replace('ü', 'v')}${t}.mp3`
             ];
 
             let currentSource = 0;
-
             function tryPlay() {
                 if (currentSource >= sources.length) {
                     btn.classList.remove('playing');
-                    document.getElementById('missingFileName').innerText = fileName + " (" + t + ")";
-                    errorLog.style.display = 'block';
+                    errorLog.innerText = "⚠️ Lỗi âm thanh";
                     return;
                 }
                 player.src = sources[currentSource];
                 player.play()
-                    .then(() => { player.onended = () => btn.classList.remove('playing'); })
-                    .catch(() => {
-                        currentSource++;
-                        tryPlay(); 
-                    });
+                    .then(() => { 
+                        errorLog.style.display = 'none';
+                        player.onended = () => btn.classList.remove('playing'); 
+                    })
+                    .catch(() => { currentSource++; tryPlay(); });
             }
             tryPlay();
         }
 
-        document.addEventListener('click', (e) => { 
-            if (!menu.contains(e.target)) { 
-                menu.style.display = 'none'; 
-                if (activeC) activeC.classList.remove('active'); 
-            } 
-        });
+        document.addEventListener('click', (e) => { if (!menu.contains(e.target)) { menu.style.display = 'none'; if (activeC) activeC.classList.remove('active'); } });
         init();
     </script>
 </body>
