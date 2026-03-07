@@ -3,201 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Pinyin Chuẩn - Nga Học HSK</title>
+    <title>Bảng Pinyin Đầy Đủ - Nga Học HSK</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --ghibli-green: #9dc183;
             --ghibli-dark: #4f7942;
-            --header-bg: #fdfdfd;
+            --accent-pink: #ffb7c5;
         }
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: #f0f9f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .back-btn {
-            text-decoration: none;
-            color: white;
-            background: var(--ghibli-green);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 0 var(--ghibli-dark);
-        }
-        .table-wrapper {
+        body { font-family: 'Quicksand', sans-serif; background: #fdfcf0; margin: 0; padding: 20px; }
+        .back-btn { text-decoration: none; color: white; background: var(--ghibli-green); padding: 10px 25px; border-radius: 25px; font-weight: bold; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 0 var(--ghibli-dark); }
+        
+        h1 { text-align: center; color: var(--ghibli-dark); }
+
+        .table-container {
             width: 100%;
-            max-width: 1000px;
-            overflow-x: auto; /* Cuộn ngang trên điện thoại */
-            background: white;
+            max-height: 80vh;
+            overflow: auto;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            min-width: 800px;
-        }
-        th, td {
-            border: 1px solid #eee;
-            padding: 10px;
-            text-align: center;
-        }
-        /* Hàng vận mẫu trên cùng */
-        thead th {
-            background: var(--ghibli-green);
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-        /* Cột thanh mẫu bên trái */
-        .initial-cell {
-            background: #eef2ed;
-            font-weight: bold;
-            color: var(--ghibli-dark);
-            position: sticky;
-            left: 0;
-        }
-        .syllable {
-            cursor: pointer;
-            transition: 0.2s;
-            border-radius: 5px;
-        }
-        .syllable:hover {
-            background: #ffb7c5;
-            color: white;
-        }
-        .empty { background: #fafafa; }
-        
-        /* Modal chọn thanh điệu nhỏ gọn */
-        #toneSelector {
-            display: none;
-            position: fixed;
             background: white;
-            border: 2px solid var(--ghibli-green);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 100;
         }
-        .tone-btn {
-            border: none;
-            background: #eef2ed;
-            padding: 8px 12px;
-            margin: 2px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        
+        /* Cố định hàng đầu và cột đầu */
+        thead th {
+            position: sticky; top: 0; z-index: 10;
+            background: var(--ghibli-green); color: white;
+            padding: 12px; font-size: 14px; border: 1px solid #ffffff33;
         }
-        .tone-btn:hover { background: var(--ghibli-green); color: white; }
+        
+        .initial-header {
+            position: sticky; left: 0; z-index: 11;
+            background: #eef2ed !important; color: var(--ghibli-dark);
+            font-weight: bold; width: 60px; border: 1px solid #ddd;
+        }
+
+        td {
+            padding: 12px; text-align: center; border: 0.5px solid #eee;
+            min-width: 60px; transition: 0.2s; font-size: 14px;
+        }
+
+        /* Ô có âm thanh */
+        .syllable { cursor: pointer; color: #444; font-weight: 500; }
+        .syllable:hover { background: var(--accent-pink); color: white; transform: scale(1.1); z-index: 5; position: relative; border-radius: 4px; }
+        
+        /* Ô trống */
+        .empty { background: #fafafa; color: #ddd; pointer-events: none; }
+
+        /* Menu chọn thanh điệu */
+        #toneMenu {
+            display: none; position: fixed; background: white;
+            border: 2px solid var(--ghibli-green); border-radius: 12px;
+            padding: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 1000;
+        }
+        .tone-grid { display: flex; gap: 8px; }
+        .t-btn { border: none; background: #f0f0f0; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .t-btn:hover { background: var(--ghibli-green); color: white; }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn">⬅ QUAY LẠI KHU VƯỜN</a>
-    <h1>Bảng Giao Thoa Pinyin 🎹</h1>
+    <a href="index.html" class="back-btn">⬅ QUAY LẠI VƯỜN</a>
+    <h1>Bảng Phát Âm Pinyin Toàn Diện 🎹</h1>
 
-    <div class="table-wrapper">
-        <table id="pinyinTable">
+    <div class="table-container">
+        <table id="pinyinMainTable">
             <thead>
-                <tr id="headerRow">
-                    <th style="background: var(--ghibli-dark);">Thanh/Vận</th>
+                <tr id="finalHeaders">
+                    <th class="initial-header">T\V</th>
                     </tr>
             </thead>
-            <tbody id="tableBody">
+            <tbody id="pinyinBody">
                 </tbody>
         </table>
     </div>
 
-    <div id="toneSelector"></div>
-    <audio id="player"></audio>
+    <div id="toneMenu">
+        <div id="toneLabel" style="text-align:center; font-weight:bold; margin-bottom:8px; color:var(--ghibli-dark)"></div>
+        <div class="tone-grid">
+            <button class="t-btn" onclick="playSyllable(1)">1</button>
+            <button class="t-btn" onclick="playSyllable(2)">2</button>
+            <button class="t-btn" onclick="playSyllable(3)">3</button>
+            <button class="t-btn" onclick="playSyllable(4)">4</button>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
 
     <script>
-        const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h'];
-        const finals = ['a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng'];
-
-        // Các âm tiết có thật trong tiếng Trung (để tránh hiện các âm không tồn tại)
-        const validSyllables = [
-            'a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng',
-            'ba', 'bo', 'bi', 'bu', 'bai', 'bei', 'bao', 'ban', 'ben', 'bang', 'beng',
-            'pa', 'po', 'pi', 'pu', 'pai', 'pei', 'pao', 'pou', 'pan', 'pen', 'pang', 'peng',
-            'ma', 'mo', 'me', 'mi', 'mu', 'mai', 'mei', 'mao', 'mou', 'man', 'men', 'mang', 'meng',
-            'fa', 'fo', 'fu', 'fai', 'fei', 'fou', 'fan', 'fen', 'fang', 'feng',
-            'da', 'de', 'di', 'du', 'dai', 'dei', 'dao', 'dou', 'dan', 'den', 'dang', 'deng',
-            'ta', 'te', 'ti', 'tu', 'tai', 'tei', 'tao', 'tou', 'tan', 'tang', 'teng',
-            'na', 'ne', 'ni', 'nu', 'nv', 'nai', 'nei', 'nao', 'nou', 'nan', 'nen', 'nang', 'neng',
-            'la', 'le', 'li', 'lu', 'lv', 'lai', 'lei', 'lao', 'lou', 'lan', 'lang', 'leng',
-            'ga', 'ge', 'gu', 'gai', 'gei', 'gao', 'gou', 'gan', 'gen', 'gang', 'geng',
-            'ka', 'ke', 'ku', 'kai', 'kei', 'kao', 'kou', 'kan', 'ken', 'kang', 'keng',
-            'ha', 'he', 'hu', 'hai', 'hei', 'hao', 'hou', 'han', 'hen', 'hang', 'heng'
+        // 1. Khai báo toàn bộ Thanh mẫu và Vận mẫu chuẩn
+        const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'];
+        const finals = [
+            'a', 'o', 'e', 'er', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong',
+            'i', 'ia', 'iao', 'ie', 'iu', 'ian', 'in', 'iang', 'ing', 'iong',
+            'u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng',
+            'ü', 'üe', 'üan', 'ün'
         ];
 
-        const headerRow = document.getElementById('headerRow');
-        const tableBody = document.getElementById('tableBody');
-        const selector = document.getElementById('toneSelector');
-        const player = document.getElementById('player');
+        // 2. Danh sách các âm tiết CÓ THẬT (Dựa trên bảng Pinyin chuẩn quốc tế)
+        // Mình đã lọc sẵn các tổ hợp âm phổ biến nhất cho bạn
+        const validData = new Set([
+            'a','o','e','er','ai','ei','ao','ou','an','en','ang','eng','yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun',
+            'ba','bo','bi','bu','bai','bei','bao','ban','ben','bang','beng',
+            'pa','po','pi','pu','pai','pei','pao','pou','pan','pen','pang','peng',
+            'ma','mo','me','mi','mu','mai','mei','mao','mou','man','men','mang','meng',
+            'fa','fo','fu','fei','fou','fan','fen','fang','feng',
+            'da','de','di','du','dai','dei','dao','dou','dan','den','dang','deng','dong',
+            'ta','te','ti','tu','tai','tei','tao','tou','tan','tang','teng','tong',
+            'na','ne','ni','nu','nv','nai','nei','nao','nen','nan','nang','neng','nong','nia','niao','nie','niu','nian','nin','niang','ning',
+            'la','le','li','lu','lv','lai','lei','lao','lou','lan','lang','leng','long','lia','liao','lie','liu','lian','lin','liang','ling',
+            'ga','ge','gu','gai','gei','gao','gou','gan','gen','gang','geng','gong','gua','guo','guai','gui','guan','gun','guang',
+            'ka','ke','ku','kai','kei','kao','kou','kan','ken','kang','keng','kong','kua','kuo','kuai','kui','kuan','kun','kuang',
+            'ha','he','hu','hai','hei','hao','hou','han','hen','hang','heng','hong','hua','huo','huai','hui','huan','hun','huang',
+            'ji','ju','jia','jie','jiao','jiu','jian','jin','jiang','jing','jiong','juan','jue','jun',
+            'qi','qu','qia','qie','qiao','qiu','qian','qin','qiang','qing','qiong','quan','que','qun',
+            'xi','xu','xia','xie','xiao','xiu','xian','xin','xiang','xing','xiong','xuan','xue','xun',
+            'zha','zhe','zhi','zhu','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang',
+            'cha','che','chi','chu','chai','chao','chou','chan','chen','chang','cheng','chong','chua','chuo','chuai','chui','chuan','chun','chuang',
+            'sha','she','shi','shu','shai','shei','shao','shou','shan','shen','shang','sheng','shua','shuo','shuai','shui','shuan','shun','shuang',
+            're','ri','ru','rao','rou','ran','ren','rang','reng','rong','ruo','rui','ruan','run',
+            'za','ze','zi','zu','zai','zei','zhao','zou','zan','zen','zang','zeng','zong','zuo','zui','zuan','zun',
+            'ca','ce','ci','cu','cai','cao','cou','can','cen','cang','ceng','cong','cuo','cui','cuan','cun',
+            'sa','se','si','su','sai','sao','sou','san','sen','sang','seng','song','suo','sui','suan','sun'
+        ]);
 
-        // 1. Tạo hàng tiêu đề (Vận mẫu)
-        finals.forEach(f => {
-            const th = document.createElement('th');
-            th.innerText = f;
-            headerRow.appendChild(th);
-        });
+        let currentSyllable = "";
+        const toneMenu = document.getElementById('toneMenu');
+        const audioPlayer = document.getElementById('audioPlayer');
 
-        // 2. Tạo các hàng (Thanh mẫu + Âm tiết)
-        initials.forEach(i => {
-            const tr = document.createElement('tr');
-            const firstCell = document.createElement('td');
-            firstCell.className = 'initial-cell';
-            firstCell.innerText = i === '' ? 'Âm không đầu' : i;
-            tr.appendChild(firstCell);
+        // Khởi tạo bảng
+        function initTable() {
+            const head = document.getElementById('finalHeaders');
+            const body = document.getElementById('pinyinBody');
 
+            // Tạo tiêu đề ngang (Finals)
             finals.forEach(f => {
-                const td = document.createElement('td');
-                const syllable = i + f;
-                
-                if (validSyllables.includes(syllable)) {
-                    td.className = 'syllable';
-                    td.innerText = syllable;
-                    td.onclick = (e) => showTones(e, syllable);
-                } else {
-                    td.className = 'empty';
-                }
-                tr.appendChild(td);
+                const th = document.createElement('th');
+                th.innerText = f;
+                head.appendChild(th);
             });
-            tableBody.appendChild(tr);
-        });
 
-        function showTones(e, s) {
-            selector.style.display = 'block';
-            selector.style.left = e.pageX + 'px';
-            selector.style.top = e.pageY + 'px';
-            selector.innerHTML = `
-                <div style="font-weight:bold; margin-bottom:5px; text-align:center">${s}</div>
-                <button class="tone-btn" onclick="playAudio('${s}1')">1</button>
-                <button class="tone-btn" onclick="playAudio('${s}2')">2</button>
-                <button class="tone-btn" onclick="playAudio('${s}3')">3</button>
-                <button class="tone-btn" onclick="playAudio('${s}4')">4</button>
-            `;
+            // Tạo các hàng (Initials)
+            initials.forEach(i => {
+                const tr = document.createElement('tr');
+                const th = document.createElement('th');
+                th.className = 'initial-header';
+                th.innerText = i === '' ? 'Ø' : i;
+                tr.appendChild(th);
+
+                finals.forEach(f => {
+                    const td = document.createElement('td');
+                    // Xử lý quy tắc viết Pinyin (Ví dụ: i -> yi, u -> wu, ü -> yu)
+                    let s = i + f;
+                    
+                    if (validData.has(s)) {
+                        td.className = 'syllable';
+                        td.innerText = s;
+                        td.onclick = (e) => openTones(e, s);
+                    } else {
+                        td.className = 'empty';
+                        td.innerText = '-';
+                    }
+                    tr.appendChild(td);
+                });
+                body.appendChild(tr);
+            });
         }
 
-        function playAudio(file) {
-            player.src = `audio/${file}.mp3`;
-            player.play().catch(err => console.log("Thiếu file âm thanh rùi!"));
-            selector.style.display = 'none';
+        function openTones(e, s) {
+            currentSyllable = s;
+            document.getElementById('toneLabel').innerText = s;
+            toneMenu.style.display = 'block';
+            toneMenu.style.left = (e.pageX + 10) + 'px';
+            toneMenu.style.top = (e.pageY + 10) + 'px';
+            e.stopPropagation();
         }
 
-        // Đóng menu chọn thanh điệu khi bấm ra ngoài
-        document.addEventListener('click', function(e) {
-            if (!selector.contains(e.target) && !e.target.classList.contains('syllable')) {
-                selector.style.display = 'none';
-            }
-        });
+        function playSyllable(tone) {
+            // Lưu ý: Tên file âm thanh của Nga phải là: a1.mp3, ba2.mp3...
+            // Riêng với ü, nếu file của Nga đặt tên là v1, v2 thì code cần chỉnh lại chút
+            let fileName = currentSyllable.replace('ü', 'v') + tone;
+            audioPlayer.src = `audio/${fileName}.mp3`;
+            audioPlayer.play().catch(err => {
+                alert("Hic, âm này Nga chưa tải file lên rồi: " + fileName);
+            });
+            toneMenu.style.display = 'none';
+        }
+
+        document.addEventListener('click', () => toneMenu.style.display = 'none');
+        initTable();
     </script>
 </body>
 </html>
