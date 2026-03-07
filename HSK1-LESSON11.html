@@ -286,10 +286,10 @@
             { h: "点", p: "diǎn", m: "Giờ (mốc thời gian)", ex: "十点", exP: "shí diǎn", exVi: "10 giờ" },
             { h: "分", p: "fēn", m: "Phút", ex: "五分", exP: "wǔ fēn", exVi: "5 phút" },
             { h: "中午", p: "zhōngwǔ", m: "Buổi trưa", ex: "中午十二点", exP: "zhōngwǔ shí'èr diǎn", exVi: "12 giờ trưa" },
-            { h: "吃饭", p: "chī fàn", m: "Ăn cơm", ex: "我们去吃饭吧", exP: "wǒmen qù chīfàn ba", exVi: "Chúng ta đi ăn cơm đi" },
+            { h: "吃饭", p: "chī fàn", m: "Ăn cơm", ex: "Chúng ta đi ăn cơm đi", exP: "wǒmen qù chīfàn ba", exVi: "wǒmen qù chīfàn ba" },
             { h: "时候", p: "shíhou", m: "Lúc, khi", ex: "什么时候？", exP: "shénme shíhou?", exVi: "Khi nào?" },
             { h: "回", p: "huí", m: "Về, trở về", ex: "回家", exP: "huí jiā", exVi: "Về nhà" },
-            { h: "我们", p: "wǒmen", m: "Chúng ta, chúng tôi", ex: "Chúng ta đi xem phim đi", exP: "wǒmen qù kàn diànyǐng ba", exVi: "Chúng mình đi xem phim đi" },
+            { h: "Chúng tôi", p: "wǒmen", m: "Chúng ta, chúng tôi", ex: "我们去看电影吧", exP: "wǒmen qù kàn diànyǐng ba", exVi: "Chúng mình đi xem phim đi" },
             { h: "电影", p: "diànyǐng", m: "Phim, điện ảnh", ex: "看电影", exP: "kàn diànyǐng", exVi: "Xem phim" },
             { h: "住", p: "zhù", m: "Ở, cư trú", ex: "你住在哪儿？", exP: "nǐ zhù zài nǎr?", exVi: "Bạn sống ở đâu?" },
             { h: "前", p: "qián", m: "Trước", ex: "三天前", exP: "sān tiān qián", exVi: "3 ngày trước" },
@@ -301,7 +301,7 @@
             { q: "现在", a: "Bây giờ", options: ["Bây giờ", "Ngày mai", "Buổi trưa", "Hôm nay"], exp: "现在 (xiànzài) là danh từ chỉ thời gian: bây giờ." },
             { q: "2:00", a: "两点", options: ["两点", "二点", "两分", "二点分"], exp: "Khi nói 2 giờ, dùng 两点 (liǎng diǎn) thay vì dùng 二." },
             { q: "分", a: "Phút", options: ["Giờ", "Phút", "Ngày", "Tháng"], exp: "分 (fēn) là đơn vị phút." },
-            { q: "中午", a: "Buổi trưa", options: ["Sáng", "Trưa", "Chiều", "Tối"], exp: "中午 (zhōngwǔ) là buổi trưa (11h-13h)." },
+            { q: "中午", a: "Buổi trưa", options: ["Buổi sáng", "Buổi trưa", "Buổi chiều", "Buổi tối"], exp: "中午 (zhōngwǔ) là buổi trưa (11h-13h)." },
             { q: "电影", a: "Phim", options: ["Sách", "Phim", "Nhạc", "Tranh"], exp: "电影 (diànyǐng) là phim ảnh." },
             { q: "回", a: "Về", options: ["Đi", "Về", "Đến", "Ở"], exp: "回 (huí) nghĩa là quay về." },
             { q: "什么时候", a: "Khi nào", options: ["Ở đâu", "Khi nào", "Cái gì", "Ai"], exp: "什么时候 là từ dùng để hỏi về thời gian." },
@@ -312,14 +312,14 @@
             { q: "5:30", a: "五点三十分", options: ["五点三十分", "五点", "三点五十分", "五分三十点"], exp: "Giờ trước phút sau: 5 giờ 30 phút." },
             { q: "前", a: "Trước", options: ["Sau", "Trong", "Trước", "Dưới"], exp: "前 (qián) chỉ vị trí hoặc thời gian phía trước." },
             { q: "Ăn cơm", a: "吃饭", options: ["喝水", "睡觉", "吃饭", "去玩"], exp: "吃饭 (chī fàn) là hành động ăn uống." },
-            { q: "10:15", a: "十点十五分", options: ["十点十五分", "十点五分", "一点十五分", "十点五button"], exp: "十点 (10h) + 十五分 (15p)." }
+            { q: "10:15", a: "十点十五分", options: ["十点十五分", "十点五分", "一点十五分", "十点"], exp: "十点 (10h) + 十五分 (15p)." }
         ];
 
         const grammarPool = [
             { vi: "Bây giờ mấy giờ?", answer: ["现在", "几点", "？"], pool: ["几点", "现在", "？", "点", "分"], exp: "Câu hỏi giờ cơ bản: 现在几点？" },
             { vi: "Tôi ở Bắc Kinh.", answer: ["我", "住", "在", "北京", "。"], pool: ["住", "我", "在", "北京", "。", "回", "点"], exp: "Cấu trúc: S + 住 + 在 + Địa điểm." },
             { vi: "Khi nào bạn về nhà?", answer: ["你", "什么时候", "回", "家", "？"], pool: ["你", "回", "什么时候", "家", "？", "去", "住"], exp: "Từ hỏi thời gian 什么时候 đứng sau chủ ngữ." },
-            { vi: "Chúng tôi đi xem phim.", answer: ["我们", "去", "看", "电影", "。"], pool: ["Chúng tôi", "看", "电影", "。", "去", "回", "吃"], exp: "Trình tự: Chúng tôi + đi + xem + phim." },
+            { vi: "Chúng tôi đi xem phim.", answer: ["我们", "去", "看", "电影", "。"], pool: ["看", "电影", "。", "去", "回", "我们", "吃"], exp: "Trình tự: S (我们) + V1 (去) + V2 (看) + O (电影)." },
             { vi: "Ba ngày trước.", answer: ["三", "天", "前", "。"], pool: ["三", "天", "前", "。", "后", "点"], exp: "Thời gian + 前 (qián) = ... trước." }
         ];
 
