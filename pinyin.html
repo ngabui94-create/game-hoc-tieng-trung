@@ -3,59 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Pinyin - Nga Học HSK</title>
+    <title>Bảng Pinyin Chuẩn - Nga Học HSK</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --ghibli-green: #9dc183; --ghibli-dark: #4f7942; --ghibli-pink: #ffb7c5; }
-        body { font-family: 'Quicksand', sans-serif; background: #f0f9f0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .pinyin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; width: 100%; max-width: 1000px; }
-        .pinyin-card { background: white; border: 2px solid var(--ghibli-green); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
-        .pinyin-card:hover { transform: scale(1.05); border-color: var(--ghibli-pink); }
-        .main-pinyin { font-size: 1.5rem; font-weight: bold; color: var(--ghibli-dark); margin-bottom: 10px; }
-        .tones { display: flex; gap: 5px; justify-content: center; }
-        .tone-btn { border: none; background: #eef2ed; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ghibli-dark); }
-        .tone-btn:hover { background: var(--ghibli-pink); color: white; }
-        .back-btn { margin-bottom: 25px; text-decoration: none; color: white; background: var(--ghibli-green); padding: 8px 20px; border-radius: 25px; font-weight: bold; box-shadow: 0 4px 0 var(--ghibli-dark); }
-        h1 { color: var(--ghibli-dark); text-shadow: 1px 1px 0 white; }
+        :root {
+            --ghibli-green: #9dc183;
+            --ghibli-dark: #4f7942;
+            --header-bg: #fdfdfd;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #f0f9f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            background: var(--ghibli-green);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 var(--ghibli-dark);
+        }
+        .table-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            overflow-x: auto; /* Cuộn ngang trên điện thoại */
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 800px;
+        }
+        th, td {
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: center;
+        }
+        /* Hàng vận mẫu trên cùng */
+        thead th {
+            background: var(--ghibli-green);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        /* Cột thanh mẫu bên trái */
+        .initial-cell {
+            background: #eef2ed;
+            font-weight: bold;
+            color: var(--ghibli-dark);
+            position: sticky;
+            left: 0;
+        }
+        .syllable {
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 5px;
+        }
+        .syllable:hover {
+            background: #ffb7c5;
+            color: white;
+        }
+        .empty { background: #fafafa; }
+        
+        /* Modal chọn thanh điệu nhỏ gọn */
+        #toneSelector {
+            display: none;
+            position: fixed;
+            background: white;
+            border: 2px solid var(--ghibli-green);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .tone-btn {
+            border: none;
+            background: #eef2ed;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .tone-btn:hover { background: var(--ghibli-green); color: white; }
     </style>
 </head>
 <body>
+
     <a href="index.html" class="back-btn">⬅ QUAY LẠI KHU VƯỜN</a>
-    <h1>Trình Phát Âm Pinyin 🍃</h1>
-    <div class="pinyin-grid" id="pinyinGrid"></div>
+    <h1>Bảng Giao Thoa Pinyin 🎹</h1>
+
+    <div class="table-wrapper">
+        <table id="pinyinTable">
+            <thead>
+                <tr id="headerRow">
+                    <th style="background: var(--ghibli-dark);">Thanh/Vận</th>
+                    </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div id="toneSelector"></div>
     <audio id="player"></audio>
 
     <script>
-        const pinyinList = [
-            'a', 'o', 'e', 'er', 'i', 'u', 'v', 
-            'ba', 'bo', 'bi', 'bu', 'pa', 'po', 'pi', 'pu',
-            'ma', 'mo', 'me', 'mi', 'mu', 'fa', 'fo', 'fu',
-            'da', 'de', 'di', 'du', 'ta', 'te', 'ti', 'tu',
-            'na', 'ne', 'ni', 'nu', 'nv', 'la', 'le', 'li', 'lu', 'lv',
-            'ga', 'ge', 'gu', 'ka', 'ke', 'ku', 'ha', 'he', 'hu'
+        const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h'];
+        const finals = ['a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng'];
+
+        // Các âm tiết có thật trong tiếng Trung (để tránh hiện các âm không tồn tại)
+        const validSyllables = [
+            'a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng',
+            'ba', 'bo', 'bi', 'bu', 'bai', 'bei', 'bao', 'ban', 'ben', 'bang', 'beng',
+            'pa', 'po', 'pi', 'pu', 'pai', 'pei', 'pao', 'pou', 'pan', 'pen', 'pang', 'peng',
+            'ma', 'mo', 'me', 'mi', 'mu', 'mai', 'mei', 'mao', 'mou', 'man', 'men', 'mang', 'meng',
+            'fa', 'fo', 'fu', 'fai', 'fei', 'fou', 'fan', 'fen', 'fang', 'feng',
+            'da', 'de', 'di', 'du', 'dai', 'dei', 'dao', 'dou', 'dan', 'den', 'dang', 'deng',
+            'ta', 'te', 'ti', 'tu', 'tai', 'tei', 'tao', 'tou', 'tan', 'tang', 'teng',
+            'na', 'ne', 'ni', 'nu', 'nv', 'nai', 'nei', 'nao', 'nou', 'nan', 'nen', 'nang', 'neng',
+            'la', 'le', 'li', 'lu', 'lv', 'lai', 'lei', 'lao', 'lou', 'lan', 'lang', 'leng',
+            'ga', 'ge', 'gu', 'gai', 'gei', 'gao', 'gou', 'gan', 'gen', 'gang', 'geng',
+            'ka', 'ke', 'ku', 'kai', 'kei', 'kao', 'kou', 'kan', 'ken', 'kang', 'keng',
+            'ha', 'he', 'hu', 'hai', 'hei', 'hao', 'hou', 'han', 'hen', 'hang', 'heng'
         ];
-        
-        const grid = document.getElementById('pinyinGrid');
+
+        const headerRow = document.getElementById('headerRow');
+        const tableBody = document.getElementById('tableBody');
+        const selector = document.getElementById('toneSelector');
         const player = document.getElementById('player');
 
-        pinyinList.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'pinyin-card';
-            card.innerHTML = `
-                <div class="main-pinyin">${item}</div>
-                <div class="tones">
-                    <button class="tone-btn" onclick="playAudio('${item}1')">1</button>
-                    <button class="tone-btn" onclick="playAudio('${item}2')">2</button>
-                    <button class="tone-btn" onclick="playAudio('${item}3')">3</button>
-                    <button class="tone-btn" onclick="playAudio('${item}4')">4</button>
-                </div>`;
-            grid.appendChild(card);
+        // 1. Tạo hàng tiêu đề (Vận mẫu)
+        finals.forEach(f => {
+            const th = document.createElement('th');
+            th.innerText = f;
+            headerRow.appendChild(th);
         });
+
+        // 2. Tạo các hàng (Thanh mẫu + Âm tiết)
+        initials.forEach(i => {
+            const tr = document.createElement('tr');
+            const firstCell = document.createElement('td');
+            firstCell.className = 'initial-cell';
+            firstCell.innerText = i === '' ? 'Âm không đầu' : i;
+            tr.appendChild(firstCell);
+
+            finals.forEach(f => {
+                const td = document.createElement('td');
+                const syllable = i + f;
+                
+                if (validSyllables.includes(syllable)) {
+                    td.className = 'syllable';
+                    td.innerText = syllable;
+                    td.onclick = (e) => showTones(e, syllable);
+                } else {
+                    td.className = 'empty';
+                }
+                tr.appendChild(td);
+            });
+            tableBody.appendChild(tr);
+        });
+
+        function showTones(e, s) {
+            selector.style.display = 'block';
+            selector.style.left = e.pageX + 'px';
+            selector.style.top = e.pageY + 'px';
+            selector.innerHTML = `
+                <div style="font-weight:bold; margin-bottom:5px; text-align:center">${s}</div>
+                <button class="tone-btn" onclick="playAudio('${s}1')">1</button>
+                <button class="tone-btn" onclick="playAudio('${s}2')">2</button>
+                <button class="tone-btn" onclick="playAudio('${s}3')">3</button>
+                <button class="tone-btn" onclick="playAudio('${s}4')">4</button>
+            `;
+        }
 
         function playAudio(file) {
             player.src = `audio/${file}.mp3`;
-            player.play().catch(e => console.log("Thiếu file: " + file));
+            player.play().catch(err => console.log("Thiếu file âm thanh rùi!"));
+            selector.style.display = 'none';
         }
+
+        // Đóng menu chọn thanh điệu khi bấm ra ngoài
+        document.addEventListener('click', function(e) {
+            if (!selector.contains(e.target) && !e.target.classList.contains('syllable')) {
+                selector.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
