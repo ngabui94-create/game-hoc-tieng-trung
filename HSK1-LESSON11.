@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK1-LESSON11 - Khu Vườn Thời Gian (Nga Học HSK)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghibli-green: #9dc183;
+            --ghibli-dark-green: #4f7942;
+            --ghibli-sky: #d0f0f7;
+            --ghibli-wood: #8b5a2b;
+            --ghibli-pink: #ffb7c5;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--ghibli-sky);
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0)), 
+                              url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 4px solid var(--ghibli-green);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: flex; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-ghibli {
+            background: white;
+            border: 2px solid var(--ghibli-green);
+            color: var(--ghibli-dark-green);
+            transition: all 0.3s;
+        }
+        .btn-ghibli:hover {
+            background: var(--ghibli-green);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(157, 193, 131, 0.4);
+        }
+
+        .flip-card { height: 350px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .flip-card-front { background: white; border: 3px solid var(--ghibli-pink); }
+        .flip-card-back { background: var(--ghibli-dark-green); color: white; transform: rotateY(180deg); border: 3px solid var(--ghibli-green); }
+
+        .word-tile {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 8px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .word-tile:hover { transform: scale(1.05); }
+        .word-tile.selected { background: var(--ghibli-green); color: white; border-color: var(--ghibli-dark-green); }
+
+        .correct-anim { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; transform: scale(1.02); }
+        .wrong-anim { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; animation: shake 0.4s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        #sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 2px solid var(--ghibli-green);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--ghibli-dark-green);
+            z-index: 100;
+        }
+
+        #back-to-garden {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: 2px solid var(--ghibli-green);
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--ghibli-dark-green);
+            z-index: 100;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        #back-to-garden:hover {
+            background: var(--ghibli-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container w-full max-w-md relative m-4">
+        
+        <!-- Nút quay về vườn -->
+        <a id="back-to-garden" href="index.html">
+            <i class="fas fa-leaf mr-2"></i> Vườn của Nga
+        </a>
+
+        <button id="sound-toggle" onclick="toggleSound()">
+            <i class="fas fa-volume-up" id="sound-icon"></i>
+        </button>
+
+        <div class="bg-white/80 border-b-2 border-dashed border-green-200 p-6 text-center pt-16 rounded-t-3xl">
+            <div class="text-xs font-bold text-green-600 mb-1 tracking-widest">NGA HỌC HSK</div>
+            <h1 class="text-2xl font-bold text-green-800">HSK1: Bài 11 🌿</h1>
+            <p class="text-gray-500 italic mt-1">现在几点？- Bây giờ mấy giờ?</p>
+        </div>
+
+        <div id="screen-menu" class="screen active flex-col p-8 space-y-4">
+            <button onclick="startGame('flashcard')" class="btn-ghibli w-full p-4 rounded-2xl flex items-center space-x-4">
+                <span class="text-3xl">🌸</span>
+                <div class="text-left">
+                    <div class="font-bold">Thẻ Ghi Nhớ</div>
+                    <div class="text-xs">Học từ vựng qua hình ảnh</div>
+                </div>
+            </button>
+            <button onclick="startGame('practice')" class="btn-ghibli w-full p-4 rounded-2xl flex items-center space-x-4">
+                <span class="text-3xl">🍃</span>
+                <div class="text-left">
+                    <div class="font-bold">Luyện Tập</div>
+                    <div class="text-xs">Thử thách 20 câu (Có tính điểm)</div>
+                </div>
+            </button>
+        </div>
+
+        <div id="screen-flashcard" class="screen flex-col p-6">
+            <div id="fc-progress" class="text-center text-xs font-bold text-green-600 mb-2"></div>
+            <div id="fc-card" class="flip-card mb-6" onclick="flipCard(this)">
+                <div class="flip-card-inner shadow-lg">
+                    <div class="flip-card-front">
+                        <div id="fc-hanzi" class="text-6xl font-bold text-gray-800"></div>
+                        <p class="text-xs text-gray-400 mt-4 italic">Chạm để lật thẻ</p>
+                    </div>
+                    <div class="flip-card-back p-4 text-center">
+                        <p id="fc-pinyin" class="text-xl text-green-200 italic font-medium"></p>
+                        <h2 id="fc-meaning" class="text-2xl font-bold mb-4 mt-2 text-yellow-100"></h2>
+                        <div class="bg-white/20 p-3 rounded-lg text-sm w-full border border-white/30 text-left">
+                            <p id="fc-example" class="font-bold text-white text-lg text-center"></p>
+                            <p id="fc-example-pinyin" class="text-green-100 font-medium text-center text-xs mt-1 mb-1"></p>
+                            <p id="fc-example-vi" class="italic opacity-90 text-center"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="markFlashcard(false)" class="p-3 bg-red-50 border-2 border-red-400 rounded-xl text-red-700 font-bold hover:bg-red-100 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <i class="fas fa-times"></i> Chưa nhớ
+                </button>
+                <button onclick="markFlashcard(true)" class="p-3 bg-green-50 border-2 border-green-500 rounded-xl text-green-700 font-bold hover:bg-green-100 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i> Đã nhớ
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-fc-summary" class="screen flex-col p-6 items-center text-center">
+            <h2 class="text-2xl font-bold text-green-800 mb-4">Kết quả học thẻ 🌻</h2>
+            <div class="bg-white rounded-2xl p-6 shadow-sm w-full mb-4 border border-green-100">
+                <p class="text-gray-600 mb-2">Số từ đã nhớ tốt:</p>
+                <div class="text-4xl font-bold text-green-600" id="fc-summary-score"></div>
+            </div>
+            <div id="fc-forgotten-list-container" class="w-full mb-6 hidden">
+                <h3 class="font-bold text-red-600 mb-2 text-sm text-left"><i class="fas fa-clipboard-list mr-1"></i> Các từ cần ôn lại:</h3>
+                <div id="fc-forgotten-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto bg-red-50 p-3 rounded-xl border border-red-100 text-left"></div>
+                <button onclick="reviewForgotten()" class="mt-4 w-full p-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 shadow-md flex justify-center items-center gap-2">
+                    <i class="fas fa-redo"></i> Học lại các từ chưa thuộc
+                </button>
+            </div>
+            <div id="fc-perfect-msg" class="w-full mb-6 text-green-600 font-bold hidden bg-green-50 p-4 rounded-xl border border-green-200">
+                Nga quá tuyệt vời! Đã thuộc hết 100% rồi! 🎉
+            </div>
+            <button onclick="returnToMenu()" class="w-full p-3 bg-gray-100 text-gray-700 rounded-xl font-bold">Về Menu chính</button>
+        </div>
+
+        <div id="screen-quiz" class="screen flex-col p-6">
+            <div class="flex justify-between text-xs font-bold text-green-700 mb-4 items-center">
+                <span id="quiz-progress" class="bg-green-100 px-3 py-1 rounded-full"></span>
+                <span id="quiz-score" class="bg-yellow-100 border border-yellow-300 text-yellow-700 px-3 py-1 rounded-full"></span>
+            </div>
+            <div class="bg-green-50 rounded-2xl p-6 text-center mb-4 border-2 border-white shadow-inner">
+                <h2 id="quiz-question" class="text-4xl font-bold text-gray-800"></h2>
+            </div>
+            <div id="quiz-options" class="space-y-3"></div>
+            <div id="quiz-feedback" class="hidden"></div>
+        </div>
+
+        <div id="screen-grammar" class="screen flex-col p-6">
+            <div class="flex justify-between text-xs font-bold text-green-700 mb-4 items-center">
+                <span id="gram-progress" class="bg-green-100 px-3 py-1 rounded-full"></span>
+                <span id="gram-score" class="bg-yellow-100 border border-yellow-300 text-yellow-700 px-3 py-1 rounded-full"></span>
+            </div>
+            <h3 id="gram-vietnamese" class="text-lg font-bold text-green-800 mb-4 text-center"></h3>
+            <div id="gram-answer-box" class="min-h-[70px] border-2 border-dashed border-green-400 rounded-xl p-3 flex flex-wrap gap-2 mb-4 bg-white shadow-inner"></div>
+            <div id="gram-pool" class="flex flex-wrap gap-2 mb-4 justify-center bg-green-50/50 p-4 rounded-xl"></div>
+            <button id="btn-check-grammar" onclick="checkGrammar()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg flex justify-center items-center gap-2">
+                Kiểm tra <i class="fas fa-check-circle"></i>
+            </button>
+            <div id="gram-feedback" class="hidden"></div>
+        </div>
+
+        <div id="screen-result" class="screen flex-col p-8 text-center items-center">
+            <div class="text-7xl mb-4 animate-bounce mt-4">🌸</div>
+            <h2 class="text-2xl font-bold text-green-800 mb-2">Hoàn thành bài luyện!</h2>
+            <div class="bg-white border-4 border-yellow-300 rounded-full w-32 h-32 flex items-center justify-center mb-6 shadow-lg">
+                <div id="result-score" class="text-5xl font-bold text-green-600">0</div>
+            </div>
+            <button onclick="returnToMenu()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl">Tiếp tục gieo mầm 🌿</button>
+        </div>
+    </div>
+
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx; let isSoundEnabled = true;
+        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (!isSoundEnabled) return; initAudio();
+            const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
+        const sounds = {
+            click: () => playTone(600, 'sine', 0.1, 0.05),
+            flip: () => { playTone(400, 'triangle', 0.1, 0.03); setTimeout(() => playTone(500, 'triangle', 0.1, 0.03), 50); },
+            correct: () => { playTone(523.25, 'sine', 0.15, 0.1); setTimeout(() => playTone(659.25, 'sine', 0.15, 0.1), 100); setTimeout(() => playTone(783.99, 'sine', 0.4, 0.1), 200); },
+            wrong: () => { playTone(300, 'sawtooth', 0.2, 0.05); setTimeout(() => playTone(250, 'sawtooth', 0.3, 0.05), 150); },
+            victory: () => [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.4, 0.1), i * 150))
+        };
+
+        function toggleSound() {
+            isSoundEnabled = !isSoundEnabled;
+            document.getElementById('sound-icon').className = isSoundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+            if (isSoundEnabled) sounds.click();
+        }
+
+        const dataFlashcards = [
+            { h: "现在", p: "xiànzài", m: "Bây giờ, hiện tại", ex: "现在几点？", exP: "xiànzài jǐ diǎn?", exVi: "Bây giờ mấy giờ?" },
+            { h: "点", p: "diǎn", m: "Giờ (mốc thời gian)", ex: "十点", exP: "shí diǎn", exVi: "10 giờ" },
+            { h: "分", p: "fēn", m: "Phút", ex: "五分", exP: "wǔ fēn", exVi: "5 phút" },
+            { h: "中午", p: "zhōngwǔ", m: "Buổi trưa", ex: "中午十二点", exP: "zhōngwǔ shí'èr diǎn", exVi: "12 giờ trưa" },
+            { h: "吃饭", p: "chī fàn", m: "Ăn cơm", ex: "我们去吃饭吧", exP: "wǒmen qù chīfàn ba", exVi: "Chúng ta đi ăn cơm đi" },
+            { h: "时候", p: "shíhou", m: "Lúc, khi", ex: "什么时候？", exP: "shénme shíhou?", exVi: "Khi nào?" },
+            { h: "回", p: "huí", m: "Về, trở về", ex: "回家", exP: "huí jiā", exVi: "Về nhà" },
+            { h: "我们", p: "wǒmen", m: "Chúng ta, chúng tôi", ex: "Chúng ta đi xem phim đi", exP: "wǒmen qù kàn diànyǐng ba", exVi: "Chúng mình đi xem phim đi" },
+            { h: "电影", p: "diànyǐng", m: "Phim, điện ảnh", ex: "看电影", exP: "kàn diànyǐng", exVi: "Xem phim" },
+            { h: "住", p: "zhù", m: "Ở, cư trú", ex: "你住在哪儿？", exP: "nǐ zhù zài nǎr?", exVi: "Bạn sống ở đâu?" },
+            { h: "前", p: "qián", m: "Trước", ex: "三天前", exP: "sān tiān qián", exVi: "3 ngày trước" },
+            { h: "北京", p: "Běijīng", m: "Bắc Kinh", ex: "他在北京。", exP: "tā zài Běijīng.", exVi: "Anh ấy ở Bắc Kinh." },
+            { h: "河内", p: "Hénèi", m: "Hà Nội", ex: "我住在河内。", exP: "wǒ zhù zài Hénèi.", exVi: "Tôi sống ở Hà Nội." }
+        ];
+
+        const questionsPool = [
+            { q: "现在", a: "Bây giờ", options: ["Bây giờ", "Ngày mai", "Buổi trưa", "Hôm nay"], exp: "现在 (xiànzài) là danh từ chỉ thời gian: bây giờ." },
+            { q: "2:00", a: "两点", options: ["两点", "二点", "两分", "二点分"], exp: "Khi nói 2 giờ, dùng 两点 (liǎng diǎn) thay vì dùng 二." },
+            { q: "分", a: "Phút", options: ["Giờ", "Phút", "Ngày", "Tháng"], exp: "分 (fēn) là đơn vị phút." },
+            { q: "中午", a: "Buổi trưa", options: ["Sáng", "Trưa", "Chiều", "Tối"], exp: "中午 (zhōngwǔ) là buổi trưa (11h-13h)." },
+            { q: "电影", a: "Phim", options: ["Sách", "Phim", "Nhạc", "Tranh"], exp: "电影 (diànyǐng) là phim ảnh." },
+            { q: "回", a: "Về", options: ["Đi", "Về", "Đến", "Ở"], exp: "回 (huí) nghĩa là quay về." },
+            { q: "什么时候", a: "Khi nào", options: ["Ở đâu", "Khi nào", "Cái gì", "Ai"], exp: "什么时候 là từ dùng để hỏi về thời gian." },
+            { q: "住", a: "Ở", options: ["Ăn", "Ở", "Đi", "Về"], exp: "住 (zhù) dùng để chỉ nơi cư trú." },
+            { q: "河内", a: "Hà Nội", options: ["Bắc Kinh", "Hà Nội", "Thượng Hải", "Huế"], exp: "河内 (Hénèi) là thủ đô Hà Nội." },
+            { q: "北京", a: "Bắc Kinh", options: ["Bắc Kinh", "Hà Nội", "Sài Gòn", "Tokyo"], exp: "北京 (Běijīng) là thủ đô Bắc Kinh." },
+            { q: "Chúng ta", a: "我们", options: ["他们", "你们", "我们", "他"], exp: "我们 là đại từ nhân xưng số nhiều (ngôi thứ nhất)." },
+            { q: "5:30", a: "五点三十分", options: ["五点三十分", "五点", "三点五十分", "五分三十点"], exp: "Giờ trước phút sau: 5 giờ 30 phút." },
+            { q: "前", a: "Trước", options: ["Sau", "Trong", "Trước", "Dưới"], exp: "前 (qián) chỉ vị trí hoặc thời gian phía trước." },
+            { q: "Ăn cơm", a: "吃饭", options: ["喝水", "睡觉", "吃饭", "去玩"], exp: "吃饭 (chī fàn) là hành động ăn uống." },
+            { q: "10:15", a: "十点十五分", options: ["十点十五分", "十点五分", "一点十五分", "十点五button"], exp: "十点 (10h) + 十五分 (15p)." }
+        ];
+
+        const grammarPool = [
+            { vi: "Bây giờ mấy giờ?", answer: ["现在", "几点", "？"], pool: ["几点", "现在", "？", "点", "分"], exp: "Câu hỏi giờ cơ bản: 现在几点？" },
+            { vi: "Tôi ở Bắc Kinh.", answer: ["我", "住", "在", "北京", "。"], pool: ["住", "我", "在", "北京", "。", "回", "点"], exp: "Cấu trúc: S + 住 + 在 + Địa điểm." },
+            { vi: "Khi nào bạn về nhà?", answer: ["你", "什么时候", "回", "家", "？"], pool: ["你", "回", "什么时候", "家", "？", "去", "住"], exp: "Từ hỏi thời gian 什么时候 đứng sau chủ ngữ." },
+            { vi: "Chúng tôi đi xem phim.", answer: ["我们", "去", "看", "电影", "。"], pool: ["Chúng tôi", "看", "电影", "。", "去", "回", "吃"], exp: "Trình tự: Chúng tôi + đi + xem + phim." },
+            { vi: "Ba ngày trước.", answer: ["三", "天", "前", "。"], pool: ["三", "天", "前", "。", "后", "点"], exp: "Thời gian + 前 (qián) = ... trước." }
+        ];
+
+        let score = 0, currentIndex = 0, currentQuestions = [], flashcardIndex = 0;
+        let currentFlashcards = [], forgottenFlashcards = [];
+        let currentGrammarAnswer = [], currentGrammarPool = [];
+
+        function switchScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function returnToMenu() { sounds.click(); switchScreen('screen-menu'); }
+
+        function startGame(mode) {
+            sounds.click(); score = 0; currentIndex = 0;
+            if (mode === 'flashcard') {
+                currentFlashcards = [...dataFlashcards].sort(() => 0.5 - Math.random());
+                forgottenFlashcards = []; flashcardIndex = 0;
+                switchScreen('screen-flashcard'); loadFlashcard();
+            } else {
+                currentQuestions = [...questionsPool, ...grammarPool].sort(() => 0.5 - Math.random()).slice(0, 20);
+                loadQuestion();
+            }
+        }
+
+        function loadFlashcard() {
+            const f = currentFlashcards[flashcardIndex];
+            document.getElementById('fc-progress').innerText = `Thẻ ${flashcardIndex + 1}/${currentFlashcards.length}`;
+            document.getElementById('fc-hanzi').innerText = f.h;
+            document.getElementById('fc-pinyin').innerText = f.p;
+            document.getElementById('fc-meaning').innerText = f.m;
+            document.getElementById('fc-example').innerText = f.ex;
+            document.getElementById('fc-example-pinyin').innerText = f.exP;
+            document.getElementById('fc-example-vi').innerText = f.exVi;
+            document.getElementById('fc-card').classList.remove('flipped');
+        }
+
+        function flipCard(el) { sounds.flip(); el.classList.toggle('flipped'); }
+        function markFlashcard(remembered) {
+            if (!remembered) forgottenFlashcards.push(currentFlashcards[flashcardIndex]);
+            if (++flashcardIndex < currentFlashcards.length) loadFlashcard();
+            else showFlashcardSummary();
+        }
+
+        function showFlashcardSummary() {
+            switchScreen('screen-fc-summary');
+            document.getElementById('fc-summary-score').innerText = `${currentFlashcards.length - forgottenFlashcards.length}/${currentFlashcards.length}`;
+            const listContainer = document.getElementById('fc-forgotten-list-container');
+            const perfectMsg = document.getElementById('fc-perfect-msg');
+            const listEl = document.getElementById('fc-forgotten-list');
+            if (forgottenFlashcards.length > 0) {
+                listContainer.classList.remove('hidden'); perfectMsg.classList.add('hidden');
+                listEl.innerHTML = forgottenFlashcards.map(f => `<div class="bg-white p-2 rounded border border-red-200 text-sm flex justify-between"><b>${f.h}</b> <span>${f.p}</span> <span class="text-red-600">${f.m}</span></div>`).join('');
+            } else {
+                listContainer.classList.add('hidden'); perfectMsg.classList.remove('hidden');
+            }
+        }
+
+        function reviewForgotten() {
+            currentFlashcards = [...forgottenFlashcards]; forgottenFlashcards = [];
+            flashcardIndex = 0; switchScreen('screen-flashcard'); loadFlashcard();
+        }
+
+        function loadQuestion() {
+            const q = currentQuestions[currentIndex];
+            document.getElementById('quiz-feedback').className = 'hidden';
+            document.getElementById('gram-feedback').className = 'hidden';
+            document.getElementById('quiz-score').innerText = `🌱 Điểm: ${score}`;
+            document.getElementById('gram-score').innerText = `🌱 Điểm: ${score}`;
+            
+            if (!q.options) {
+                switchScreen('screen-grammar');
+                document.getElementById('gram-progress').innerText = `Câu ${currentIndex + 1}/20 - Sắp xếp`;
+                document.getElementById('gram-vietnamese').innerText = q.vi;
+                document.getElementById('btn-check-grammar').style.display = 'flex';
+                currentGrammarAnswer = []; currentGrammarPool = [...q.pool].sort(() => 0.5 - Math.random());
+                renderGrammar();
+            } else {
+                switchScreen('screen-quiz');
+                document.getElementById('quiz-progress').innerText = `Câu ${currentIndex + 1}/20`;
+                document.getElementById('quiz-question').innerText = q.q;
+                const opts = document.getElementById('quiz-options'); opts.innerHTML = '';
+                q.options.sort(() => 0.5 - Math.random()).forEach(o => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 rounded-xl border-2 border-green-100 font-bold bg-white';
+                    btn.innerText = o;
+                    btn.onclick = () => { Array.from(opts.children).forEach(b => b.disabled = true); checkQuiz(o, q.a, btn); };
+                    opts.appendChild(btn);
+                });
+            }
+        }
+
+        function checkQuiz(selected, correct, btn) {
+            const fb = document.getElementById('quiz-feedback');
+            const isCorrect = selected === correct;
+            if (isCorrect) { sounds.correct(); score += 10; btn.classList.add('correct-anim'); }
+            else { sounds.wrong(); score -= 5; btn.classList.add('wrong-anim'); }
+            
+            fb.className = `mt-4 p-4 rounded-xl border-2 ${isCorrect ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`;
+            fb.innerHTML = `<div class="font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '🌸 Đúng rồi!' : '🍂 Sai rồi! (-5)'}</div>
+                            <div class="text-sm mt-1"><b>Đáp án:</b> ${correct}</div>
+                            <div class="text-xs text-gray-600 italic mt-2">${currentQuestions[currentIndex].exp}</div>
+                            <button onclick="nextQuestion()" class="mt-3 w-full p-2 bg-white border border-gray-300 rounded-lg text-sm">Câu tiếp theo →</button>`;
+            document.getElementById('quiz-score').innerText = `🌱 Điểm: ${score}`;
+        }
+
+        function renderGrammar() {
+            const box = document.getElementById('gram-answer-box'); const pool = document.getElementById('gram-pool');
+            box.innerHTML = ''; pool.innerHTML = '';
+            currentGrammarAnswer.forEach((w, i) => box.appendChild(createTile(w, true, i)));
+            currentGrammarPool.forEach((w, i) => pool.appendChild(createTile(w, false, i)));
+        }
+
+        function createTile(w, isSelected, i) {
+            const d = document.createElement('div'); d.className = `word-tile ${isSelected ? 'selected' : ''}`;
+            d.innerText = w; d.onclick = () => {
+                sounds.click();
+                if (isSelected) currentGrammarPool.push(currentGrammarAnswer.splice(i, 1)[0]);
+                else currentGrammarAnswer.push(currentGrammarPool.splice(i, 1)[0]);
+                renderGrammar();
+            };
+            return d;
+        }
+
+        function checkGrammar() {
+            document.getElementById('btn-check-grammar').style.display = 'none';
+            const q = currentQuestions[currentIndex]; const fb = document.getElementById('gram-feedback');
+            const isCorrect = currentGrammarAnswer.join('') === q.answer.join('');
+            if (isCorrect) { sounds.correct(); score += 20; } else { sounds.wrong(); score -= 5; }
+            
+            fb.className = `mt-4 p-4 rounded-xl border-2 ${isCorrect ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`;
+            fb.innerHTML = `<div class="font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}">${isCorrect ? '🌸 Rất tốt!' : '🍂 Chưa đúng! (-5)'}</div>
+                            <div class="text-sm"><b>Đáp án:</b> ${q.answer.join('')}</div>
+                            <div class="text-xs mt-2 italic">${q.exp}</div>
+                            <button onclick="nextQuestion()" class="mt-3 w-full p-2 bg-white border border-gray-300 rounded-lg text-sm">Tiếp theo →</button>`;
+            document.getElementById('gram-score').innerText = `🌱 Điểm: ${score}`;
+        }
+
+        function nextQuestion() { if (++currentIndex < currentQuestions.length) loadQuestion(); else showResult(); }
+
+        function showResult() {
+            sounds.victory(); switchScreen('screen-result');
+            let curr = 0; const step = score > 0 ? 1 : -1;
+            if (score === 0) { document.getElementById('result-score').innerText = 0; return; }
+            const intv = setInterval(() => {
+                curr += step; document.getElementById('result-score').innerText = curr;
+                if (curr === score) clearInterval(intv);
+            }, 30);
+        }
+    </script>
+</body>
+</html>
