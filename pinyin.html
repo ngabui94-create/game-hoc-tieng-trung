@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Pinyin - Nga Học HSK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --ghibli-green: #9dc183; --ghibli-dark: #4f7942; --ghibli-pink: #ffb7c5; }
+        body { font-family: 'Quicksand', sans-serif; background: #f0f9f0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .pinyin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; width: 100%; max-width: 1000px; }
+        .pinyin-card { background: white; border: 2px solid var(--ghibli-green); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .pinyin-card:hover { transform: scale(1.05); border-color: var(--ghibli-pink); }
+        .main-pinyin { font-size: 1.5rem; font-weight: bold; color: var(--ghibli-dark); margin-bottom: 10px; }
+        .tones { display: flex; gap: 5px; justify-content: center; }
+        .tone-btn { border: none; background: #eef2ed; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ghibli-dark); }
+        .tone-btn:hover { background: var(--ghibli-pink); color: white; }
+        .back-btn { margin-bottom: 25px; text-decoration: none; color: white; background: var(--ghibli-green); padding: 8px 20px; border-radius: 25px; font-weight: bold; box-shadow: 0 4px 0 var(--ghibli-dark); }
+        h1 { color: var(--ghibli-dark); text-shadow: 1px 1px 0 white; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">⬅ QUAY LẠI KHU VƯỜN</a>
+    <h1>Trình Phát Âm Pinyin 🍃</h1>
+    <div class="pinyin-grid" id="pinyinGrid"></div>
+    <audio id="player"></audio>
+
+    <script>
+        const pinyinList = [
+            'a', 'o', 'e', 'er', 'i', 'u', 'v', 
+            'ba', 'bo', 'bi', 'bu', 'pa', 'po', 'pi', 'pu',
+            'ma', 'mo', 'me', 'mi', 'mu', 'fa', 'fo', 'fu',
+            'da', 'de', 'di', 'du', 'ta', 'te', 'ti', 'tu',
+            'na', 'ne', 'ni', 'nu', 'nv', 'la', 'le', 'li', 'lu', 'lv',
+            'ga', 'ge', 'gu', 'ka', 'ke', 'ku', 'ha', 'he', 'hu'
+        ];
+        
+        const grid = document.getElementById('pinyinGrid');
+        const player = document.getElementById('player');
+
+        pinyinList.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'pinyin-card';
+            card.innerHTML = `
+                <div class="main-pinyin">${item}</div>
+                <div class="tones">
+                    <button class="tone-btn" onclick="playAudio('${item}1')">1</button>
+                    <button class="tone-btn" onclick="playAudio('${item}2')">2</button>
+                    <button class="tone-btn" onclick="playAudio('${item}3')">3</button>
+                    <button class="tone-btn" onclick="playAudio('${item}4')">4</button>
+                </div>`;
+            grid.appendChild(card);
+        });
+
+        function playAudio(file) {
+            player.src = `audio/${file}.mp3`;
+            player.play().catch(e => console.log("Thiếu file: " + file));
+        }
+    </script>
+</body>
+</html>
