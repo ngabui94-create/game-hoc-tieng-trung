@@ -114,11 +114,11 @@
             text-align: center;
         }
 
-        /* --- TỐI ƯU SEARCH BOX JIJI --- */
+        /* --- TỐI ƯU SEARCH BOX KOALA 🐨 --- */
         .search-wrapper {
             position: relative;
-            width: 85%; /* Co giãn linh hoạt trên mobile */
-            max-width: 350px; /* Không quá dài trên máy tính */
+            width: 85%;
+            max-width: 350px;
             margin-bottom: 10px;
             z-index: 20;
         }
@@ -130,7 +130,7 @@
             border: 2px solid var(--ghibli-green);
             background: white;
             font-family: 'Quicksand', sans-serif;
-            font-size: 16px; /* 16px để iOS không bị tự zoom */
+            font-size: 16px;
             outline: none;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
@@ -142,36 +142,33 @@
             box-shadow: 0 5px 20px rgba(79, 121, 66, 0.2);
         }
 
-        /* Biểu tượng mèo Jiji */
-        .jiji-icon {
+        /* Biểu tượng Gấu Koala */
+        .koala-icon {
             position: absolute;
-            left: 10px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            width: 35px;
-            height: 35px;
-            background-image: url('https://i.pinimg.com/originals/14/7b/9e/147b9e078028972e9a26569130761e01.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            font-size: 26px; /* Kích thước Koala */
             transition: all 0.3s ease;
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Hiệu ứng vẫy nhẹ khi gõ tìm kiếm */
-        @keyframes jijiNod {
-            0%, 100% { transform: translateY(-50%) rotate(0deg); }
-            50% { transform: translateY(-50%) rotate(-10deg); }
+        /* Hiệu ứng Koala nhún nhảy khi chạm/focus vào thanh tìm kiếm */
+        @keyframes koalaBounce {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-65%) scale(1.2); }
         }
 
-        #gameSearch:focus + .jiji-icon {
-            animation: jijiNod 0.6s ease-in-out infinite;
+        #gameSearch:focus + .koala-icon {
+            animation: koalaBounce 0.6s ease-in-out infinite;
         }
 
-        /* --- GRID CONTAINER TỐI ƯU --- */
+        /* --- GRID CONTAINER (Giữ nguyên) --- */
         .container {
             display: grid;
-            /* Mặc định 2 cột cho điện thoại nhỏ */
             grid-template-columns: repeat(2, 1fr); 
             gap: 12px;
             max-width: 1200px;
@@ -181,7 +178,6 @@
             position: relative;
         }
 
-        /* Máy tính và Tablet lớn: tự động dàn hàng ngang */
         @media (min-width: 768px) {
             .container { 
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
@@ -259,7 +255,7 @@
 
     <div class="search-wrapper">
         <input type="text" id="gameSearch" placeholder="Tìm bài học...">
-        <div class="jiji-icon"></div>
+        <div class="koala-icon">🐨</div>
     </div>
 </header>
 
@@ -295,7 +291,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- LOGIC TÌM KIẾM ---
         const searchInput = document.getElementById('gameSearch');
         const cards = document.querySelectorAll('.game-card');
 
@@ -307,10 +302,9 @@
             });
         });
 
-        // --- HIỆU ỨNG LÁ BAY ---
         const container = document.getElementById('leaves-container');
         const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨'];
-        const numLeaves = 15; // Giảm số lượng lá trên mobile để mượt hơn
+        const numLeaves = 15;
 
         for (let i = 0; i < numLeaves; i++) {
             let leaf = document.createElement('div');
