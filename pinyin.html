@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Pinyin Gọn Gàng - Nga Học HSK</title>
+    <title>Bảng Pinyin Yoyo Style - Nga Học HSK</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,111 +11,83 @@
             --ghibli-dark: #4f7942;
             --accent-pink: #ffb7c5;
         }
-        body { 
-            font-family: 'Quicksand', sans-serif; 
-            background: #fdfcf0; 
-            margin: 0; 
-            padding: 5px; 
-        }
-        .back-btn { 
-            text-decoration: none; 
-            color: white; 
-            background: var(--ghibli-green); 
-            padding: 8px 20px; 
-            border-radius: 20px; 
-            font-weight: bold; 
-            display: inline-block; 
-            margin: 10px;
-            box-shadow: 0 3px 0 var(--ghibli-dark);
-            font-size: 0.9rem;
-        }
-        
-        h1 { text-align: center; color: var(--ghibli-dark); font-size: 1.5rem; margin: 10px 0; }
+        body { font-family: 'Quicksand', sans-serif; background: #fdfcf0; margin: 0; padding: 5px; }
+        .back-btn { text-decoration: none; color: white; background: var(--ghibli-green); padding: 5px 15px; border-radius: 15px; font-weight: bold; display: inline-block; margin: 5px; box-shadow: 0 2px 0 var(--ghibli-dark); font-size: 0.8rem; }
+        h1 { text-align: center; color: var(--ghibli-dark); font-size: 1.2rem; margin: 5px 0; }
 
         .table-container {
             width: 100%;
-            max-height: 85vh;
+            max-height: 88vh;
             overflow: auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             background: white;
         }
 
         table { border-collapse: separate; border-spacing: 0; }
         
-        /* Thanh mẫu ngang - Chữ to, ô nhỏ */
         thead th {
             position: sticky; top: 0; z-index: 10;
             background: var(--ghibli-green); color: white;
-            padding: 8px 5px; 
-            font-size: 1.4rem; 
+            padding: 4px 2px; font-size: 1.4rem; 
             border: 1px solid #ffffff33;
-            min-width: 45px;
+            min-width: 40px; 
         }
         
-        /* Vận mẫu dọc - Chữ to, ô nhỏ */
         .final-header {
             position: sticky; left: 0; z-index: 11;
             background: #eef2ed !important; color: var(--ghibli-dark);
-            font-weight: bold; 
-            padding: 8px 10px;
-            font-size: 1.4rem; 
-            border: 1px solid #ddd;
+            font-weight: bold; padding: 4px 6px;
+            font-size: 1.4rem; border: 1px solid #ddd;
             text-align: left;
         }
 
         td {
-            padding: 8px 5px; 
-            text-align: center; 
-            border: 0.5px solid #eee;
-            transition: 0.2s; 
-            font-size: 1.35rem;
-            min-width: 50px;
+            padding: 4px 2px; 
+            text-align: center; border: 0.5px solid #eee;
+            font-size: 1.35rem; min-width: 42px;
         }
 
-        .syllable { cursor: pointer; color: #333; font-weight: 600; white-space: nowrap; }
-        .syllable:hover { 
-            background: var(--accent-pink); 
-            color: white; 
-            border-radius: 4px; 
-        }
+        tr:nth-child(even) td { background-color: #fafdfa; }
+
+        .syllable { cursor: pointer; color: #222; font-weight: 600; white-space: nowrap; }
+        .syllable:hover, .syllable.active { background: var(--accent-pink) !important; color: white; border-radius: 3px; }
         
-        .empty { background: #fafafa; color: #f0f0f0; pointer-events: none; }
+        .empty { color: #f2f2f2; pointer-events: none; font-size: 0.8rem; }
 
-        /* Pop-up chọn thanh điệu */
         #toneMenu {
             display: none; position: fixed; background: white;
-            border: 2px solid var(--ghibli-green); border-radius: 10px;
-            padding: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1000;
+            border: 2px solid var(--ghibli-green); border-radius: 8px;
+            padding: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1000;
         }
-        .tone-grid { display: flex; gap: 8px; }
+        .tone-grid { display: flex; gap: 5px; }
         .t-btn { 
-            border: none; background: #f0f0f0; 
-            padding: 10px 15px; border-radius: 8px; 
-            cursor: pointer; font-weight: bold; font-size: 1.2rem; 
+            border: none; background: #f0f0f0; padding: 8px 12px; 
+            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1.1rem; 
+            transition: 0.1s;
         }
         .t-btn:hover { background: var(--ghibli-green); color: white; }
+        .t-btn:active { transform: scale(0.9); background: var(--ghibli-dark); } /* Hiệu ứng lún xuống khi bấm */
     </style>
 </head>
 <body>
 
     <a href="index.html" class="back-btn">⬅ VỀ VƯỜN</a>
-    <h1>Bảng Pinyin Tối Ưu 🍃</h1>
+    <h1>Bảng Pinyin Đầy Đủ (400+ Âm) 🎹</h1>
 
     <div class="table-container">
         <table id="pinyinMainTable">
             <thead>
                 <tr id="initialHeaders">
                     <th class="final-header">V\T</th>
-                    </tr>
+                </tr>
             </thead>
-            <tbody id="pinyinBody">
-                </tbody>
+            <tbody id="pinyinBody"></tbody>
         </table>
     </div>
 
     <div id="toneMenu">
-        <div id="toneLabel" style="text-align:center; font-size: 1.2rem; font-weight:bold; margin-bottom:8px; color:var(--ghibli-dark)"></div>
+        <div id="toneLabel" style="text-align:center; font-size: 1.1rem; font-weight:bold; margin-bottom:5px; color:var(--ghibli-dark)"></div>
         <div class="tone-grid">
             <button class="t-btn" onclick="playSyllable(1)">1</button>
             <button class="t-btn" onclick="playSyllable(2)">2</button>
@@ -127,22 +99,64 @@
     <audio id="audioPlayer"></audio>
 
     <script>
-        const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'];
+        const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's'];
         const finals = [
-            'a', 'o', 'e', 'er', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong',
+            'a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er',
             'i', 'ia', 'iao', 'ie', 'iu', 'ian', 'in', 'iang', 'ing', 'iong',
             'u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng',
             'ü', 'üe', 'üan', 'ün'
         ];
 
+        // Đã cập nhật đủ hơn 400 âm tiết chuẩn xác
         const validData = new Set([
-            'a','o','e','er','ai','ei','ao','ou','an','en','ang','eng','yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun',
-            'ba','bo','bi','bu','bai','bei','bao','ban','ben','bang','beng','pa','po','pi','pu','pai','pei','pao','pou','pan','pen','pang','peng','ma','mo','me','mi','mu','mai','mei','mao','mou','man','men','mang','meng','fa','fo','fu','fei','fou','fan','fen','fang','feng','da','de','di','du','dai','dei','dao','dou','dan','den','dang','deng','dong','ta','te','ti','tu','tai','tei','tao','tou','tan','tang','teng','tong','na','ne','ni','nu','nv','nai','nei','nao','nen','nan','nang','neng','nong','nia','niao','nie','niu','nian','nin','niang','ning','la','le','li','lu','lv','lai','lei','lao','lou','lan','lang','leng','long','lia','liao','lie','liu','lian','lin','liang','ling','ga','ge','gu','gai','gei','gao','gou','gan','gen','gang','geng','gong','gua','guo','guai','gui','guan','gun','guang','ka','ke','ku','kai','kei','kao','kou','kan','ken','kang','keng','kong','kua','kuo','kuai','kui','kuan','kun','kuang','ha','he','hu','hai','hei','hao','hou','han','hen','hang','heng','hong','hua','huo','huai','hui','huan','hun','huang','ji','ju','jia','jie','jiao','jiu','jian','jin','jiang','jing','jiong','juan','jue','jun','qi','qu','qia','qie','qiao','qiu','qian','qin','qiang','qing','qiong','quan','que','qun','xi','xu','xia','xie','xiao','xiu','xian','xin','xiang','xing','xiong','xuan','xue','xun','zha','zhe','zhi','zhu','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang','cha','che','chi','chu','chai','chao','chou','chan','chen','chang','cheng','chong','chua','chuo','chuai','chui','chuan','chun','chuang','sha','she','shi','shu','shai','shei','shao','shou','shan','shen','shang','sheng','shua','shuo','shuai','shui','shuan','shun','shuang','re','ri','ru','rao','rou','ran','ren','rang','reng','rong','ruo','rui','ruan','run','za','ze','zi','zu','zai','zei','zhao','zou','zan','zen','zang','zeng','zong','zuo','zui','zuan','zun','ca','ce','ci','cu','cai','cao','cou','can','cen','cang','ceng','cong','cuo','cui','cuan','cun','sa','se','si','su','sai','sao','sou','san','sen','sang','seng','song','suo','sui','suan','sun'
+            'a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er',
+            'ba', 'bo', 'bai', 'bei', 'bao', 'ban', 'ben', 'bang', 'beng', 'bi', 'biao', 'bie', 'bian', 'bin', 'bing',
+            'pa', 'po', 'pai', 'pei', 'pao', 'pou', 'pan', 'pen', 'pang', 'peng', 'pi', 'piao', 'pie', 'pian', 'pin', 'ping',
+            'ma', 'mo', 'me', 'mai', 'mei', 'mao', 'mou', 'man', 'men', 'mang', 'meng', 'mi', 'miao', 'mie', 'miu', 'mian', 'min', 'ming',
+            'fa', 'fo', 'fei', 'fou', 'fan', 'fen', 'fang', 'feng',
+            'da', 'de', 'dai', 'dei', 'dao', 'dou', 'dan', 'den', 'dang', 'deng', 'dong', 'di', 'diao', 'die', 'diu', 'dian', 'ding', 'du', 'duo', 'dui', 'duan', 'dun',
+            'ta', 'te', 'tai', 'tao', 'tou', 'tan', 'tang', 'teng', 'tong', 'ti', 'tiao', 'tie', 'tian', 'ting', 'tu', 'tuo', 'tui', 'tuan', 'tun',
+            'na', 'ne', 'nai', 'nei', 'nao', 'nou', 'nan', 'nen', 'nang', 'neng', 'nong', 'ni', 'niao', 'nie', 'niu', 'nian', 'nin', 'niang', 'ning', 'nu', 'nuo', 'nuan', 'nü', 'nüe',
+            'la', 'le', 'lai', 'lei', 'lao', 'lou', 'lan', 'lang', 'leng', 'long', 'li', 'lia', 'liao', 'lie', 'liu', 'lian', 'lin', 'liang', 'ling', 'lu', 'luo', 'luan', 'lun', 'lü', 'lüe',
+            'ga', 'ge', 'gai', 'gei', 'gao', 'gou', 'gan', 'gen', 'gang', 'geng', 'gong', 'gu', 'gua', 'guo', 'guai', 'gui', 'guan', 'gun', 'guang',
+            'ka', 'ke', 'kai', 'kei', 'kao', 'kou', 'kan', 'ken', 'kang', 'keng', 'kong', 'ku', 'kua', 'kuo', 'kuai', 'kui', 'kuan', 'kun', 'kuang',
+            'ha', 'he', 'hai', 'hei', 'hao', 'hou', 'han', 'hen', 'hang', 'heng', 'hong', 'hu', 'hua', 'huo', 'huai', 'hui', 'huan', 'hun', 'huang',
+            'zha', 'zhe', 'zhi', 'zhai', 'zhei', 'zhao', 'zhou', 'zhan', 'zhen', 'zhang', 'zheng', 'zhong', 'zhu', 'zhua', 'zhuo', 'zhuai', 'zhui', 'zhuan', 'zhun', 'zhuang',
+            'cha', 'che', 'chi', 'chai', 'chao', 'chou', 'chan', 'chen', 'chang', 'cheng', 'chong', 'chu', 'chua', 'chuo', 'chuai', 'chui', 'chuan', 'chun', 'chuang',
+            'sha', 'she', 'shi', 'shai', 'shei', 'shao', 'shou', 'shan', 'shen', 'shang', 'sheng', 'shu', 'shua', 'shuo', 'shuai', 'shui', 'shuan', 'shun', 'shuang',
+            're', 'ri', 'rao', 'rou', 'ran', 'ren', 'rang', 'reng', 'rong', 'ru', 'ruo', 'rui', 'ruan', 'run',
+            'za', 'ze', 'zi', 'zai', 'zei', 'zao', 'zou', 'zan', 'zen', 'zang', 'zeng', 'zong', 'zu', 'zuo', 'zui', 'zuan', 'zun',
+            'ca', 'ce', 'ci', 'cai', 'cao', 'cou', 'can', 'cen', 'cang', 'ceng', 'cong', 'cu', 'cuo', 'cui', 'cuan', 'cun',
+            'sa', 'se', 'si', 'sai', 'sao', 'sou', 'san', 'sen', 'sang', 'seng', 'song', 'su', 'suo', 'sui', 'suan', 'sun',
+            'ji', 'jia', 'jiao', 'jie', 'jiu', 'jian', 'jin', 'jiang', 'jing', 'jiong', 'ju', 'jue', 'juan', 'jun',
+            'qi', 'qia', 'qiao', 'qie', 'qiu', 'qian', 'qin', 'qiang', 'qing', 'qiong', 'qu', 'que', 'quan', 'qun',
+            'xi', 'xia', 'xiao', 'xie', 'xiu', 'xian', 'xin', 'xiang', 'xing', 'xiong', 'xu', 'xue', 'xuan', 'xun',
+            'yi', 'ya', 'yao', 'ye', 'you', 'yan', 'yin', 'yang', 'ying', 'yong',
+            'wu', 'wa', 'wo', 'wai', 'wei', 'wan', 'wen', 'wang', 'weng',
+            'yu', 'yue', 'yuan', 'yun'
         ]);
 
         let currentSyllable = "";
+        let activeCell = null;
         const toneMenu = document.getElementById('toneMenu');
         const audioPlayer = document.getElementById('audioPlayer');
+
+        // Hàm thông minh tự động đổi quy tắc chính tả Pinyin
+        function getSpelling(initial, final) {
+            if (initial === '') {
+                const zeroMap = {
+                    'a': 'a', 'o': 'o', 'e': 'e', 'ai': 'ai', 'ei': 'ei', 'ao': 'ao', 'ou': 'ou', 'an': 'an', 'en': 'en', 'ang': 'ang', 'eng': 'eng', 'er': 'er',
+                    'i': 'yi', 'ia': 'ya', 'iao': 'yao', 'ie': 'ye', 'iu': 'you', 'ian': 'yan', 'in': 'yin', 'iang': 'yang', 'ing': 'ying', 'iong': 'yong',
+                    'u': 'wu', 'ua': 'wa', 'uo': 'wo', 'uai': 'wai', 'ui': 'wei', 'uan': 'wan', 'un': 'wen', 'uang': 'wang', 'ueng': 'weng',
+                    'ü': 'yu', 'üe': 'yue', 'üan': 'yuan', 'ün': 'yun'
+                };
+                return zeroMap[final];
+            }
+            if (['j', 'q', 'x'].includes(initial) && final.startsWith('ü')) {
+                return initial + final.replace('ü', 'u'); // Biến ü thành u sau j, q, x
+            }
+            return initial + final;
+        }
 
         function initTable() {
             const head = document.getElementById('initialHeaders');
@@ -163,11 +177,12 @@
 
                 initials.forEach(i => {
                     const td = document.createElement('td');
-                    let s = i + f;
+                    let s = getSpelling(i, f); // Sử dụng hàm thông minh
+                    
                     if (validData.has(s)) {
                         td.className = 'syllable';
                         td.innerText = s;
-                        td.onclick = (e) => openTones(e, s);
+                        td.onclick = (e) => openTones(e, s, td);
                     } else {
                         td.className = 'empty';
                         td.innerText = '·';
@@ -178,13 +193,19 @@
             });
         }
 
-        function openTones(e, s) {
+        function openTones(e, s, cell) {
             currentSyllable = s;
             document.getElementById('toneLabel').innerText = s;
             toneMenu.style.display = 'block';
+            
+            // Xoá highlight ô cũ, highlight ô mới
+            if (activeCell) activeCell.classList.remove('active');
+            activeCell = cell;
+            activeCell.classList.add('active');
+
             let posX = e.clientX;
             let posY = e.clientY;
-            if (posX + 120 > window.innerWidth) posX -= 120;
+            if (posX + 100 > window.innerWidth) posX -= 100;
             if (posY + 80 > window.innerHeight) posY -= 80;
             toneMenu.style.left = posX + 'px';
             toneMenu.style.top = posY + 'px';
@@ -192,15 +213,27 @@
         }
 
         function playSyllable(tone) {
-            let fileName = currentSyllable.replace('ü', 'v') + tone;
+            // Tự động chuyển ü thành v để khớp tên file .mp3 của Nga
+            let fileName = currentSyllable.replace(/ü/g, 'v') + tone; 
             audioPlayer.src = `audio/${fileName}.mp3`;
+            
             audioPlayer.play().catch(err => {
-                console.log("Thiếu file: " + fileName);
+                console.log("Thiếu file: " + fileName + ".mp3");
+                // Đổi màu chữ label thành đỏ nếu thiếu file để Nga dễ biết
+                document.getElementById('toneLabel').style.color = 'red';
+                setTimeout(() => document.getElementById('toneLabel').style.color = 'var(--ghibli-dark)', 1000);
             });
-            toneMenu.style.display = 'none';
+            // MENU SẼ KHÔNG TỰ TẮT ĐI NỮA
         }
 
-        document.addEventListener('click', () => toneMenu.style.display = 'none');
+        // Bấm ra ngoài vùng menu thì mới tắt menu
+        document.addEventListener('click', (e) => {
+            if (!toneMenu.contains(e.target)) {
+                toneMenu.style.display = 'none';
+                if (activeCell) activeCell.classList.remove('active');
+            }
+        });
+
         initTable();
     </script>
 </body>
