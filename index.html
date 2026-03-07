@@ -68,7 +68,7 @@
 
         header {
             text-align: center;
-            padding: 40px 15px; /* Giảm padding cho mobile */
+            padding: 40px 15px;
             background: rgba(255, 255, 255, 0.75);
             width: 100%;
             margin-bottom: 20px;
@@ -86,13 +86,8 @@
         h1 {
             margin: 0;
             color: var(--ghibli-dark-green);
-            font-size: 2rem; /* Giảm nhẹ size chữ tiêu đề */
+            font-size: 2rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        @media (min-width: 768px) {
-            h1 { font-size: 2.5rem; }
         }
 
         .sub-title-box {
@@ -104,34 +99,48 @@
             background-color: rgba(255, 183, 197, 0.3);
             color: var(--ghibli-dark-green);
             font-weight: 600;
-            font-size: 1rem;
             position: relative;
-            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        /* --- SEARCH BOX TOTORO (SỬ DỤNG EMOJI VÀ CÂN ĐỐI) --- */
+        .search-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            margin: 10px 0 20px 0;
+            z-index: 20;
+            display: flex; /* Sử dụng flexbox để cân đối */
+            align-items: center; /* Căn giữa theo chiều dọc */
         }
 
-        .sub-title-box::before { content: '🌸'; position: absolute; left: -18px; top: -2px; }
-        .sub-title-box::after { content: '🌸'; position: absolute; right: -18px; top: -2px; }
+        #gameSearch {
+            width: 100%;
+            padding: 12px 20px 12px 50px; /* Thêm padding bên trái cho Emoji */
+            border-radius: 25px;
+            border: 2px solid var(--ghibli-green);
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
 
-        .welcome-quote {
-            font-weight: 600;
-            font-size: 0.95rem;
-            max-width: 90%;
-            line-height: 1.6;
-            margin-top: 10px;
-            background: linear-gradient(45deg, #4f7942, #8b5a2b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
+        #gameSearch:focus {
+            border-color: var(--ghibli-dark-green);
+            box-shadow: 0 4px 15px rgba(157, 193, 131, 0.4);
+        }
+
+        .totoro-emoji {
+            position: absolute;
+            left: 15px; /* Vị trí Emoji bên trái */
+            font-size: 1.6rem; /* Kích thước Emoji */
+            pointer-events: none; /* Không cản trở việc click vào ô tìm kiếm */
         }
 
         .container {
             display: grid;
-            /* Tự động chia cột: tối thiểu 150px trên mobile (để được 2 cột), 220px trên máy tính */
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             max-width: 1200px;
@@ -139,6 +148,11 @@
             padding-bottom: 50px;
             z-index: 10;
             position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .container { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+            h1 { font-size: 2.5rem; }
         }
 
         .game-card {
@@ -161,31 +175,13 @@
         .game-card:hover {
             transform: translateY(-5px) scale(1.03);
             border-color: var(--ghibli-leaf);
-            box-shadow: 0 15px 30px rgba(79, 121, 66, 0.2);
         }
 
-        .game-icon { 
-            font-size: 35px; /* Giảm nhẹ size icon trên mobile */
-            margin-bottom: 10px; 
-            transition: transform 0.3s;
-        }
-        
-        @media (min-width: 768px) {
-            .game-icon { font-size: 45px; }
-            .container { gap: 20px; }
-            .game-card { padding: 20px; }
-        }
+        .game-icon { font-size: 35px; margin-bottom: 10px; }
+        @media (min-width: 768px) { .game-icon { font-size: 45px; } }
 
-        .game-title { 
-            font-weight: 600; 
-            font-size: 0.9rem; 
-            color: var(--ghibli-wood); 
-            line-height: 1.2;
-        }
-
-        @media (min-width: 768px) {
-            .game-title { font-size: 1.1rem; }
-        }
+        .game-title { font-weight: 600; font-size: 0.9rem; color: var(--ghibli-wood); }
+        @media (min-width: 768px) { .game-title { font-size: 1.1rem; } }
 
         .new-badge {
             position: absolute;
@@ -197,7 +193,6 @@
             padding: 2px 30px;
             transform: rotate(45deg);
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         footer {
@@ -219,13 +214,18 @@
 <header>
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
     <div class="sub-title-box">Nga Học HSK</div>
-    <p class="welcome-quote">
+    
+    <div class="search-wrapper">
+        <span class="totoro-emoji">🐨</span> <input type="text" id="gameSearch" placeholder="Tìm bài học của Nga...">
+    </div>
+
+    <p class="welcome-quote" id="quote-text">
         Chào mừng bạn đến với khu vườn nhỏ của Nga,<br>
         Nơi tiếng Trung nảy mầm mỗi ngày.
     </p>
 </header>
 
-<div class="container">
+<div class="container" id="gameContainer">
     <a href="BO THU 1.html" class="game-card"><div class="game-icon">🌱</div><div class="game-title">BỘ THỦ 1</div></a>
     <a href="BO THU 2.html" class="game-card"><div class="game-icon">🌿</div><div class="game-title">BỘ THỦ 2</div></a>
     <a href="BO THU 3.html" class="game-card"><div class="game-icon">☘️</div><div class="game-title">BỘ THỦ 3</div></a>
@@ -257,9 +257,27 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // --- LOGIC TÌM KIẾM ---
+        const searchInput = document.getElementById('gameSearch');
+        const cards = document.querySelectorAll('.game-card');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.game-title').textContent.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+
+        // --- HIỆU ỨNG LÁ BAY ---
         const container = document.getElementById('leaves-container');
         const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨'];
-        const numLeaves = 20; // Giảm bớt số lá trên mobile để nhẹ máy
+        const numLeaves = 20;
 
         for (let i = 0; i < numLeaves; i++) {
             let leaf = document.createElement('div');
@@ -268,15 +286,11 @@
             leaf.style.left = Math.random() * 100 + 'vw';
             const size = Math.random() * 15 + 10;
             leaf.style.fontSize = size + 'px';
-            if(leaf.innerText === '✨') leaf.style.opacity = '0.6';
-
+            
             const fallDuration = Math.random() * 7 + 8;
             const swayDuration = Math.random() * 3 + 3;
             leaf.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
-            
-            const fallDelay = Math.random() * 10;
-            const swayDelay = Math.random() * 5;
-            leaf.style.animationDelay = `-${fallDelay}s, -${swayDelay}s`;
+            leaf.style.animationDelay = `-${Math.random() * 10}s, -${Math.random() * 5}s`;
             
             container.appendChild(leaf);
         }
