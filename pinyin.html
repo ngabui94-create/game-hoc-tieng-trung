@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cùng Nga Học Pinyin chuẩn HSK 👩‍🏫🌿</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
             --ghibli-green: #9dc183; 
@@ -15,37 +15,37 @@
         }
 
         body { 
-            font-family: 'Quicksand', sans-serif; 
+            font-family: 'Nunito', sans-serif; /* Font chữ tròn trịa phong cách Ghibli */
             background: var(--paper); 
             margin: 0; 
             padding: 0; 
             color: #444; 
-            overflow-x: hidden; /* Chống tràn ngang tuyệt đối */
+            overflow-x: hidden;
         }
 
         /* Giao diện Ghibli phía trên */
         .ghibli-header {
             background: linear-gradient(to bottom, #cae9ff, var(--paper));
-            padding: 15px 5px;
+            padding: 18px 5px;
             text-align: center;
-            border-bottom: 3px solid var(--ghibli-green);
+            border-bottom: 4px solid var(--ghibli-green);
         }
 
         .back-btn { 
             text-decoration: none; color: white; background: var(--ghibli-green); 
-            padding: 5px 15px; border-radius: 20px; font-weight: bold; 
-            display: inline-block; margin-bottom: 10px; 
-            box-shadow: 0 3px 0 var(--ghibli-dark); font-size: 0.8rem;
+            padding: 6px 18px; border-radius: 20px; font-weight: 800; 
+            display: inline-block; margin-bottom: 12px; 
+            box-shadow: 0 4px 0 var(--ghibli-dark); font-size: 0.9rem;
         }
 
-        h1 { color: var(--ghibli-dark); font-size: 1.4rem; margin: 0; text-shadow: 1px 1px white; }
+        h1 { color: var(--ghibli-dark); font-size: 1.6rem; margin: 0; text-shadow: 2px 2px white; font-weight: 800; }
 
-        /* Container Bảng - Tối ưu vừa khít màn hình */
+        /* Container Bảng - Vừa khít màn hình laptop */
         .table-container { 
             width: 100vw; 
             max-height: 80vh; 
             overflow-y: auto; 
-            overflow-x: hidden; /* Không cho kéo ngang */
+            overflow-x: hidden; 
             background: white; 
         }
 
@@ -53,71 +53,74 @@
             border-collapse: separate; 
             border-spacing: 0; 
             width: 100%; 
-            table-layout: fixed; /* Ép các cột chia đều không gian */
+            table-layout: fixed; /* Ép chia đều cột */
         }
 
-        /* Tiêu đề cột (Thanh mẫu) */
-        thead th { 
-            position: sticky; top: 0; z-index: 10; 
-            color: white; padding: 8px 1px; 
-            font-size: 0.85rem; /* Thu nhỏ chữ tiêu đề để vừa khít */
-            border-bottom: 2px solid var(--ghibli-dark);
+        /* Tiêu đề dính (Sticky) */
+        thead th, .final-header {
+            position: sticky;
+            z-index: 10;
+            color: white;
+            padding: 10px 1px;
+            font-size: 1rem; /* Tăng kích thước tiêu đề */
+            border-bottom: 3px solid var(--ghibli-dark);
             word-wrap: break-word;
+            font-weight: 800;
         }
+        thead th { top: 0; }
+        .final-header { top: auto; left: 0; z-index: 11; width: 50px; text-align: center; }
 
-        /* Tiêu đề hàng (Vần mẫu) */
-        .final-header { 
-            position: sticky; left: 0; z-index: 11; 
-            background: #f8fbf8 !important; color: var(--ghibli-dark); 
-            font-weight: bold; padding: 5px; font-size: 0.9rem; 
-            border-right: 2px solid var(--ghibli-green); 
-            width: 40px; /* Cố định độ rộng cột vần mẫu */
-            text-align: center;
-        }
+        /* Bảng màu dịu nhẹ phong cách Ghibli (Watercolor) */
+        .group-labial { background: #fee2e2 !important; color: #b91c1c !important; } /* Hồng nhạt - Môi */
+        .group-alveolar { background: #fef3c7 !important; color: #a16207 !important; } /* Vàng nhạt - Đầu lưỡi */
+        .group-velar { background: #d1fae5 !important; color: #047857 !important; } /* Xanh lá nhạt - Cuống lưỡi */
+        .group-palatal { background: #ede9fe !important; color: #6d28d9 !important; } /* Tím nhạt - Mặt lưỡi */
+        .group-retroflex { background: #e0f2fe !important; color: #0369a1 !important; } /* Xanh dương nhạt - Lưỡi quặt */
+        .group-sibilant { background: #f3f4f6 !important; color: #374151 !important; } /* Xám nhạt - Đầu lưỡi răng */
+        .group-zero { background: #e9f5db !important; color: #4f7942 !important; } /* Xanh nhạt đặc trưng - Ø */
 
         /* Ô âm tiết */
         td { 
-            padding: 4px 1px; 
+            padding: 5px 1px; 
             text-align: center; 
-            border-bottom: 1px solid #f0f0f0; 
-            border-right: 1px solid #f0f0f0;
-            font-size: 0.9rem; /* Chữ vừa đủ nhìn trên máy tính */
+            border-bottom: 1.5px solid #eee; 
+            border-right: 1.5px solid #eee;
+            /* Tăng cỡ chữ lên ~1.3 lần (từ 0.9rem lên 1.15rem) */
+            font-size: 1.15rem; 
+            font-weight: 700;
         }
 
         .syllable { 
-            cursor: pointer; color: #333; font-weight: 600; 
-            border-radius: 4px; transition: 0.1s;
-            display: block; background: #fafafa;
-            padding: 2px 0;
+            cursor: pointer; 
+            color: #333; 
+            border-radius: 6px; 
+            transition: all 0.15s;
+            display: block; 
+            background: rgba(255,255,255,0.6);
+            padding: 3px 0;
         }
 
-        .syllable:hover { background: var(--accent-pink) !important; color: white !important; }
-        .syllable.active { background: var(--ghibli-dark) !important; color: white !important; }
-        .empty { color: #eee; font-size: 0.7rem; pointer-events: none; }
+        /* Hiệu ứng khi chọn và hover */
+        .syllable:hover { background: var(--accent-pink) !important; color: white !important; transform: scale(1.1); }
+        .syllable.active { background: var(--ghibli-dark) !important; color: white !important; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        
+        .empty { color: #eee; font-size: 0.8rem; pointer-events: none; }
 
         /* Menu thanh điệu */
         #toneMenu { 
             display: none; position: fixed; background: white; 
-            border: 3px solid var(--ghibli-green); border-radius: 15px; 
-            padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 1000; 
+            border: 4px solid var(--ghibli-green); border-radius: 20px; 
+            padding: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); z-index: 1000; 
         }
-        .tone-grid { display: flex; gap: 5px; }
+        .tone-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .t-btn { 
-            border: none; background: #f0f7ef; padding: 10px 12px; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; 
-            font-size: 1.1rem; color: var(--ghibli-dark); 
-            box-shadow: 0 3px 0 #d4e4d0;
+            border: none; background: #f0f7ef; padding: 12px 18px; 
+            border-radius: 12px; cursor: pointer; font-weight: 800; 
+            font-size: 1.3rem; color: var(--ghibli-dark); 
+            box-shadow: 0 4px 0 #d4e4d0;
         }
-        .t-btn.playing { background: var(--highlight) !important; box-shadow: none; transform: translateY(2px); }
+        .t-btn.playing { background: var(--highlight) !important; box-shadow: none; transform: translateY(3px); }
 
-        /* Nhóm màu sắc */
-        .group-labial { background: #ffcad4 !important; } 
-        .group-alveolar { background: #ffe5d9 !important; } 
-        .group-velar { background: #ffecb3 !important; } 
-        .group-palatal { background: #e2cfea !important; } 
-        .group-retroflex { background: #d1e7dd !important; } 
-        .group-sibilant { background: #d0f4de !important; } 
-        .group-zero { background: var(--ghibli-green) !important; }
     </style>
 </head>
 <body>
@@ -131,7 +134,7 @@
         <table id="pinyinMainTable">
             <thead>
                 <tr id="initialHeaders">
-                    <th class="final-header" style="background: var(--ghibli-green) !important; color: white;">V\T</th>
+                    <th class="final-header group-zero" style="border-right: 2px solid var(--ghibli-dark);">V\T</th>
                 </tr>
             </thead>
             <tbody id="pinyinBody"></tbody>
@@ -139,14 +142,13 @@
     </div>
 
     <div id="toneMenu">
-        <div id="toneLabel" style="text-align:center; font-weight:bold; margin-bottom:10px; font-size:1.2rem; color: var(--ghibli-dark);"></div>
+        <div id="toneLabel" style="text-align:center; font-weight:800; margin-bottom:12px; font-size:1.4rem; color: var(--ghibli-dark);"></div>
         <div class="tone-grid">
             <button class="t-btn" onclick="playWithRetry(1)" id="btn-t1">1</button>
             <button class="t-btn" onclick="playWithRetry(2)" id="btn-t2">2</button>
             <button class="t-btn" onclick="playWithRetry(3)" id="btn-t3">3</button>
             <button class="t-btn" onclick="playWithRetry(4)" id="btn-t4">4</button>
         </div>
-        <div id="errorLog" style="display:none; color:red; font-size:0.7rem; text-align:center; margin-top:5px;">⚠️ Thiếu file</div>
     </div>
 
     <audio id="audioPlayer"></audio>
@@ -154,7 +156,10 @@
     <script>
         const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's'];
         const finals = ['a', 'o', 'e', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'er', 'i', 'ia', 'iao', 'ie', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'u', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng', 'ü', 'üe', 'üan', 'ün'];
+        
+        // Bản đồ nhóm màu dịu nhẹ mới
         const groupMap = {'': 'group-zero', 'b':'group-labial','p':'group-labial','m':'group-labial','f':'group-labial', 'd':'group-alveolar','t':'group-alveolar','n':'group-alveolar','l':'group-alveolar', 'g':'group-velar','k':'group-velar','h':'group-velar', 'j':'group-palatal','q':'group-palatal','x':'group-palatal', 'zh':'group-retroflex','ch':'group-retroflex','sh':'group-retroflex','r':'group-retroflex', 'z':'group-sibilant','c':'group-sibilant','s':'group-sibilant'};
+        
         const validData = new Set(['a','o','e','ai','ei','ao','ou','an','en','ang','eng','er','ba','bo','bai','bei','bao','ban','ben','bang','beng','bi','biao','bie','bian','bin','bing','pa','po','pai','pei','pao','pou','pan','pen','pang','peng','pi','piao','pie','pian','pin','ping','ma','mo','me','mai','mei','mao','mou','man','men','mang','meng','mi','miao','mie','miu','mian','min','ming','fa','fo','fei','fou','fan','fen','fang','feng','da','de','dai','dei','dao','dou','dan','den','dang','deng','dong','di','diao','die','diu','dian','ding','du','duo','dui','duan','dun','ta','te','tai','tao','tou','tan','tang','teng','tong','ti','tiao','tie','tian','ting','tu','tuo','tui','tuan','tun','na','ne','nai','nei','nao','nou','nan','nen','nang','neng','nong','ni','niao','nie','niu','nian','nin','niang','ning','nu','nuo','nuan','nü','nüe','la','le','lai','lei','lao','lou','lan','lang','leng','long','li','lia','liao','lie','liu','lian','lin','liang','ling','lu','luo','luan','lun','lü','lüe','ga','ge','gai','gei','gao','gou','gan','gen','gang','geng','gong','gu','gua','guo','guai','gui','guan','gun','guang','ka','ke','kai','kei','kao','kou','kan','ken','kang','keng','kong','ku','kua','kuo','kuai','kui','kuan','kun','kuang','ha','he','hai','hei','hao','hou','han','hen','hang','heng','hong','hu','hua','huo','huai','hui','huan','hun','huang','zha','zhe','zhi','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhu','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang','cha','che','chi','chai','chao','chou','chan','chen','chang','cheng','chong','chu','chua','chuo','chuai','chui','chuan','chun','chuang','sha','she','shi','shai','shei','shao','shou','shan','shen','shang','sheng','shu','shua','shuo','shuai','shui','shuan','shun','shuang','re','ri','rao','rou','ran','ren','rang','reng','rong','ru','ruo','rui','ruan','run','za','ze','zi','zai','zei','zao','zou','zan','zen','zang','zeng','zong','zu','zuo','zui','zuan','zun','ca','ce','ci','cai','cao','cou','can','cen','cang','ceng','cong','cu','cuo','cui','cuan','cun','sa','se','si','sai','sao','sou','san','sen','sang','seng','song','su','suo','sui','suan','sun','ji','jia','jiao','jie','jiu','jian','jin','jiang','jing','jiong','ju','jue','juan','jun','qi','qia','qiao','qie','qiu','qian','qin','qiang','qing','qiong','qu','que','quan','qun','xi','xia','xiao','xie','xiu','xian','xin','xiang','xing','xiong','xu','xue','xuan','xun','yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun']);
 
         function getToneMarked(s, t) {
@@ -176,18 +181,22 @@
 
         function init() {
             const h = document.getElementById('initialHeaders'), b = document.getElementById('pinyinBody');
+            
+            // Khởi tạo Thanh mẫu với màu nhóm dịu nhẹ
             initials.forEach(i => { 
                 const th = document.createElement('th'); 
                 th.className = groupMap[i] || ''; 
                 th.innerText = i===''?'Ø':i; 
                 h.appendChild(th); 
             });
+
             finals.forEach(f => {
                 const tr = document.createElement('tr'); 
                 const th = document.createElement('th'); 
-                th.className = 'final-header'; 
+                th.className = 'final-header group-zero'; // Vận mẫu tô màu nhóm Ø
                 th.innerText = f; 
                 tr.appendChild(th);
+
                 initials.forEach(i => {
                     const td = document.createElement('td');
                     let s = (i==='' && ['i','u','ü'].some(v=>f.startsWith(v))) ? getZ(f) : (['j','q','x'].includes(i) && f.startsWith('ü')) ? i+f.replace('ü','u') : i+f;
