@@ -34,7 +34,7 @@
             position: relative;
         }
 
-        /* --- HIỆU ỨNG LÁ BAY (Giữ nguyên) --- */
+        /* --- HIỆU ỨNG LÁ BAY --- */
         #leaves-container {
             position: fixed;
             top: 0;
@@ -114,7 +114,6 @@
             text-align: center;
         }
 
-        /* --- TỐI ƯU SEARCH BOX KOALA 🐨 --- */
         .search-wrapper {
             position: relative;
             width: 85%;
@@ -142,13 +141,12 @@
             box-shadow: 0 5px 20px rgba(79, 121, 66, 0.2);
         }
 
-        /* Biểu tượng Gấu Koala */
         .koala-icon {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 26px; /* Kích thước Koala */
+            font-size: 26px;
             transition: all 0.3s ease;
             pointer-events: none;
             display: flex;
@@ -156,7 +154,6 @@
             justify-content: center;
         }
 
-        /* Hiệu ứng Koala nhún nhảy khi chạm/focus vào thanh tìm kiếm */
         @keyframes koalaBounce {
             0%, 100% { transform: translateY(-50%) scale(1); }
             50% { transform: translateY(-65%) scale(1.2); }
@@ -166,7 +163,6 @@
             animation: koalaBounce 0.6s ease-in-out infinite;
         }
 
-        /* --- GRID CONTAINER (Giữ nguyên) --- */
         .container {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
@@ -183,7 +179,6 @@
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
                 gap: 20px; 
             }
-            .welcome-quote { font-size: 1rem; }
         }
 
         .game-card {
@@ -260,6 +255,12 @@
 </header>
 
 <div class="container" id="gameContainer">
+    <a href="pinyin.html" class="game-card">
+        <div class="new-badge" style="background: #ffcc00; color: #333;">HOT</div>
+        <div class="game-icon">🎹</div>
+        <div class="game-title">BẢNG PHÁT ÂM</div>
+    </a>
+
     <a href="BO THU 1.html" class="game-card"><div class="game-icon">🌱</div><div class="game-title">BỘ THỦ 1</div></a>
     <a href="BO THU 2.html" class="game-card"><div class="game-icon">🌿</div><div class="game-title">BỘ THỦ 2</div></a>
     <a href="BO THU 3.html" class="game-card"><div class="game-icon">☘️</div><div class="game-title">BỘ THỦ 3</div></a>
