@@ -102,41 +102,57 @@
             position: relative;
         }
 
-        /* --- SEARCH BOX TOTORO (SỬ DỤNG EMOJI VÀ CÂN ĐỐI) --- */
+        .welcome-quote {
+            font-weight: 600;
+            font-size: 0.95rem;
+            max-width: 90%;
+            line-height: 1.6;
+            margin: 10px 0 20px 0;
+            background: linear-gradient(45deg, #4f7942, #8b5a2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        /* --- SEARCH BOX TOTORO --- */
         .search-wrapper {
             position: relative;
             width: 90%;
-            max-width: 400px;
-            margin: 10px 0 20px 0;
+            max-width: 350px;
+            margin-bottom: 10px;
             z-index: 20;
-            display: flex; /* Sử dụng flexbox để cân đối */
-            align-items: center; /* Căn giữa theo chiều dọc */
         }
 
         #gameSearch {
             width: 100%;
-            padding: 12px 20px 12px 50px; /* Thêm padding bên trái cho Emoji */
-            border-radius: 25px;
+            padding: 12px 20px 12px 55px; /* Chừa chỗ cho Totoro */
+            border-radius: 30px;
             border: 2px solid var(--ghibli-green);
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             font-family: 'Quicksand', sans-serif;
             font-size: 1rem;
             outline: none;
-            box-sizing: border-box;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
 
         #gameSearch:focus {
             border-color: var(--ghibli-dark-green);
-            box-shadow: 0 4px 15px rgba(157, 193, 131, 0.4);
+            box-shadow: 0 5px 20px rgba(79, 121, 66, 0.2);
         }
 
-        .totoro-emoji {
+        .totoro-icon {
             position: absolute;
-            left: 15px; /* Vị trí Emoji bên trái */
-            font-size: 1.6rem; /* Kích thước Emoji */
-            pointer-events: none; /* Không cản trở việc click vào ô tìm kiếm */
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px; /* Kích thước ảnh Totoro */
+            height: 40px;
+            background-image: url('https://i.pinimg.com/originals/31/87/3e/31873ea8b31b6019d39f30a0798cd409.jpg'); /* Sử dụng link trực tiếp từ file bạn gửi */
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%; /* Cắt tròn cho cân đối */
+            border: 2px solid var(--ghibli-green);
         }
 
         .container {
@@ -215,14 +231,15 @@
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
     <div class="sub-title-box">Nga Học HSK</div>
     
-    <div class="search-wrapper">
-        <span class="totoro-emoji">🐨</span> <input type="text" id="gameSearch" placeholder="Tìm bài học của Nga...">
-    </div>
-
-    <p class="welcome-quote" id="quote-text">
+    <p class="welcome-quote">
         Chào mừng bạn đến với khu vườn nhỏ của Nga,<br>
         Nơi tiếng Trung nảy mầm mỗi ngày.
     </p>
+
+    <div class="search-wrapper">
+        <div class="totoro-icon"></div>
+        <input type="text" id="gameSearch" placeholder="Tìm bài học">
+    </div>
 </header>
 
 <div class="container" id="gameContainer">
@@ -263,14 +280,9 @@
 
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase().trim();
-            
             cards.forEach(card => {
                 const title = card.querySelector('.game-title').textContent.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
+                card.style.display = title.includes(searchTerm) ? "flex" : "none";
             });
         });
 
@@ -286,12 +298,8 @@
             leaf.style.left = Math.random() * 100 + 'vw';
             const size = Math.random() * 15 + 10;
             leaf.style.fontSize = size + 'px';
-            
-            const fallDuration = Math.random() * 7 + 8;
-            const swayDuration = Math.random() * 3 + 3;
-            leaf.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+            leaf.style.animationDuration = `${Math.random() * 7 + 8}s, ${Math.random() * 3 + 3}s`;
             leaf.style.animationDelay = `-${Math.random() * 10}s, -${Math.random() * 5}s`;
-            
             container.appendChild(leaf);
         }
     });
