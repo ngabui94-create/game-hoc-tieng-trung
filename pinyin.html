@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Pinyin Đại Cồ - Nga Học HSK</title>
+    <title>Bảng Pinyin Gọn Gàng - Nga Học HSK</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,87 +15,84 @@
             font-family: 'Quicksand', sans-serif; 
             background: #fdfcf0; 
             margin: 0; 
-            padding: 10px; 
+            padding: 5px; 
         }
         .back-btn { 
             text-decoration: none; 
             color: white; 
             background: var(--ghibli-green); 
-            padding: 12px 30px; 
-            border-radius: 30px; 
+            padding: 8px 20px; 
+            border-radius: 20px; 
             font-weight: bold; 
             display: inline-block; 
-            margin-bottom: 15px;
-            box-shadow: 0 4px 0 var(--ghibli-dark);
-            font-size: 1.1rem;
+            margin: 10px;
+            box-shadow: 0 3px 0 var(--ghibli-dark);
+            font-size: 0.9rem;
         }
         
-        h1 { text-align: center; color: var(--ghibli-dark); font-size: 1.8rem; }
+        h1 { text-align: center; color: var(--ghibli-dark); font-size: 1.5rem; margin: 10px 0; }
 
         .table-container {
             width: 100%;
             max-height: 85vh;
             overflow: auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             background: white;
         }
 
-        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        table { border-collapse: separate; border-spacing: 0; }
         
-        /* Cố định hàng thanh mẫu trên cùng */
+        /* Thanh mẫu ngang - Chữ to, ô nhỏ */
         thead th {
             position: sticky; top: 0; z-index: 10;
             background: var(--ghibli-green); color: white;
-            padding: 20px; 
-            font-size: 1.5rem; /* CHỮ TO GẤP 1.5 LẦN */
+            padding: 8px 5px; 
+            font-size: 1.4rem; 
             border: 1px solid #ffffff33;
+            min-width: 45px;
         }
         
-        /* Cố định cột vận mẫu bên trái */
+        /* Vận mẫu dọc - Chữ to, ô nhỏ */
         .final-header {
             position: sticky; left: 0; z-index: 11;
             background: #eef2ed !important; color: var(--ghibli-dark);
             font-weight: bold; 
-            padding: 20px;
-            font-size: 1.5rem; /* CHỮ TO GẤP 1.5 LẦN */
+            padding: 8px 10px;
+            font-size: 1.4rem; 
             border: 1px solid #ddd;
-            min-width: 80px;
+            text-align: left;
         }
 
         td {
-            padding: 20px; 
+            padding: 8px 5px; 
             text-align: center; 
             border: 0.5px solid #eee;
-            min-width: 100px; 
             transition: 0.2s; 
-            font-size: 1.4rem; /* CHỮ TRONG Ô TO HƠN */
+            font-size: 1.35rem;
+            min-width: 50px;
         }
 
-        /* Ô có âm thanh */
-        .syllable { cursor: pointer; color: #333; font-weight: 600; }
+        .syllable { cursor: pointer; color: #333; font-weight: 600; white-space: nowrap; }
         .syllable:hover { 
             background: var(--accent-pink); 
             color: white; 
-            transform: scale(1.1); 
-            z-index: 5; 
-            position: relative; 
-            border-radius: 8px; 
+            border-radius: 4px; 
         }
         
-        .empty { background: #fafafa; color: #eee; pointer-events: none; }
+        .empty { background: #fafafa; color: #f0f0f0; pointer-events: none; }
 
-        /* Menu chọn thanh điệu to rõ */
+        /* Pop-up chọn thanh điệu */
         #toneMenu {
             display: none; position: fixed; background: white;
-            border: 3px solid var(--ghibli-green); border-radius: 15px;
-            padding: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); z-index: 1000;
+            border: 2px solid var(--ghibli-green); border-radius: 10px;
+            padding: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); z-index: 1000;
         }
-        .tone-grid { display: flex; gap: 12px; }
+        .tone-grid { display: flex; gap: 8px; }
         .t-btn { 
             border: none; background: #f0f0f0; 
-            padding: 15px 20px; border-radius: 10px; 
-            cursor: pointer; font-weight: bold; font-size: 1.3rem; 
+            padding: 10px 15px; border-radius: 8px; 
+            cursor: pointer; font-weight: bold; font-size: 1.2rem; 
         }
         .t-btn:hover { background: var(--ghibli-green); color: white; }
     </style>
@@ -103,13 +100,13 @@
 <body>
 
     <a href="index.html" class="back-btn">⬅ VỀ VƯỜN</a>
-    <h1>Bảng Pinyin Cỡ Lớn 🍎</h1>
+    <h1>Bảng Pinyin Tối Ưu 🍃</h1>
 
     <div class="table-container">
         <table id="pinyinMainTable">
             <thead>
                 <tr id="initialHeaders">
-                    <th class="final-header">V \ T</th>
+                    <th class="final-header">V\T</th>
                     </tr>
             </thead>
             <tbody id="pinyinBody">
@@ -118,7 +115,7 @@
     </div>
 
     <div id="toneMenu">
-        <div id="toneLabel" style="text-align:center; font-size: 1.5rem; font-weight:bold; margin-bottom:10px; color:var(--ghibli-dark)"></div>
+        <div id="toneLabel" style="text-align:center; font-size: 1.2rem; font-weight:bold; margin-bottom:8px; color:var(--ghibli-dark)"></div>
         <div class="tone-grid">
             <button class="t-btn" onclick="playSyllable(1)">1</button>
             <button class="t-btn" onclick="playSyllable(2)">2</button>
@@ -130,7 +127,6 @@
     <audio id="audioPlayer"></audio>
 
     <script>
-        // Đã đảo vị trí: Thanh mẫu ngang, Vận mẫu dọc
         const initials = ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'];
         const finals = [
             'a', 'o', 'e', 'er', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong',
@@ -139,7 +135,6 @@
             'ü', 'üe', 'üan', 'ün'
         ];
 
-        // Dữ liệu âm tiết chuẩn (Giữ nguyên logic cũ)
         const validData = new Set([
             'a','o','e','er','ai','ei','ao','ou','an','en','ang','eng','yi','ya','yao','ye','you','yan','yin','yang','ying','yong','wu','wa','wo','wai','wei','wan','wen','wang','weng','yu','yue','yuan','yun',
             'ba','bo','bi','bu','bai','bei','bao','ban','ben','bang','beng','pa','po','pi','pu','pai','pei','pao','pou','pan','pen','pang','peng','ma','mo','me','mi','mu','mai','mei','mao','mou','man','men','mang','meng','fa','fo','fu','fei','fou','fan','fen','fang','feng','da','de','di','du','dai','dei','dao','dou','dan','den','dang','deng','dong','ta','te','ti','tu','tai','tei','tao','tou','tan','tang','teng','tong','na','ne','ni','nu','nv','nai','nei','nao','nen','nan','nang','neng','nong','nia','niao','nie','niu','nian','nin','niang','ning','la','le','li','lu','lv','lai','lei','lao','lou','lan','lang','leng','long','lia','liao','lie','liu','lian','lin','liang','ling','ga','ge','gu','gai','gei','gao','gou','gan','gen','gang','geng','gong','gua','guo','guai','gui','guan','gun','guang','ka','ke','ku','kai','kei','kao','kou','kan','ken','kang','keng','kong','kua','kuo','kuai','kui','kuan','kun','kuang','ha','he','hu','hai','hei','hao','hou','han','hen','hang','heng','hong','hua','huo','huai','hui','huan','hun','huang','ji','ju','jia','jie','jiao','jiu','jian','jin','jiang','jing','jiong','juan','jue','jun','qi','qu','qia','qie','qiao','qiu','qian','qin','qiang','qing','qiong','quan','que','qun','xi','xu','xia','xie','xiao','xiu','xian','xin','xiang','xing','xiong','xuan','xue','xun','zha','zhe','zhi','zhu','zhai','zhei','zhao','zhou','zhan','zhen','zhang','zheng','zhong','zhua','zhuo','zhuai','zhui','zhuan','zhun','zhuang','cha','che','chi','chu','chai','chao','chou','chan','chen','chang','cheng','chong','chua','chuo','chuai','chui','chuan','chun','chuang','sha','she','shi','shu','shai','shei','shao','shou','shan','shen','shang','sheng','shua','shuo','shuai','shui','shuan','shun','shuang','re','ri','ru','rao','rou','ran','ren','rang','reng','rong','ruo','rui','ruan','run','za','ze','zi','zu','zai','zei','zhao','zou','zan','zen','zang','zeng','zong','zuo','zui','zuan','zun','ca','ce','ci','cu','cai','cao','cou','can','cen','cang','ceng','cong','cuo','cui','cuan','cun','sa','se','si','su','sai','sao','sou','san','sen','sang','seng','song','suo','sui','suan','sun'
@@ -153,14 +148,12 @@
             const head = document.getElementById('initialHeaders');
             const body = document.getElementById('pinyinBody');
 
-            // 1. Tạo hàng ngang Thanh mẫu (Initials)
             initials.forEach(i => {
                 const th = document.createElement('th');
                 th.innerText = i === '' ? 'Ø' : i;
                 head.appendChild(th);
             });
 
-            // 2. Tạo từng hàng theo Vận mẫu (Finals) dọc xuống
             finals.forEach(f => {
                 const tr = document.createElement('tr');
                 const th = document.createElement('th');
@@ -171,7 +164,6 @@
                 initials.forEach(i => {
                     const td = document.createElement('td');
                     let s = i + f;
-                    
                     if (validData.has(s)) {
                         td.className = 'syllable';
                         td.innerText = s;
@@ -190,13 +182,10 @@
             currentSyllable = s;
             document.getElementById('toneLabel').innerText = s;
             toneMenu.style.display = 'block';
-            
-            // Tính toán vị trí menu không bị tràn màn hình
             let posX = e.clientX;
             let posY = e.clientY;
-            if (posX + 150 > window.innerWidth) posX -= 150;
-            if (posY + 100 > window.innerHeight) posY -= 100;
-
+            if (posX + 120 > window.innerWidth) posX -= 120;
+            if (posY + 80 > window.innerHeight) posY -= 80;
             toneMenu.style.left = posX + 'px';
             toneMenu.style.top = posY + 'px';
             e.stopPropagation();
@@ -206,7 +195,7 @@
             let fileName = currentSyllable.replace('ü', 'v') + tone;
             audioPlayer.src = `audio/${fileName}.mp3`;
             audioPlayer.play().catch(err => {
-                alert("Nga ơi, file " + fileName + ".mp3 chưa có trong thư mục audio!");
+                console.log("Thiếu file: " + fileName);
             });
             toneMenu.style.display = 'none';
         }
