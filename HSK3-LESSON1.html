@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK3 Bài 1 - Khu Vườn Của Nga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghibli-green: #a8d5ba;
+            --ghibli-brown: #d4a373;
+            --ghibli-sky: #caf0f8;
+            --ghibli-wood: #6d4c41;
+            --ghibli-dark-green: #4f7942;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, var(--ghibli-sky) 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chinese-text { font-family: 'Noto Sans SC', sans-serif; }
+
+        .ghibli-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid var(--ghibli-wood);
+            border-radius: 20px;
+            box-shadow: 0 10px 0 var(--ghibli-brown);
+        }
+
+        .btn-ghibli {
+            background-color: var(--ghibli-green);
+            color: var(--ghibli-wood);
+            border: 2px solid var(--ghibli-wood);
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: bold;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .btn-ghibli:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 0 var(--ghibli-brown);
+            background-color: #95c7a9;
+        }
+
+        .flashcard-inner {
+            position: relative; width: 100%; height: 350px;
+            transition: transform 0.6s; transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard-inner.is-flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 15px;
+            padding: 20px; border: 2px solid var(--ghibli-wood);
+        }
+        .flashcard-front { background-color: #fff; }
+        .flashcard-back { background-color: #fef3c7; transform: rotateY(180deg); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container" class="w-full max-w-xl px-4 mt-10 mb-10">
+        <!-- Start Screen -->
+        <div id="start-screen" class="ghibli-card p-8 text-center">
+            <h1 class="text-3xl font-bold text-amber-900 mb-2">HSK3 - Bài 1</h1>
+            <h2 class="text-xl text-emerald-700 font-bold mb-6 italic">周末你有什么打算？</h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="startFlashcards()" class="btn-ghibli text-lg">🎴 Phần 1: Ôn Flashcards</button>
+                <button onclick="startQuiz('p3')" class="btn-ghibli text-lg" style="background-color: #fef3c7;">✨ Phần 2: Ngữ pháp V+好</button>
+                <button onclick="startQuiz('p4')" class="btn-ghibli text-lg" style="background-color: #fff1f2;">❄️ Phần 3: Phủ định hoàn toàn</button>
+                <button onclick="startQuiz('p5')" class="btn-ghibli text-lg" style="background-color: #f0f9ff;">🔗 Phần 4: Liên từ 那</button>
+                <button onclick="window.location.href='index.html'" class="text-amber-700 font-bold text-sm mt-4 hover:underline">🏠 Trở về Khu Vườn</button>
+            </div>
+        </div>
+
+        <!-- Flashcard Screen -->
+        <div id="flashcard-screen" class="ghibli-card p-6 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold">← Quay lại</button>
+                <div class="text-amber-900 font-bold"><span id="card-index">1</span> / <span id="card-total">15</span></div>
+            </div>
+            <div id="flashcard-inner" class="flashcard-inner mb-6" onclick="this.classList.toggle('is-flipped')">
+                <div class="flashcard-front shadow-lg">
+                    <h2 id="card-hanzi" class="chinese-text text-7xl text-amber-900"></h2>
+                    <p class="mt-4 text-xs text-gray-400 uppercase tracking-widest">Chạm để lật</p>
+                </div>
+                <div class="flashcard-back shadow-lg text-center">
+                    <h3 id="card-pinyin" class="text-2xl font-bold text-emerald-700"></h3>
+                    <p id="card-mean" class="text-xl text-amber-900 mt-2 font-bold"></p>
+                    <div class="mt-4 p-3 bg-white rounded-lg border border-amber-100 text-left w-full">
+                        <p id="card-ex" class="chinese-text text-lg text-amber-800"></p>
+                        <p id="card-exv" class="text-sm text-gray-500 italic"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="prevCard()" class="btn-ghibli flex-1 bg-white">Trước</button>
+                <button onclick="nextCard()" class="btn-ghibli flex-1">Tiếp theo</button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="ghibli-card p-6 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <span id="quiz-title" class="text-xs font-bold text-amber-700 uppercase"></span>
+                <span class="text-emerald-700 font-bold">Câu <span id="q-idx">1</span></span>
+            </div>
+            <div class="bg-amber-50 p-6 rounded-xl border-2 border-dashed border-amber-300 mb-6 text-center">
+                <p id="q-text" class="chinese-text text-2xl text-amber-900 font-bold"></p>
+            </div>
+            <div id="options" class="grid grid-cols-1 gap-3"></div>
+            <div id="feedback" class="mt-4 p-4 rounded-lg hidden">
+                <p id="fb-text" class="font-bold mb-2"></p>
+                <p id="fb-explanation" class="text-sm italic"></p>
+                <button onclick="nextQuestion()" class="mt-4 w-full bg-amber-600 text-white py-2 rounded-lg font-bold">Câu tiếp theo</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="ghibli-card p-8 text-center hidden">
+            <h2 class="text-3xl font-bold text-amber-900 mb-4">Tuyệt vời!</h2>
+            <div class="text-6xl mb-4">🌸</div>
+            <p class="text-amber-800 mb-6 font-bold">Bạn đã hoàn thành phần này!</p>
+            <button onclick="returnToStart()" class="btn-ghibli px-10">Quay lại Menu</button>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            { h: "周末", p: "zhōumò", m: "Cuối tuần", ex: "你周末打算做什么？", exv: "Cuối tuần bạn định làm gì?" },
+            { h: "打算", p: "dǎsuàn", m: "Kế hoạch; dự định", ex: "我打算去旅游。", exv: "Tôi dự định đi du lịch." },
+            { h: "跟", p: "gēn", m: "Cùng, với", ex: "我跟你一起去。", exv: "Tôi đi cùng với bạn." },
+            { h: "一直", p: "yìzhí", m: "Suốt, liên tục", ex: "今天一直下雨。", exv: "Hôm nay trời mưa suốt." },
+            { h: "游戏", p: "yóuxì", m: "Trò chơi", ex: "他在玩游戏。", exv: "Anh ấy đang chơi game." },
+            { h: "着急", p: "zháojí", m: "Lo lắng", ex: "别着急，慢慢来。", exv: "Đừng lo lắng, thong thả thôi." },
+            { h: "复习", p: "fùxí", m: "Ôn tập", ex: "我们要复习课文。", exv: "Chúng ta cần ôn tập bài khóa." }
+        ];
+
+        const quizData = {
+            p3: {
+                title: "Ngữ pháp V+好",
+                questions: [
+                    { q: "明天要考试，我还没______。", options: ["准备好", "买好", "穿好"], correct: 0, exp: "Hành động 'chuẩn bị' đã hoàn tất và đạt kết quả tốt." },
+                    { q: "饭已经______了，快来吃吧。", options: ["洗好", "做好", "听好"], correct: 1, exp: "Nấu cơm xong và sẵn sàng để ăn." }
+                ]
+            },
+            p4: {
+                title: "Phủ định hoàn toàn",
+                questions: [
+                    { q: "我今天______不想吃。", options: ["一个苹果也", "一个苹果都", "Cả A và B đều đúng"], correct: 2, exp: "Số từ + Lượng từ + Danh từ + 也/都 + 不/没." },
+                    { q: "这里的东西，我______没买。", options: ["一件也", "一些也", "一双也"], correct: 0, exp: "Phủ định hoàn toàn với lượng từ 一件 (bộ/chiếc)." }
+                ]
+            },
+            p5: {
+                title: "Liên từ 那",
+                questions: [
+                    { q: "A: 我不想去商店。\nB: ______ 我们去公园吧。", options: ["那", "这", "就"], correct: 0, exp: "那 (Nà) dùng để đưa ra kết luận hoặc gợi ý 'Vậy thì'." }
+                ]
+            }
+        };
+
+        let currentIdx = 0;
+        let currentQuiz = null;
+        let qIdx = 0;
+
+        function returnToStart() {
+            document.querySelectorAll('.ghibli-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        function startFlashcards() {
+            currentIdx = 0;
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('flashcard-screen').classList.remove('hidden');
+            document.getElementById('card-total').innerText = vocabulary.length;
+            updateFlashcard();
+        }
+
+        function updateFlashcard() {
+            const v = vocabulary[currentIdx];
+            document.getElementById('card-index').innerText = currentIdx + 1;
+            document.getElementById('card-hanzi').innerText = v.h;
+            document.getElementById('card-pinyin').innerText = v.p;
+            document.getElementById('card-mean').innerText = v.m;
+            document.getElementById('card-ex').innerText = v.ex;
+            document.getElementById('card-exv').innerText = v.exv;
+            document.getElementById('flashcard-inner').classList.remove('is-flipped');
+        }
+
+        function nextCard() {
+            if (currentIdx < vocabulary.length - 1) { currentIdx++; updateFlashcard(); }
+            else { showEnd(); }
+        }
+
+        function prevCard() {
+            if (currentIdx > 0) { currentIdx--; updateFlashcard(); }
+        }
+
+        function startQuiz(part) {
+            currentQuiz = quizData[part];
+            qIdx = 0;
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('quiz-title').innerText = currentQuiz.title;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = currentQuiz.questions[qIdx];
+            document.getElementById('q-idx').innerText = (qIdx + 1);
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('feedback').classList.add('hidden');
+            
+            const optContainer = document.getElementById('options');
+            optContainer.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "btn-ghibli text-left bg-white";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(idx, btn) {
+            const q = currentQuiz.questions[qIdx];
+            const fb = document.getElementById('feedback');
+            fb.classList.remove('hidden');
+            if (idx === q.correct) {
+                btn.style.backgroundColor = "#d1fae5";
+                document.getElementById('fb-text').innerText = "Chính xác! ✨";
+                document.getElementById('fb-text').style.color = "#059669";
+            } else {
+                btn.style.backgroundColor = "#fee2e2";
+                document.getElementById('fb-text').innerText = "Chưa đúng rồi ❌";
+                document.getElementById('fb-text').style.color = "#dc2626";
+            }
+            document.getElementById('fb-explanation').innerText = q.exp;
+        }
+
+        function nextQuestion() {
+            qIdx++;
+            if (qIdx < currentQuiz.questions.length) { showQuestion(); }
+            else { showEnd(); }
+        }
+
+        function showEnd() {
+            document.querySelectorAll('.ghibli-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('end-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
