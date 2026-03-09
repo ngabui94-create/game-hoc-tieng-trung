@@ -16,76 +16,308 @@
         }
 
         body {
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
             font-family: 'Quicksand', sans-serif;
             background: var(--ghibli-sky);
             background-image: 
                 linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0)),
                 url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover; background-attachment: fixed;
-            color: #333; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; overflow-x: hidden; position: relative;
+            background-size: cover;
+            background-attachment: fixed;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- HIỆU ỨNG LÁ BAY --- */
+        #leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            top: -10%;
+            pointer-events: none;
+            user-select: none;
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(0px) rotate(0deg); }
+            100% { transform: translateX(30px) rotate(45deg); }
         }
 
         header {
-            text-align: center; padding: 30px 15px; background: rgba(255, 255, 255, 0.75);
-            width: 100%; border-bottom: 5px solid var(--ghibli-green);
-            backdrop-filter: blur(5px); display: flex; flex-direction: column; align-items: center;
-            z-index: 10; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            padding: 30px 15px;
+            background: rgba(255, 255, 255, 0.75);
+            width: 100%;
+            margin-bottom: 20px;
+            border-bottom: 5px solid var(--ghibli-green);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        h1 { margin: 0; color: var(--ghibli-dark-green); font-size: clamp(1.5rem, 5vw, 2.5rem); }
-        .sub-title-box { display: inline-block; margin: 12px 0; padding: 6px 20px; border: 2px dashed var(--ghibli-dark-green); border-radius: 15px; background-color: rgba(255, 183, 197, 0.3); color: var(--ghibli-dark-green); font-weight: 600; }
+        h1 {
+            margin: 0;
+            color: var(--ghibli-dark-green);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .sub-title-box {
+            display: inline-block;
+            margin: 12px 0;
+            padding: 6px 20px;
+            border: 2px dashed var(--ghibli-dark-green);
+            border-radius: 15px;
+            background-color: rgba(255, 183, 197, 0.3);
+            color: var(--ghibli-dark-green);
+            font-weight: 600;
+        }
+
+        .welcome-quote {
+            font-weight: 600;
+            font-size: 0.9rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin: 10px 0 20px 0;
+            background: linear-gradient(45deg, #4f7942, #8b5a2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 85%;
+            max-width: 350px;
+            margin-bottom: 10px;
+            z-index: 20;
+        }
+
+        #gameSearch {
+            width: 100%;
+            padding: 12px 15px 12px 50px;
+            border-radius: 25px;
+            border: 2px solid var(--ghibli-green);
+            background: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        #gameSearch:focus {
+            border-color: var(--ghibli-dark-green);
+            box-shadow: 0 5px 20px rgba(79, 121, 66, 0.2);
+        }
+
+        .koala-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 26px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
 
         .container {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
-            max-width: 1200px; width: 92%; padding: 30px 0 50px; z-index: 10;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px;
+            max-width: 1200px;
+            width: 92%;
+            padding: 10px 0 50px;
+            z-index: 10;
         }
-        @media (min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
+
+        @media (min-width: 768px) {
+            .container { 
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+                gap: 20px; 
+            }
+        }
 
         .game-card {
-            background: white; border-radius: 20px; padding: 15px; text-align: center;
-            transition: all 0.3s ease; border: 3px solid transparent; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; position: relative; overflow: hidden;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
         }
-        .game-card:hover { transform: translateY(-5px); border-color: var(--ghibli-leaf); background-color: #f9fff6; }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--ghibli-leaf);
+            background-color: #f9fff6;
+        }
+
         .game-icon { font-size: 32px; margin-bottom: 8px; }
+        @media (min-width: 768px) { .game-icon { font-size: 45px; } }
+
         .game-title { font-weight: 600; font-size: 0.85rem; color: var(--ghibli-wood); }
-        .new-badge { position: absolute; top: 8px; right: -28px; background: #ff6b6b; color: white; font-size: 0.6rem; padding: 2px 30px; transform: rotate(45deg); font-weight: bold; }
+        @media (min-width: 768px) { .game-title { font-size: 1.05rem; } }
+
+        .new-badge {
+            position: absolute;
+            top: 8px;
+            right: -28px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 30px;
+            transform: rotate(45deg);
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: var(--ghibli-dark-green);
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
 
+<div id="leaves-container"></div>
+
 <header>
     <h1>Khu Vườn Tiếng Trung 🌿</h1>
     <div class="sub-title-box">Nga Học HSK</div>
+    
+    <p class="welcome-quote">
+        Chào mừng bạn đến với khu vườn nhỏ của Nga,<br>
+        Nơi tiếng Trung nảy mầm mỗi ngày.
+    </p>
+
+    <div class="search-wrapper">
+        <input type="text" id="gameSearch" placeholder="Tìm bài học...">
+        <div class="koala-icon">🐨</div>
+    </div>
 </header>
 
-<div class="container">
-    <!-- NEW HSK3 CARD -->
+<div class="container" id="gameContainer">
+    <!-- NEW HSK3 LESSON -->
     <a href="HSK3-LESSON1.html" class="game-card">
         <div class="new-badge">MỚI</div>
         <div class="game-icon">🌲</div>
-        <div class="game-title">HSK3: BÀI 1</div>
+        <div class="game-title">HSK3: Bài 1</div>
     </a>
 
-    <!-- PREVIOUS CARDS -->
     <a href="pinyin.html" class="game-card">
         <div class="new-badge" style="background: #ffcc00; color: #333;">HOT</div>
         <div class="game-icon">🎹</div>
         <div class="game-title">BẢNG PHÁT ÂM</div>
     </a>
-    
-    <a href="BO THU 1.html" class="game-card">
-        <div class="game-icon">🌱</div>
-        <div class="game-title">BỘ THỦ 1</div>
-    </a>
 
-    <a href="HSK1-LESSON1-2.html" class="game-card">
-        <div class="game-icon">📚</div>
-        <div class="game-title">HSK1: Bài 1-2</div>
+    <a href="BO THU 1.html" class="game-card"><div class="game-icon">🌱</div><div class="game-title">BỘ THỦ 1</div></a>
+    <a href="BO THU 2.html" class="game-card"><div class="game-icon">🌿</div><div class="game-title">BỘ THỦ 2</div></a>
+    <a href="BO THU 3.html" class="game-card"><div class="game-icon">☘️</div><div class="game-title">BỘ THỦ 3</div></a>
+    <a href="BO THU 4.html" class="game-card"><div class="game-icon">🍀</div><div class="game-title">BỘ THỦ 4</div></a>
+    <a href="BO THU 5.html" class="game-card"><div class="game-icon">🍃</div><div class="game-title">BỘ THỦ 5</div></a>
+    <a href="BO THU 6.html" class="game-card"><div class="game-icon">🌳</div><div class="game-title">BỘ THỦ 6</div></a>
+    
+    <a href="HSK1-LESSON1-2.html" class="game-card"><div class="game-icon">📚</div><div class="game-title">HSK1: Bài 1-2</div></a>
+    <a href="HSK1-LESSON3.html" class="game-card"><div class="game-icon">📖</div><div class="game-title">HSK1: Bài 3</div></a>
+    <a href="HSK1-LESSON4.html" class="game-card"><div class="game-icon">🏠</div><div class="game-title">HSK1: Bài 4</div></a>
+    <a href="HSK1-LESSON5.html" class="game-card"><div class="game-icon">👨‍👩‍👧</div><div class="game-title">HSK1: Bài 5</div></a>
+    <a href="HSK1-LESSON6.html" class="game-card"><div class="game-icon">🗣️</div><div class="game-title">HSK1: Bài 6</div></a>
+    <a href="HSK1-LESSON7.html" class="game-card"><div class="game-icon">🗓️</div><div class="game-title">HSK1: Bài 7</div></a>
+    <a href="HSK1-LESSON8.html" class="game-card"><div class="game-icon">☕</div><div class="game-title">HSK1: Bài 8</div></a>
+    <a href="HSK1-LESSON9.html" class="game-card"><div class="game-icon">🐱</div><div class="game-title">HSK1: Bài 9</div></a>
+    <a href="HSK1-LESSON10.html" class="game-card"><div class="game-icon">🪑</div><div class="game-title">HSK1: Bài 10</div></a>
+    <a href="HSK1-LESSON11.html" class="game-card"><div class="game-icon">⏰</div><div class="game-title">HSK1: Bài 11</div></a>
+    <a href="HSK1-LESSON12.html" class="game-card"><div class="game-icon">🌤️</div><div class="game-title">HSK1: Bài 12</div></a>
+    <a href="HSK1-LESSON13.html" class="game-card"><div class="game-icon">🍵</div><div class="game-title">HSK1: Bài 13</div></a>
+    <a href="HSK1-LESSON14.html" class="game-card"><div class="game-icon">🛍️</div><div class="game-title">HSK1: Bài 14</div></a>
+
+    <a href="HSK1-LESSON15.html" class="game-card">
+        <div class="new-badge">MỚI</div>
+        <div class="game-icon">✈️</div>
+        <div class="game-title">HSK1: Bài 15</div>
     </a>
 </div>
+
+<footer>
+    © 2026 - Khu Vườn Của Nga 🌸 <br>
+    Học tiếng Trung thật vui mỗi ngày!
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById('gameSearch');
+        const cards = document.querySelectorAll('.game-card');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const title = card.querySelector('.game-title').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? "flex" : "none";
+            });
+        });
+
+        const container = document.getElementById('leaves-container');
+        const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨'];
+        const numLeaves = 15;
+
+        for (let i = 0; i < numLeaves; i++) {
+            let leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            leaf.innerText = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+            leaf.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 15 + 10;
+            leaf.style.fontSize = size + 'px';
+            leaf.style.animationDuration = `${Math.random() * 7 + 8}s, ${Math.random() * 3 + 3}s`;
+            leaf.style.animationDelay = `-${Math.random() * 10}s, -${Math.random() * 5}s`;
+            container.appendChild(leaf);
+        }
+    });
+</script>
 
 </body>
 </html>
