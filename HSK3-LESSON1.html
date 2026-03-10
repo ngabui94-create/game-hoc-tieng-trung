@@ -603,7 +603,7 @@
             }
         }
 
-        // --- BÀI TẬP CUỐI BÀI ---
+// --- BÀI TẬP CUỐI BÀI ---
         function showExercise() {
             if(document.getElementById('btn-comprehensive').disabled) return;
             playAudio('audio-click');
@@ -618,41 +618,60 @@
             const selects = document.querySelectorAll('.ex-select');
             const inputs = document.querySelectorAll('#exercise-screen input[type="text"]');
             
-            // Soạn sẵn tin nhắn nội dung bài tập để copy
-            let resultText = "BÀI TẬP TỔNG HỢP - HSK3 BÀI 1\n";
-            resultText += "--------------------------------\n\n";
+            // Hàm hỗ trợ lấy giá trị và định dạng màu đỏ in đậm
+            const getVal = (el) => (el.value && el.value !== '____') ? el.value : '...';
+            const highlight = (val) => `<b style="color: red;">[${val}]</b>`;
             
-            resultText += "Phần 2: Điền từ\n";
-            resultText += `1. 你写完 [${selects[0].value || '...'}] 了吗？\n`;
-            resultText += `2. 上个 [${selects[1].value || '...'}] 我们去朋友家玩儿了。\n`;
-            resultText += `3. 别玩儿 [${selects[2].value || '...'}] 了，快去睡觉。\n`;
-            resultText += `4. 他说好请我吃饭，但是没 [${selects[3].value || '...'}] 钱。\n`;
-            resultText += `5. 明天我要上课, 不能 [${selects[4].value || '...'}] 你们一起去玩儿。\n`;
-            resultText += `6. A: 你是什么时候 [${selects[5].value || '...'}] 家的？我怎么不知道？ B: 上个月。\n`;
-            resultText += `7. A: 你是北方人吗？ B: 不是, 我是 [${selects[6].value || '...'}] 人。\n`;
-            resultText += `8. A: 考完试你有什么 [${selects[7].value || '...'}] ？ B: 我还没想好。\n`;
-            resultText += `9. A: 你好，我要买一张 [${selects[8].value || '...'}] 。 B: 三块钱。\n`;
-            resultText += `10. A: 累了吧？吃点儿 [${selects[9].value || '...'}] 吧。 B: 好, 你也吃点儿吧。\n\n`;
-            
-            resultText += "Phần 3: Mô tả hình ảnh\n";
-            resultText += `Hình 1:\n A: 衣服都 [${inputs[0].value || '...'}] 了吗？\n B: 我一 [${inputs[1].value || '...'}] 也 [${inputs[2].value || '...'}] 。\n\n`;
-            resultText += `Hình 2:\n A: 小狗怎么没吃饭？\n B: 我的狗生病了，一 [${inputs[3].value || '...'}] 也 [${inputs[4].value || '...'}] 。\n\n`;
-            resultText += `Hình 3:\n A: 我们休息一下再 [${inputs[5].value || '...'}] 吧。\n B: 没关系，我一 [${inputs[6].value || '...'}] 也 [${inputs[7].value || '...'}] 。\n\n`;
-            resultText += `Hình 4:\n A: 你什么时候回家？\n B: 我还没 [${inputs[8].value || '...'}] 。飞机票呢，你知道在哪儿买票吗？\n`;
+            // 1. Soạn nội dung định dạng HTML (để giữ màu và in đậm)
+            let htmlText = `
+                <h3>BÀI TẬP TỔNG HỢP - HSK3 BÀI 1</h3>
+                <hr>
+                <p><b>Phần 2: Điền từ</b></p>
+                <p>1. 你写完 ${highlight(getVal(selects[0]))} 了吗？</p>
+                <p>2. 上个 ${highlight(getVal(selects[1]))} 我们去朋友家玩儿了。</p>
+                <p>3. 别玩儿 ${highlight(getVal(selects[2]))} 了，快去睡觉。</p>
+                <p>4. 他说好请我吃饭，但是没 ${highlight(getVal(selects[3]))} 钱。</p>
+                <p>5. 明天我要上课, 不能 ${highlight(getVal(selects[4]))} 你们一起去玩儿。</p>
+                <p>6. A: 你是什么时候 ${highlight(getVal(selects[5]))} 家的？我怎么不知道？<br> B: 上个月。</p>
+                <p>7. A: 你是北方人吗？<br> B: 不是, 我是 ${highlight(getVal(selects[6]))} 人。</p>
+                <p>8. A: 考完试你有什么 ${highlight(getVal(selects[7]))} ？<br> B: 我还没想好。</p>
+                <p>9. A: 你好，我要买一张 ${highlight(getVal(selects[8]))} 。<br> B: 三块钱。</p>
+                <p>10. A: 累了吧？吃点儿 ${highlight(getVal(selects[9]))} 吧。<br> B: 好, 你也吃点儿吧。</p>
 
-            // Lệnh copy đoạn văn bản vào Clipboard
-            navigator.clipboard.writeText(resultText).then(() => {
+                <br><p><b>Phần 3: Mô tả hình ảnh</b></p>
+                <p>Hình 1:<br> A: 衣服都 ${highlight(getVal(inputs[0]))} 了吗？<br> B: 我一 ${highlight(getVal(inputs[1]))} 也 ${highlight(getVal(inputs[2]))} 。</p>
+                <p>Hình 2:<br> A: 小狗怎么没吃饭？<br> B: 我的狗生病了，一 ${highlight(getVal(inputs[3]))} 也 ${highlight(getVal(inputs[4]))} 。</p>
+                <p>Hình 3:<br> A: 我们休息一下再 ${highlight(getVal(inputs[5]))} 吧。<br> B: 没关系，我一 ${highlight(getVal(inputs[6]))} 也 ${highlight(getVal(inputs[7]))} 。</p>
+                <p>Hình 4:<br> A: 你什么时候回家？<br> B: 我还没 ${highlight(getVal(inputs[8]))} 。飞机票呢，你知道在哪儿买票吗？</p>
+            `;
+
+            // 2. Soạn nội dung dự phòng (văn bản thuần, không màu) cho các thiết bị/app không hỗ trợ HTML
+            let plainText = htmlText.replace(/<br>/g, '\n').replace(/<\/p>/g, '\n').replace(/<[^>]+>/g, '');
+
+            // Hàm hiển thị thông báo thành công
+            const showSuccess = () => {
                 const feedback = document.getElementById('exercise-feedback');
                 feedback.innerHTML = `<p class="font-bold text-lg mb-2">🎉 Đã copy toàn bộ bài làm của bạn!</p>
                                       <p>👉 Hãy mở tin nhắn <b>Zalo/Facebook của cô giáo</b> và ấn <b>Dán (Ctrl+V)</b> để gửi nộp bài nhé.</p>`;
                 feedback.classList.remove('hidden');
                 feedback.classList.add('animate-pulse');
-            }).catch(err => {
-                alert("Hệ thống không thể tự copy. Hãy thử chụp ảnh màn hình bài làm và gửi cho cô giáo nhé!");
-            });
-        }
-    </script>
-</body>
-</html>
+            };
 
-</html>
+            // 3. Thực hiện copy
+            if (navigator.clipboard && window.ClipboardItem) {
+                // Copy định dạng Rich Text (HTML)
+                const typeText = new Blob([plainText], { type: "text/plain" });
+                const typeHtml = new Blob([htmlText], { type: "text/html" });
+                const data = [new ClipboardItem({ "text/plain": typeText, "text/html": typeHtml })];
+
+                navigator.clipboard.write(data).then(showSuccess).catch(err => {
+                    // Dự phòng nếu lỗi
+                    navigator.clipboard.writeText(plainText).then(showSuccess).catch(e => alert("Hãy thử chụp ảnh màn hình bài làm và gửi nhé!"));
+                });
+            } else {
+                // Dự phòng cho trình duyệt cũ
+                navigator.clipboard.writeText(plainText).then(showSuccess).catch(err => {
+                    alert("Hệ thống không thể tự copy. Hãy thử chụp ảnh màn hình bài làm và gửi cho cô giáo nhé!");
+                });
+            }
+        }
