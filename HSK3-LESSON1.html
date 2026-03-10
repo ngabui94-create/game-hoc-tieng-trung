@@ -51,7 +51,6 @@
             background-color: #95c7a9;
         }
 
-        /* Flashcard Styles */
         .flashcard-inner {
             position: relative; width: 100%; height: 380px;
             transition: transform 0.6s; transform-style: preserve-3d;
@@ -67,7 +66,6 @@
         .flashcard-front { background-color: #fff; }
         .flashcard-back { background-color: #fef3c7; transform: rotateY(180deg); }
 
-        /* Vocab Game Styles */
         .word-pill {
             display: inline-block; padding: 8px 16px; margin: 4px;
             background: white; border: 2px solid var(--ghibli-wood);
@@ -180,9 +178,8 @@
             </div>
         </div>
 
-<div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
+        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
             <h2 class="text-2xl font-bold text-amber-900 mb-8">Kết quả ghi nhớ</h2>
-            
             <div class="flex justify-around mb-8">
                 <div class="relative w-24 h-24 flex items-center justify-center rounded-full border-[6px] border-emerald-200">
                     <div class="text-center">
@@ -197,15 +194,13 @@
                     </div>
                 </div>
             </div>
-
             <div id="unlearned-container" class="hidden text-left mb-8">
                 <p class="text-amber-900 font-bold mb-3 border-b border-amber-200 pb-1">Danh sách cần lưu ý:</p>
                 <div id="unlearned-list" class="max-h-64 overflow-y-auto custom-scroll border-2 border-amber-50 rounded-xl p-0 bg-white divide-y divide-amber-50"></div>
             </div>
-
-            <div id="flash-stat-btns" class="flex gap-3 mt-2">
-                </div>
+            <div id="flash-stat-btns" class="flex gap-3 mt-2"></div>
         </div>
+
         <div id="end-screen" class="ghibli-card p-8 text-center hidden">
             <h2 class="text-3xl font-bold text-amber-900 mb-4">Hoàn thành!</h2>
             <div class="text-6xl mb-4">🌟</div>
@@ -226,7 +221,7 @@
         const vocabulary = [
             { h: "周末", p: "zhōumò", m: "Cuối tuần", ex: "你周末打算做什么？", exp: "Nǐ zhōumò dǎsuàn zuò shénme?", exv: "Cuối tuần bạn định làm gì?" },
             { h: "打算", p: "dǎsuàn", m: "Kế hoạch; dự định", ex: "我打算去旅游。", exp: "Wǒ dǎsuàn qù lǚyóu.", exv: "Tôi dự định đi du lịch." },
-            { h: "啊", p: "a", m: "Trợ từ khẳng định", ex: "好啊，我们去吧！", exp: "Hǎo a, wǒmen qù ba!", exv: "Được thôi, chúng ta đi đi!" },
+            { h: "啊", p: "a", m: "Trợ từ khẳng định", ex: "好啊， we 去吧！", exp: "Hǎo a, wǒmen qù ba!", exv: "Được thôi, chúng ta đi đi!" },
             { h: "跟", p: "gēn", m: "Cùng, với", ex: "我跟你一起去。", exp: "Wǒ gēn nǐ yìqǐ qù.", exv: "Tôi đi cùng với bạn." },
             { h: "一直", p: "yìzhí", m: "Suốt, liên tục", ex: "今天一直下雨。", exp: "Jīntiān yìzhí xià yǔ.", exv: "Hôm nay trời mưa suốt." },
             { h: "游戏", p: "yóuxì", m: "Trò chơi", ex: "他在玩游戏。", exp: "Tā zài wán yóuxì.", exv: "Anh ấy đang chơi game." },
@@ -272,122 +267,91 @@
                     { q: "我太累了，作业我______。", options: ["一点儿也不想写", "不想写一点儿也", "也一点儿不想写", "一点儿不想也写"], correct: 0, res: "我一点儿也不想写。", py: "Wǒ yìdiǎnr yě bù xiǎng xiě.", vi: "Tôi chẳng muốn viết một chút nào cả.", exp: "Nhấn mạnh mức độ không muốn thực hiện hành động." }
                 ]
             },
-            p5: { 
-                name: "Liên từ 那", 
-const grammar_na_questions = [
-
-{
-q: "A: 周末我不想去商店买东西。\nB: ______",
-options: [
-"那我们去公园走走吧。",
-"那我昨天去商店了。",
-"那商店在学校旁边。",
-"那你喜欢什么颜色？"
-],
-correct: 0
-},
-
-{
-q: "A: 外边下大雨了，不能去踢球了。\nB: ______",
-options: [
-"那我们在家看电影吧。",
-"那足球很好玩。",
-"那我昨天踢球了。",
-"那你喜欢运动吗？"
-],
-correct: 0
-},
-
-{
-q: "A: 对不起，红色的手机已经卖完了。\nB: ______",
-options: [
-"那我看看别的颜色吧。",
-"那红色很好看。",
-"那手机很贵。",
-"那我昨天买手机了。"
-],
-correct: 0
-},
-
-{
-q: "A: 我今天很累，不想出去吃饭。\nB: ______",
-options: [
-"那我们在家做饭吧。",
-"那外面的饭很好吃。",
-"那我昨天出去吃饭了。",
-"那你喜欢吃什么？"
-],
-correct: 0
-},
-
-{
-q: "A: 我不会做这个作业。\nB: ______",
-options: [
-"那我帮你看看吧。",
-"那这个作业很难。",
-"那老师很好。",
-"那今天没有作业。"
-],
-correct: 0
-},
-
-{
-q: "A: 明天我要考试。\nB: ______",
-options: [
-"那你今天早点儿休息吧。",
-"那考试很难。",
-"那我不喜欢考试。",
-"那今天星期三。"
-],
-correct: 0
-},
-
-{
-q: "A: 我今天没带钱。\nB: ______",
-options: [
-"那我请你吃饭吧。",
-"那钱很重要。",
-"那你喜欢吃饭吗？",
-"那饭很好吃。"
-],
-correct: 0
-},
-
-{
-q: "A: 我找不到地图了。\nB: ______",
-options: [
-"那我们用手机查一下吧。",
-"那地图很好看。",
-"那你有手机吗？",
-"那我昨天买地图了。"
-],
-correct: 0
-},
-
-{
-q: "A: 今天老师不在。\nB: ______",
-options: [
-"那我们自己复习吧。",
-"那老师很好。",
-"那今天星期一。",
-"那我喜欢老师。"
-],
-correct: 0
-},
-
-{
-q: "A: 我已经吃过饭了。\nB: ______",
-options: [
-"那我们去散步吧。",
-"那饭很好吃。",
-"那我喜欢吃面。",
-"那你会做饭吗？"
-],
-correct: 0
+p5: { 
+    name: "Liên Từ'那' ", 
+    questions: [
+        { 
+            q: "A: 周末我不想去商店买东西。\nB: ______", 
+            options: ["那商店在学校旁边。", "那我们去公园走走吧。", "那我昨天去商店了。", "那你喜欢什么颜色？"], 
+            correct: 1, 
+            res: "那我们去公园走走吧。", 
+            py: "Nà wǒmen qù gōngyuán zǒuzou ba.", 
+            vi: "Vậy chúng ta đi công viên dạo chút đi." 
+        },
+        { 
+            q: "A: 外面下大雨了，不能去踢球了。\nB: ______", 
+            options: ["那足球很好玩。", "那我已经买球了。", "那我们在家看电影吧。", "那你喜欢运动吗？"], 
+            correct: 2, 
+            res: "那我们在家看电影吧。", 
+            py: "Nà wǒmen zàijiā kàn diànyǐng ba.", 
+            vi: "Vậy chúng ta ở nhà xem phim đi." 
+        },
+        { 
+            q: "A: 对不起，红色的手机已经卖完了。\nB: ______", 
+            options: ["那个手机很贵。", "那我买不手机。", "那红色很好看。", "那我买黑色的吧。"], 
+            correct: 3, 
+            res: "那我买黑色的吧。", 
+            py: "Nà wǒ mǎi hēisè de ba.", 
+            vi: "Vậy tôi sẽ mua cái màu đen." 
+        },
+        { 
+            q: "A: 我今天很累，不想出去吃饭。\nB: ______", 
+            options: ["那我们在家做饭吧。", "那外面的饭很好吃。", "那我明天出去吃。", "那你喜欢吃什么？"], 
+            correct: 0, 
+            res: "那我们在家做饭吧。", 
+            py: "Nà wǒmen zàijiā zuò fàn ba.", 
+            vi: "Vậy chúng ta nấu cơm ở nhà đi." 
+        },
+        { 
+            q: "A: 我不会做这个作业，太难了。\nB: ______", 
+            options: ["那这个作业很有意思。", "那我帮你看看吧。", "那个老师很好。", "那今天没有作业。"], 
+            correct: 1, 
+            res: "那我帮你看看吧。", 
+            py: "Nà wǒ bāng nǐ kànkan ba.", 
+            vi: "Vậy để mình xem giúp bạn nhé." 
+        },
+        { 
+            q: "A: 明天早上我要参加考试。\nB: ______", 
+            options: ["那我不喜欢考试。", "那今天星期三。", "那你今天早点儿休息吧。", "那考试不难。"], 
+            correct: 2, 
+            res: "那你今天早点儿休息吧。", 
+            py: "Nà nǐ jīntiān zǎodiǎnr xiūxi ba.", 
+            vi: "Vậy hôm nay bạn nghỉ ngơi sớm đi." 
+        },
+        { 
+            q: "A: 我今天出门太着急，没带钱。\nB: ______", 
+            options: ["那钱很重要。", "那我请你吃饭吧。", "那里的饭很好吃。", "那你下午去拿吧。"], 
+            correct: 1, 
+            res: "那我请你吃饭吧。", 
+            py: "Nà wǒ qǐng nǐ chīfàn ba.", 
+            vi: "Vậy để tôi mời bạn ăn cơm nhé." 
+        },
+        { 
+            q: "A: 我没带地图，不知道怎么走。\nB: ______", 
+            options: ["那地图很好看。", "你有面包吗？", "那我也找不到。", "那我们用手吧。"], 
+            correct: 3, 
+            res: "那我们用手机吧。", 
+            py: "Nà wǒmen yòng shǒujī ba.", 
+            vi: "Vậy chúng ta dùng điện thoạiđi." 
+        },
+        { 
+            q: "A: 今天张老师不在学校。\nB: ______", 
+            options: ["那我们自己复习吧。", "那老师人很好。", "那今天不是星期一。", "那我认识那个老师。"], 
+            correct: 0, 
+            res: "那我们自己复习吧。", 
+            py: "Nà wǒmen zìjǐ fùxí ba.", 
+            vi: "Vậy chúng ta tự ôn tập đi." 
+        },
+        { 
+            q: "A: 我已经吃过晚饭了，现在很饱。\nB: ______", 
+            options: ["那里的饭很好吃。", "那你会做饭吗？", "那我们去外面散步吧。", "那我喜欢吃面条。"], 
+            correct: 2, 
+            res: "那我们去散步吧。", 
+            py: "Nà wǒmen qù sànbù ba.", 
+            vi: "Vậy chúng ta đi tản bộ đi." 
+        }
+    ]
 }
-
-];
-            }
         };
 
         // --- Core Logic ---
@@ -397,12 +361,16 @@ correct: 0
 
         function playAudio(id) { const a = document.getElementById(id); if(a) { a.currentTime = 0; a.play().catch(()=>{}); } }
 
-function startFlashcards(list) {
+        function returnToStart() {
+            document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        // Flashcard Logic
+        function startFlashcards(list) {
             playAudio('audio-click');
             currentFlashList = [...list];
-            flashcardIdx = 0;
-            learnedCount = 0;
-            unlearnedItems = [];
+            flashcardIdx = 0; learnedCount = 0; unlearnedItems = [];
             document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
             document.getElementById('flashcard-screen').classList.remove('hidden');
             document.getElementById('card-total').innerText = currentFlashList.length;
@@ -421,10 +389,7 @@ function startFlashcards(list) {
             document.getElementById('flashcard-inner').classList.remove('is-flipped');
         }
 
-        function flipCard() { 
-            playAudio('audio-flip'); 
-            document.getElementById('flashcard-inner').classList.toggle('is-flipped'); 
-        }
+        function flipCard() { playAudio('audio-flip'); document.getElementById('flashcard-inner').classList.toggle('is-flipped'); }
 
         function markCard(learned) {
             if (learned) learnedCount++; else unlearnedItems.push(currentFlashList[flashcardIdx]);
@@ -438,40 +403,40 @@ function startFlashcards(list) {
             document.getElementById('flashcard-stat-screen').classList.remove('hidden');
             const total = currentFlashList.length;
             const pLearned = Math.round((learnedCount / total) * 100);
-            
             document.getElementById('stat-percent-learned').innerText = pLearned + '%';
             document.getElementById('stat-percent-unlearned').innerText = (100 - pLearned) + '%';
-            
             const listEl = document.getElementById('unlearned-list');
             const btnContainer = document.getElementById('flash-stat-btns');
-            
             if (unlearnedItems.length > 0) {
                 document.getElementById('unlearned-container').classList.remove('hidden');
                 listEl.innerHTML = unlearnedItems.map(item => `
                     <div class="flex justify-between items-center p-3">
                         <span class="text-amber-900 font-bold"><span class="chinese-text">${item.h}</span> <span class="text-xs font-normal text-gray-400">(${item.p})</span></span>
                         <span class="text-amber-700 text-sm italic">${item.m}</span>
-                    </div>
-                `).join('');
-
-                btnContainer.innerHTML = `
-                    <button onclick="startFlashcards(unlearnedItems)" class="btn-ghibli flex-[2] bg-amber-500 text-white border-amber-700 font-bold shadow-md">🔄 Học lại từ chưa thuộc</button>
-                    <button onclick="returnToStart()" class="btn-ghibli flex-1 font-bold">🔙 Bài 1</button>
-                `;
+                    </div>`).join('');
+                btnContainer.innerHTML = `<button onclick="startFlashcards(unlearnedItems)" class="btn-ghibli flex-[2] bg-amber-500 text-white border-amber-700 shadow-md">🔄 Học lại từ chưa thuộc</button><button onclick="returnToStart()" class="btn-ghibli flex-1">🔙 Bài 1</button>`;
             } else {
                 document.getElementById('unlearned-container').classList.add('hidden');
-                btnContainer.innerHTML = `
-                    <button onclick="window.location.href='index.html'" class="btn-ghibli flex-1 bg-emerald-100 border-emerald-500 text-emerald-800 font-bold">🏠 Về Vườn</button>
-                    <button onclick="returnToStart()" class="btn-ghibli flex-1 font-bold">🔙 Bài 1</button>
-                `;
+                btnContainer.innerHTML = `<button onclick="window.location.href='index.html'" class="btn-ghibli flex-1 bg-emerald-100 border-emerald-500 text-emerald-800">🏠 Về Vườn</button><button onclick="returnToStart()" class="btn-ghibli flex-1">🔙 Bài 1</button>`;
             }
         }
 
+        // Vocabulary Game Logic
         function startVocabularyGame() {
             playAudio('audio-click'); vgStep = 0; vgScore = 0;
             document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
             document.getElementById('vocab-game-screen').classList.remove('hidden');
             nextVocabStep();
+        }
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
         }
 
         function nextVocabStep() {
@@ -485,24 +450,17 @@ function startFlashcards(list) {
             document.getElementById('vg-feedback').classList.add('hidden');
             document.getElementById('vg-next-btn').classList.add('hidden');
             document.getElementById('vg-check-btn').classList.remove('hidden');
-            
             const card = vocabulary[vgStep];
+            const options = shuffle([...vocabulary]).filter(v => v.h !== card.h).slice(0, 3);
+            options.push(card);
             const content = document.getElementById('vg-content');
-            content.innerHTML = `
-                <div class="text-4xl font-bold text-amber-900 mb-6 chinese-text">${card.h}</div>
-                <div class="grid grid-cols-2 gap-3 w-full">
-                    ${shuffle([...vocabulary]).slice(0, 3).concat(card)
-                        .sort(() => Math.random() - 0.5)
-                        .map(item => `<button class="btn-ghibli py-3 text-sm" onclick="selectVocabOption(this, '${item.m}')">${item.m}</button>`).join('')}
-                </div>
-            `;
+            content.innerHTML = `<div class="text-4xl font-bold text-amber-900 mb-6 chinese-text">${card.h}</div><div class="grid grid-cols-2 gap-3 w-full">${shuffle(options).map(item => `<button class="btn-ghibli py-3 text-sm" onclick="selectVocabOption(this, '${item.m}')">${item.m}</button>`).join('')}</div>`;
             vgStep++;
         }
 
         let selectedOption = null;
         function selectVocabOption(btn, mean) {
-            const btns = document.querySelectorAll('#vg-content button');
-            btns.forEach(b => b.style.backgroundColor = '');
+            document.querySelectorAll('#vg-content button').forEach(b => b.style.backgroundColor = '');
             btn.style.backgroundColor = '#caf0f8';
             selectedOption = mean;
         }
@@ -526,6 +484,7 @@ function startFlashcards(list) {
             selectedOption = null;
         }
 
+        // Quiz Logic
         function startQuiz(key) {
             playAudio('audio-click'); currentQuizKey = key; quizIdx = 0; quizScore = 0;
             document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
@@ -575,12 +534,6 @@ function startFlashcards(list) {
                 document.getElementById('end-screen').classList.remove('hidden');
                 document.getElementById('result-text').innerText = `Kết quả: ${quizScore}/${quizData[currentQuizKey].questions.length}`;
             }
-        }
-
-        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
-        function returnToStart() {
-            document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
-            document.getElementById('start-screen').classList.remove('hidden');
         }
     </script>
 </body>
