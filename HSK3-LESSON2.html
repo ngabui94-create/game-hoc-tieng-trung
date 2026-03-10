@@ -639,14 +639,23 @@ p5: {
             fb.innerText = "Đã copy bài làm! Hãy gửi cho cô giáo nhé.";
         }
 
-        // HÀM HỖ TRỢ
+// HÀM HỖ TRỢ QUAN TRỌNG ĐỂ CHUYỂN CẢNH
         function showScreen(id) {
-            ['start-screen', 'flashcard-screen', 'vocab-game-screen', 'play-screen', 'end-screen', 'exercise-screen'].forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function finishPart(msg) {
-            document.getElementById('result-text').innerText = msg;
-            showScreen('end-screen');
+            // Danh sách tất cả các màn hình có trong game
+            const screens = ['start-screen', 'flashcard-screen', 'vocab-game-screen', 'play-screen', 'end-screen', 'exercise-screen'];
+            
+            screens.forEach(screenId => {
+                const screenElement = document.getElementById(screenId);
+                if (screenElement) {
+                    screenElement.classList.add('hidden');
+                }
+            });
+            
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo(0, 0); // Quay lên đầu trang khi chuyển màn
+            }
         }
     </script>
 </body>
