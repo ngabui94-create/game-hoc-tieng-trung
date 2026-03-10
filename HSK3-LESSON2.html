@@ -155,7 +155,7 @@
         </div>
     </div> ```
 <script>
-        // 1. BIẾN TRẠNG THÁI (Giống Bài 1 để quản lý khóa/mở)
+        // 1. BIẾN TRẠNG THÁI (Quản lý khóa/mở nút)
         let gameState = {
             vocabDone: false,
             p3Done: false,
@@ -163,11 +163,11 @@
             p5Done: false
         };
 
-        // 2. DỮ LIỆU TỪ VỰNG BÀI 2
+        // 2. DỮ LIỆU TỪ VỰNG
         const vocabulary = [
             { hz: "腿", py: "tuǐ", vi: "Chân", exHz: "我的腿疼。", exVi: "Chân tôi bị đau." },
             { hz: "疼", py: "téng", vi: "Đau", exHz: "昨天走路太多了，现在腿很疼。", exVi: "Hôm qua đi bộ nhiều quá, giờ chân rất đau." },
-            { hz: "脚", py: "jiǎo", vi: "Bàn chân", exHz: "这双鞋子不适合我的脚。", exVi: "Đôi giày này không vừa chân tôi." },
+            { hz: "脚", py: "jiǎo", vi: "Bàn chân", exHz: "这双鞋子不适合我的脚。", exPy: "Zhè shuāng xiézi bù shìhé wǒ de jiǎo.", exVi: "Đôi giày này không vừa chân tôi." },
             { hz: "树", py: "shù", vi: "Cây", exHz: "树下有一只小猫。", exVi: "Dưới gốc cây có một con mèo nhỏ." },
             { hz: "容易", py: "róngyì", vi: "Dễ dàng", exHz: "写汉字不容易。", exVi: "Viết chữ Hán không dễ dàng." },
             { hz: "难", py: "nán", vi: "Khó", exHz: "这个考试很难。", exVi: "Kỳ thi này rất khó." },
@@ -177,7 +177,7 @@
             { hz: "办公室", py: "bàngōngshì", vi: "Văn phòng", exHz: "我在办公室等你。", exVi: "Tôi đợi bạn ở văn phòng." },
             { hz: "辆", py: "liàng", vi: "Chiếc, cái (xe)", exHz: "我买了一辆新自行车。", exVi: "Tôi mua một chiếc xe đạp mới." },
             { hz: "楼", py: "lóu", vi: "Tòa nhà, tầng", exHz: "我就在楼下等你。", exVi: "Tôi đợi bạn ngay dưới lầu." },
-            { hz: "拿", py: "ná", vi: "Cầm, lấy", exHz: "帮我拿一下雨伞。", exVi: "Giúp tôi cầm cây dù một chút." },
+            { hz: "拿", py: "ná", vi: "Cầm, lấy", exHz: "帮 me 拿一下雨伞。", exVi: "Giúp tôi cầm cây dù một chút." },
             { hz: "把", py: "bǎ", vi: "Cái (ô, ghế)", exHz: "那边有一把椅子。", exVi: "Đằng kia có một cái ghế." },
             { hz: "伞", py: "sǎn", vi: "Cái ô, dù", exHz: "下雨了，带把伞吧。", exVi: "Mưa rồi, mang theo cây dù đi." },
             { hz: "胖", py: "pàng", vi: "Béo", exHz: "我不胖，我很瘦。", exVi: "Tôi không béo, tôi rất gầy." },
@@ -185,7 +185,6 @@
             { hz: "瘦", py: "shòu", vi: "Gầy", exHz: "你太瘦了，多吃点儿饭。", exVi: "Bạn gầy quá, ăn nhiều cơm vào." }
         ];
 
-        // 3. DỮ LIỆU TRẮC NGHIỆM NGỮ PHÁP
         const quizData = {
 p3: { 
                 name: "Bổ ngữ phương hướng đơn", 
@@ -473,38 +472,44 @@ p5: {
                 ]
             },
 
-        // 4. BIẾN ĐIỀU KHIỂN GAME
+
         let currentIdx = 0;
         let score = 0;
         let currentPart = '';
         let quizList = [];
 
-        // HÀM QUAY LẠI MENU
-        function returnToStart() {
+        // --- HÀM HỖ TRỢ CHUYỂN MÀN HÌNH ---
+        function showScreen(id) {
             const screens = ['start-screen', 'flashcard-screen', 'vocab-game-screen', 'play-screen', 'end-screen', 'exercise-screen'];
-            screens.forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById('start-screen').classList.remove('hidden');
+            screens.forEach(s => {
+                const el = document.getElementById(s);
+                if(el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(id);
+            if(target) target.classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function returnToStart() {
+            showScreen('start-screen');
             updateLockStatus();
         }
 
-        // HÀM KIỂM TRA KHÓA/MỞ (Soi kỹ từ Bài 1)
         function updateLockStatus() {
             const isAllDone = gameState.vocabDone && gameState.p3Done && gameState.p4Done && gameState.p5Done;
             const btn = document.getElementById('btn-comprehensive');
-            
-            if (isAllDone) {
+            if (isAllDone && btn) {
                 btn.disabled = false;
-                btn.style.backgroundColor = '#dcfce7'; 
-                btn.style.color = '#065f46';
+                btn.style.backgroundColor = '#dcfce7';
                 btn.innerHTML = '✅ Bài Tập Tổng Hợp (Đã mở)';
             }
-
-            if(gameState.vocabDone) document.getElementById('check-vocab').classList.remove('hidden');
-            if(gameState.p3Done) document.getElementById('check-p3').classList.remove('hidden');
-            if(gameState.p4Done) document.getElementById('check-p4').classList.remove('hidden');
-            if(gameState.p5Done) document.getElementById('check-p5').classList.remove('hidden');
+            if(gameState.vocabDone) document.getElementById('check-vocab')?.classList.remove('hidden');
+            if(gameState.p3Done) document.getElementById('check-p3')?.classList.remove('hidden');
+            if(gameState.p4Done) document.getElementById('check-p4')?.classList.remove('hidden');
+            if(gameState.p5Done) document.getElementById('check-p5')?.classList.remove('hidden');
         }
-    // 5. LOGIC FLASHCARDS
+
+        // --- PHẦN 1: FLASHCARDS ---
         function startFlashcards() {
             currentIdx = 0;
             document.getElementById('card-total').innerText = vocabulary.length;
@@ -527,7 +532,7 @@ p5: {
             else { returnToStart(); }
         }
 
-        // 6. LOGIC GAME TỪ VỰNG (Sync Bài 1)
+        // --- PHẦN 2: GAME TỪ VỰNG ---
         function startVocabGame() {
             currentIdx = 0; score = 0;
             showVocabStep();
@@ -540,39 +545,34 @@ p5: {
             document.getElementById('vg-next-btn').classList.add('hidden');
             document.getElementById('vg-check-btn').classList.remove('hidden');
             document.getElementById('vg-content').innerHTML = `
-                <p class="text-gray-500 font-bold mb-2">Dịch sang chữ Hán:</p>
-                <p class="text-4xl font-bold text-amber-900 mb-2">${word.vi}</p>
-                <p class="text-emerald-600 italic">Pinyin: ${word.py}</p>
-                <input type="text" id="vg-input" class="w-full text-center text-3xl p-3 border-b-4 border-amber-300 outline-none mt-4 chinese-text" placeholder="Nhập chữ Hán">
+                <p class="text-amber-900 text-4xl font-bold mb-4">${word.vi}</p>
+                <input type="text" id="vg-input" class="w-full text-center text-3xl p-2 border-b-2 border-amber-500 outline-none chinese-text" placeholder="Nhập chữ Hán">
             `;
             setTimeout(() => document.getElementById('vg-input').focus(), 100);
         }
         function checkVocabGame() {
-            const input = document.getElementById('vg-input').value.trim();
+            const val = document.getElementById('vg-input').value.trim();
             const correct = vocabulary[currentIdx].hz;
             const fb = document.getElementById('vg-feedback');
             fb.classList.remove('hidden');
-            if (input === correct) {
-                fb.innerHTML = "Chính xác! 🌟"; fb.className = "mt-4 p-3 rounded bg-emerald-100 text-emerald-700 font-bold";
+            if(val === correct) {
+                fb.innerText = "Đúng rồi! ✨"; fb.className = "mt-4 p-2 bg-green-100 text-green-700 rounded font-bold";
                 score++;
             } else {
-                fb.innerHTML = `Sai rồi! Đáp án là: ${correct}`; fb.className = "mt-4 p-3 rounded bg-rose-100 text-rose-700 font-bold";
+                fb.innerText = "Sai rồi, đáp án: " + correct; fb.className = "mt-4 p-2 bg-red-100 text-red-700 rounded font-bold";
             }
             document.getElementById('vg-check-btn').classList.add('hidden');
             document.getElementById('vg-next-btn').classList.remove('hidden');
         }
         function nextVocabStep() {
-            if (currentIdx < vocabulary.length - 1) { currentIdx++; showVocabStep(); }
-            else {
-                gameState.vocabDone = true;
-                finishPart(`Bạn đã hoàn thành Game Từ Vựng! Đúng ${score}/${vocabulary.length}`);
-            }
+            if(currentIdx < vocabulary.length - 1) { currentIdx++; showVocabStep(); }
+            else { gameState.vocabDone = true; finishPart("Game Từ Vựng: " + score + "/" + vocabulary.length); }
         }
 
-        // 7. LOGIC TRẮC NGHIỆM NGỮ PHÁP
+        // --- PHẦN 3: TRẮC NGHIỆM ---
         function startQuiz(part) {
             currentPart = part; currentIdx = 0; score = 0; quizList = quizData[part];
-            document.getElementById('quiz-part-name').innerText = part;
+            document.getElementById('quiz-part-name').innerText = "Phần " + part;
             showQuestion();
             showScreen('play-screen');
         }
@@ -587,9 +587,9 @@ p5: {
                 btn.className = "btn-ghibli p-3 bg-white text-xl";
                 btn.innerText = o;
                 btn.onclick = () => {
-                    const isRight = o === q.a;
+                    const isRight = (o === q.a);
                     if(isRight) score++;
-                    document.getElementById('feedback-title').innerText = isRight ? "Đúng rồi! ✨" : "Tiếc quá! 😅";
+                    document.getElementById('feedback-title').innerText = isRight ? "Chính xác!" : "Sai rồi!";
                     document.getElementById('exp-full').innerText = q.q.replace('___', q.a);
                     document.getElementById('exp-vi').innerText = q.vi;
                     document.getElementById('exp-detail').innerText = q.exp;
@@ -600,62 +600,30 @@ p5: {
             });
         }
         function showNextQuestion() {
-            if (currentIdx < quizList.length - 1) { currentIdx++; showQuestion(); }
-            else {
-                gameState[currentPart + 'Done'] = true;
-                finishPart(`Hoàn thành phần ${currentPart}! Điểm: ${score}/${quizList.length}`);
-            }
+            if(currentIdx < quizList.length - 1) { currentIdx++; showQuestion(); }
+            else { gameState[currentPart + 'Done'] = true; finishPart("Hoàn thành! Điểm: " + score + "/" + quizList.length); }
         }
 
-        // 8. BÀI TẬP TỔNG HỢP (Logic Bài 2)
+        // --- PHẦN 4: BÀI TẬP TỔNG HỢP ---
         function showExercise() {
             const fillContainer = document.getElementById('fill-exercise');
-            const questions = [
-                "1. 这是你的 [___] 吗？真大！", "2. 今天的考试一点儿也不 [___] 。", 
-                "3. 我在505教室上课，现在要上 [___] 去。", "4. 你看，小狗在 [___] 下做什么呢？", 
-                "5. 我太 [___] 了, 不能吃那么多饭。", "6. B: [___] 我一点儿也不喜欢看书。",
-                "7. A: 我想买这 [___] 车。", "8. B: 去商店买一 [___] 吧。",
-                "9. A: 昨天走路太多, [___] 有点儿疼。", "10. A: [___] , 我想早一点回家。"
-            ];
-            fillContainer.innerHTML = questions.map((q, i) => `<p>${q.replace('[___]', `<select class="ex-select border-b-2 border-amber-500 outline-none"><option value=""></option>${['楼','办公室','树','胖','难','辆','腿','把','经理','其实'].map(opt=>`<option>${opt}</option>`).join('')}</select>`)}</p>`).join('');
+            const qs = ["1. 这是你的 [___] 吗？", "2. 考试一点儿也不 [___] 。", "3. 现在要上 [___] 去。", "4. 小狗在 [___] 下做什么？", "5. 我太 [___] 了, 不能吃那么多。"];
+            const opts = ['楼','办公室','树','胖','难'];
+            fillContainer.innerHTML = qs.map(q => `<p class="mb-2">${q.replace('[___]', `<select class="ex-select border-b border-amber-500">${['', ...opts].map(o=>`<option>${o}</option>`).join('')}</select>`)}</p>`).join('');
             
             const imgContainer = document.getElementById('image-exercise');
-            imgContainer.innerHTML = `
-                <div class="bg-white p-3 border rounded">
-                    <p>Hình 1: A: 周经理到了办公室就 <input type="text" class="ex-input border-b border-amber-500 outline-none w-24"> 。</p>
-                    <p>B: 他能 <input type="text" class="ex-input border-b border-amber-500 outline-none w-20"> 吗？他 <input type="text" class="ex-input border-b border-amber-500 outline-none w-20"> 就 <input type="text" class="ex-input border-b border-amber-500 outline-none w-20"> 。</p>
-                </div>
-            `;
+            imgContainer.innerHTML = `<p>周经理到了办公室就 <input type="text" class="ex-input border-b border-amber-500 w-32"> 。</p>`;
             showScreen('exercise-screen');
         }
 
         function checkFinalExercise() {
-            let result = "KẾT QUẢ HSK3 BÀI 2:\n";
-            document.querySelectorAll('.ex-select').forEach((s, i) => result += `Câu ${i+1}: ${s.value || 'Trống'}\n`);
-            document.querySelectorAll('.ex-input').forEach((inp, i) => result += `Mô tả ${i+1}: ${inp.value || 'Trống'}\n`);
-            navigator.clipboard.writeText(result);
-            const fb = document.getElementById('exercise-feedback');
-            fb.classList.remove('hidden');
-            fb.innerText = "Đã copy bài làm! Hãy gửi cho cô giáo nhé.";
+            alert("Đã ghi nhận bài làm! Hãy chụp màn hình gửi giáo viên.");
+            returnToStart();
         }
 
-// HÀM HỖ TRỢ QUAN TRỌNG ĐỂ CHUYỂN CẢNH
-        function showScreen(id) {
-            // Danh sách tất cả các màn hình có trong game
-            const screens = ['start-screen', 'flashcard-screen', 'vocab-game-screen', 'play-screen', 'end-screen', 'exercise-screen'];
-            
-            screens.forEach(screenId => {
-                const screenElement = document.getElementById(screenId);
-                if (screenElement) {
-                    screenElement.classList.add('hidden');
-                }
-            });
-            
-            const target = document.getElementById(id);
-            if (target) {
-                target.classList.remove('hidden');
-                window.scrollTo(0, 0); // Quay lên đầu trang khi chuyển màn
-            }
+        function finishPart(msg) {
+            document.getElementById('result-text').innerText = msg;
+            showScreen('end-screen');
         }
     </script>
 </body>
