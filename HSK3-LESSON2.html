@@ -603,6 +603,7 @@ p5: {
                 btn.innerHTML = '📝 Bài Tập Tổng Hợp (Đã mở khóa)';
             }
         }
+};
 
         // --- Core Logic ---
         let currentQuizKey = '', quizIdx = 0, quizScore = 0, quizAnswered = false;
@@ -673,8 +674,26 @@ p5: {
             return array;
         }
 
-        function nextVocabStep() {
-            if (vgStep >= vocabulary.length) {
+function nextVocabStep() {
+
+    if (vgStep >= vocabulary.length) {
+        completedParts.vocab = true;
+        document.getElementById("check-vocab").classList.remove("hidden");
+        checkUnlockExercise();
+        returnToStart();
+        return;
+    }
+
+    const word = vocabulary[vgStep];
+
+    document.getElementById("vg-step").innerText = vgStep + 1;
+
+    document.getElementById("vg-content").innerHTML =
+        `<div class="text-6xl chinese-text mb-4">${word.h}</div>
+         <div class="text-xl">${word.m}</div>`;
+
+    vgStep++;
+}
                 // ĐÁNH DẤU HOÀN THÀNH VOCAB
                 completedParts.vocab = true;
                 document.getElementById('check-vocab').classList.remove('hidden');
