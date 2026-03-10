@@ -193,57 +193,21 @@
             </div>
         </div>
 
-<div id="flashcard-screen" class="ghibli-card p-6 hidden">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex gap-4">
-                    <button onclick="window.location.href='index.html'" class="text-emerald-700 text-sm font-bold hover:underline">🏠 Về Vườn</button>
-                    <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Bài 1</button>
-                </div>
-                <div class="text-amber-900 font-bold px-3 py-1 bg-amber-100 rounded-full text-xs">
-                    Thẻ: <span id="card-index">1</span> / <span id="card-total">15</span>
-                </div>
-            </div>
-            <div class="mb-6">
-                <div id="flashcard-inner" class="flashcard-inner" onclick="flipCard()">
-                    <div class="flashcard-front shadow-lg">
-                        <h2 id="card-hanzi" class="chinese-text text-8xl text-amber-900 leading-tight"></h2>
-                        <p class="mt-8 text-sm text-amber-600 animate-pulse font-bold">Chạm để lật thẻ 👆</p>
-                    </div>
-                    <div class="flashcard-back shadow-lg overflow-y-auto custom-scroll">
-                        <h3 id="card-pinyin" class="text-3xl font-bold text-emerald-700 mb-1"></h3>
-                        <p id="card-mean" class="text-xl text-amber-900 mb-4 font-bold border-b-2 border-amber-200 pb-2 w-full text-center"></p>
-                        <div class="text-left w-full space-y-3">
-                            <div><p id="card-example-cn" class="chinese-sub text-2xl text-amber-800 leading-relaxed font-medium"></p></div>
-                            <p id="card-example-py" class="text-sm text-emerald-600 italic font-semibold"></p>
-                            <p id="card-example-vi" class="text-sm text-gray-600 bg-white p-2 rounded-lg border border-amber-100"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="markCard(false)" class="bg-rose-100 border-2 border-rose-400 text-rose-700 p-4 rounded-xl font-bold hover:bg-rose-200">Chưa thuộc</button>
-                <button onclick="markCard(true)" class="bg-emerald-100 border-2 border-emerald-400 text-emerald-700 p-4 rounded-xl font-bold hover:bg-emerald-200">Đã thuộc</button>
+        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
+             <h2 class="text-2xl font-bold text-amber-900 mb-8">Kết quả ghi nhớ</h2>
+             <div class="flex justify-center mb-8"><div class="text-center font-bold text-emerald-700 text-lg">Đã xem xong Flashcards!</div></div>
+             <button onclick="returnToStart()" class="btn-ghibli w-full">🔙 Về Menu Bài 1</button>
+        </div>
+
+        <div id="end-screen" class="ghibli-card p-8 text-center hidden">
+            <h2 class="text-3xl font-bold text-amber-900 mb-4">Hoàn thành!</h2>
+            <div class="text-6xl mb-4">🌟</div>
+            <p id="result-text" class="text-amber-800 mb-6 font-bold text-xl"></p>
+            <div class="flex gap-3 w-full">
+                <button onclick="returnToStart()" class="btn-ghibli flex-1 py-3 text-lg bg-emerald-100 border-emerald-500 text-emerald-800">🔙 Về Menu Bài 1</button>
             </div>
         </div>
 
-        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
-            <h2 class="text-2xl font-bold text-amber-900 mb-6">Kết quả ghi nhớ</h2>
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-emerald-50 p-4 rounded-xl border-2 border-emerald-200">
-                    <p class="text-emerald-600 font-bold text-sm">ĐÃ THUỘC</p>
-                    <p id="stat-learned" class="text-3xl font-bold text-emerald-700">0</p>
-                </div>
-                <div class="bg-rose-50 p-4 rounded-xl border-2 border-rose-200">
-                    <p class="text-rose-600 font-bold text-sm">CHƯA THUỘC</p>
-                    <p id="stat-unlearned" class="text-3xl font-bold text-rose-700">0</p>
-                </div>
-            </div>
-            <div class="flex flex-col gap-3">
-                <button id="btn-review-unlearned" onclick="reviewUnlearned()" class="btn-ghibli w-full bg-amber-400 border-amber-600 text-amber-900 hidden">🔄 Học lại các từ chưa thuộc</button>
-                <button onclick="startFlashcards(vocabulary)" class="btn-ghibli w-full bg-blue-50 border-blue-300 text-blue-700">📖 Học lại tất cả</button>
-                <button onclick="returnToStart()" class="btn-ghibli w-full">🔙 Về Menu Bài 1</button>
-            </div>
-        </div>
         <div id="exercise-screen" class="ghibli-card p-6 hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-amber-900">📝 Bài Tập Tổng Hợp</h2>
@@ -387,10 +351,6 @@
 
         // --- HỆ THỐNG MỞ KHÓA BÀI TẬP ---
         let completedParts = { vocab: false, p3: false, p4: false, p5: false };
-        let currentFlashList = []; 
-        let flashcardIdx = 0;      
-        let learnedCount = 0;      
-        let unlearnedItems = [];
 
         function checkUnlockExercise() {
             if (completedParts.vocab && completedParts.p3 && completedParts.p4 && completedParts.p5) {
