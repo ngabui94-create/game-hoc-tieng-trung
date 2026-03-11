@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK3 Bài 3 - Khu Vườn Của Nga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Noto+Sans+SC:wght@500;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghibli-green: #a8d5ba;
+            --ghibli-brown: #d4a373;
+            --ghibli-sky: #caf0f8;
+            --ghibli-wood: #6d4c41;
+            --ghibli-dark-green: #4f7942;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Nunito', sans-serif;
+            background: linear-gradient(180deg, var(--ghibli-sky) 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chinese-text { font-family: 'Noto Sans SC', sans-serif; font-weight: 700; }
+        .chinese-sub { font-family: 'Noto Sans SC', sans-serif; }
+
+        .ghibli-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid var(--ghibli-wood);
+            border-radius: 20px;
+            box-shadow: 0 10px 0 var(--ghibli-brown);
+        }
+
+        .btn-ghibli {
+            background-color: var(--ghibli-green);
+            color: var(--ghibli-wood);
+            border: 2px solid var(--ghibli-wood);
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: bold;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .btn-ghibli:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 0 var(--ghibli-brown);
+            background-color: #95c7a9;
+        }
+        
+        .btn-ghibli:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%; height: 380px;
+            transition: transform 0.6s; transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard-inner.is-flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 15px;
+            padding: 24px;
+            border: 2px solid var(--ghibli-wood);
+        }
+        .flashcard-front { background-color: #fff; }
+        .flashcard-back { background-color: #fef3c7; transform: rotateY(180deg); }
+        
+        select.ex-select {
+            appearance: none; -webkit-appearance: none;
+            padding: 0 8px; cursor: pointer;
+        }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--ghibli-brown); border-radius: 10px; }
+        .hidden { display: none; }
+
+        .circle-stat {
+            position: relative;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border: 6px solid #f3f4f6;
+        }
+        .stat-green { border-color: #a8d5ba; color: #4f7942; }
+        .stat-red { border-color: #fca5a5; color: #b91c1c; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container" class="w-full max-w-xl px-4 mt-10 mb-10">
+        <div id="start-screen" class="ghibli-card p-8 text-center">
+            <h1 class="text-3xl font-bold text-amber-900 mb-2">HSK3 - Bài 3</h1>
+            <h2 class="text-xl text-emerald-700 font-bold mb-4 italic" style="font-family: 'Noto Sans SC', sans-serif; font-style: normal;">桌子上放着很多饮料</h2>
+            <div class="mx-auto mb-4 text-6xl">🍹</div>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="startFlashcards(vocabulary)" class="btn-ghibli text-lg">🎴 Phần 1: Ôn Flashcards</button>
+                
+                <button onclick="startVocabularyGame()" class="btn-ghibli text-lg relative" style="background-color: #fef3c7;">
+                    🎮 Phần 2: Game Từ Vựng <span id="check-vocab" class="absolute right-4 hidden">✅</span>
+                </button>
+                
+                <button onclick="startQuiz('p3')" class="btn-ghibli text-lg relative" style="background-color: #fff1f2;">
+                    ✨ Phần 3: Phân biệt 还是 / 或者 <span id="check-p3" class="absolute right-4 hidden">✅</span>
+                </button>
+                
+                <button onclick="startQuiz('p4')" class="btn-ghibli text-lg relative" style="background-color: #ecfdf5;">
+                    ❄️ Phần 4: Sự tồn tại (V+着) <span id="check-p4" class="absolute right-4 hidden">✅</span>
+                </button>
+                
+                <button onclick="startQuiz('p5')" class="btn-ghibli text-lg relative" style="background-color: #f0f9ff;">
+                    🔗 Phần 5: Khả năng với “会” <span id="check-p5" class="absolute right-4 hidden">✅</span>
+                </button>
+
+                <button id="btn-comprehensive" onclick="showExercise()" class="btn-ghibli text-lg mt-2 transition-all duration-500" style="background-color: #e5e7eb; border-color: #9ca3af; color: #6b7280;" disabled>
+                    🔒 Bài Tập Tổng Hợp (Cần hoàn thành Game)
+                </button>
+
+                <button onclick="window.location.href='index.html'" class="text-amber-700 font-bold text-sm mt-2 hover:underline">🏠 Trở về Khu Vườn chính</button>
+            </div>
+        </div>
+<script>
+        const vocabulary = [
+            { h: "还是", p: "háishi", m: "Hay là (dùng trong câu hỏi)", ex: "你喝茶还是喝咖啡？", exp: "Nǐ hē chá háishi hē kāfēi?", exv: "Bạn uống trà hay là uống cà phê?" },
+            { h: "爬山", p: "pá shān", m: "Leo núi", ex: "周末我们去爬山吧。", exp: "Zhōumò wǒmen qù pá shān ba.", exv: "Cuối tuần chúng ta đi leo núi nhé." },
+            { h: "小心", p: "xiǎoxīn", m: "Cẩn thận", ex: "路上开车要小心。", exp: "Lùshàng kāichē yào xiǎoxīn.", exv: "Lái xe trên đường phải cẩn thận." },
+            { h: "条", p: "tiáo", m: "Lượng từ (quần, váy, sông...)", ex: "这一条裤子很漂亮。", exp: "Zhè yì tiáo kùzi hěn piàoliang.", exv: "Cái quần này rất đẹp." },
+            { h: "裤子", p: "kùzi", m: "Quần", ex: "这条裤子多少元？", exp: "Zhè tiáo kùzi duōshǎo yuán?", exv: "Cái quần này bao nhiêu tiền?" },
+            { h: "记得", p: "jìde", m: "Nhớ, còn nhớ", ex: "你还记得我吗？", exp: "Nǐ hái jìde wǒ ma?", exv: "Bạn còn nhớ tôi không?" },
+            { h: "衬衫", p: "chènshān", m: "Áo sơ mi", ex: "这件衬衫有点儿大。", exp: "Zhè jiàn chènshān yǒudiǎnr dà.", exv: "Cái áo sơ mi này hơi rộng." },
+            { h: "元", p: "yuán", m: "Đồng (đơn vị tiền)", ex: "这件衣服两百元。", exp: "Zhè jiàn yīfu liǎngbǎi yuán.", exv: "Bộ quần áo này 200 đồng." },
+            { h: "新鲜", p: "xīnxiān", m: "Tươi mới", ex: "这些水果很新鲜。", exp: "Zhèxiē shuǐguǒ hěn xīnxiān.", exv: "Chỗ hoa quả này rất tươi." },
+            { h: "甜", p: "tián", m: "Ngọt", ex: "西瓜甜不甜？", exp: "Xīguā tián bù tián?", exv: "Dưa hấu có ngọt không?" },
+            { h: "只", p: "zhǐ", m: "Chỉ", ex: "我只喝了一杯咖啡。", exp: "Wǒ zhǐ hē le yì bēi kāfēi.", exv: "Tôi chỉ uống một ly cà phê." },
+            { h: "放", p: "fàng", m: "Đặt, để", ex: "桌子上放着一本书。", exp: "Zhuōzi shàng fàng zhe yì běn shū.", exv: "Trên bàn có đặt một quyển sách." },
+            { h: "饮料", p: "yǐnliào", m: "Thức uống", ex: "你想喝点儿什么饮料？", exp: "Nǐ xiǎng hē diǎnr shénme yǐnliào?", exv: "Bạn muốn uống loại thức uống gì?" },
+            { h: "或者", p: "huòzhě", m: "Hoặc (dùng trong câu kể)", ex: "喝茶或者咖啡都可以。", exp: "Hē chá huòzhě kāfēi dōu kěyǐ.", exv: "Uống trà hoặc cà phê đều được." },
+            { h: "舒服", p: "shūfu", m: "Dễ chịu, thoải mái", ex: "喝杯热茶会很舒服。", exp: "Hē bēi rè chá huì hěn shūfu.", exv: "Uống ly trà nóng sẽ rất dễ chịu." },
+            { h: "花", p: "huā", m: "Hoa", ex: "桌子上放着很多花。", exp: "Zhuōzi shàng fàng zhe hěnduō huā.", exv: "Trên bàn đặt rất nhiều hoa." },
+            { h: "绿", p: "lǜ", m: "Xanh lá cây", ex: "这条绿色的裤子怎么样？", exp: "Zhè tiáo lǜsè de kùzi zěnmeyàng?", exv: "Cái quần màu xanh lá này thế nào?" },
+            { h: "上面", p: "shàngmiàn", m: "Bên trên", ex: "上面写着多少元？", exp: "Shàngmiàn xiě zhe duōshǎo yuán?", exv: "Bên trên viết bao nhiêu tiền?" }
+        ];
+
+        const quizData = {
+            p3: { 
+                name: "Phân biệt 还是 và 或者", 
+                questions: [
+                    { q: "你喜欢喝咖啡 ________ 喝茶？", options: ["还是", "或者"], correct: 0, res: "你喜欢喝咖啡还是喝茶？", py: "Nǐ xǐhuān hē kāfēi háishi hē chá?", vi: "Bạn thích uống cà phê hay uống trà?", exp: "Dùng 还是 trong câu hỏi lựa chọn." },
+                    { q: "今天晚上我们吃米饭 ________ 吃面条都可以。", options: ["还是", "或者"], correct: 1, res: "吃米饭或者吃面条都可以。", py: "Chī mǐfàn huòzhě chī miàntiáo dōu kěyǐ.", vi: "Ăn cơm hay mì sợi đều được.", exp: "Dùng 或者 trong câu khẳng định/liệt kê." },
+                    { q: "明天是下雨 ________ 不下雨，我还不知道。", options: ["还是", "或者"], correct: 0, res: "是下雨还是不下雨，我还不知道。", py: "Míngtiān shì xià yǔ háishi bú xià yǔ, wǒ hái bù zhīdào.", vi: "Ngày mai mưa hay không mưa tôi vẫn chưa biết.", exp: "Vế câu hỏi nằm trong câu kể vẫn dùng 还是." },
+                    { q: "周末我们可以去公园散步 ________ 在家看电影。", options: ["还是", "或者"], correct: 1, res: "去公园散步或者在家看电影。", py: "Zhōumò wǒmen kěyǐ qù gōngyuán sànbù huòzhě zàijiā kàn diànyǐng.", vi: "Cuối tuần chúng ta có thể đi công viên dạo bộ hoặc ở nhà xem phim.", exp: "Câu khẳng định về sự lựa chọn dùng 或者." },
+                    { q: "你想买 cái 红色的衣服 ________ cái 蓝色的衣服？", options: ["还是", "或者"], correct: 0, res: "你想买红色的衣服还是蓝色的衣服？", py: "Nǐ xiǎng mǎi hóngsè de yīfu háishi lánsè de yīfu?", vi: "Bạn muốn mua bộ màu đỏ hay bộ màu xanh?", exp: "Câu hỏi lựa chọn trực tiếp dùng 还是." }
+                ] 
+            },
+            p4: { 
+                name: "Cấu trúc tồn tại: V+着", 
+                questions: [ 
+                    { q: "桌子上 _____ 着很多饮料。", options: ["喝", "放", "买"], correct: 1, res: "桌子上放着很多饮料。", py: "Zhuōzi shàng fàng zhe hěnduō yǐnliào.", vi: "Trên bàn có đặt rất nhiều đồ uống.", exp: "Địa điểm + V + 着 + Số lượng/Sự vật." },
+                    { q: "我家楼上 _____ 着一个老师。", options: ["住", "坐", "放"], correct: 0, res: "我家楼上住着一个老师。", py: "Wǒ jiā lóushàng zhù zhe yí gè lǎoshī.", vi: "Tầng trên nhà tôi có một thầy giáo đang ở.", exp: "Biểu thị trạng thái tồn tại ổn định." },
+                    { q: "_____ 写着 320 元。", options: ["上面", "裤子", "还是"], correct: 0, res: "上面写着 320 元。", py: "Shàngmiàn xiě zhe sānbǎi èrshí yuán.", vi: "Bên trên có viết 320 đồng.", exp: "上面 là danh từ chỉ phương vị làm chủ ngữ." },
+                    { q: "桌子上 _____ 放着咖啡。", options: ["不", "没", "别"], correct: 1, res: "桌子上没放着咖啡。", py: "Zhuōzi shàng méi fàng zhe kāfēi.", vi: "Trên bàn không có đặt cà phê.", exp: "Phủ định của cấu trúc tồn tại dùng '没'." },
+                    { q: "公共汽车上 _____ 着几个人。", options: ["放", "坐", "站"], correct: 1, res: "公共汽车上坐着几 người.", py: "Gōnggòng qìchē shàng zuò zhe jǐ gè rén.", vi: "Trên xe bus có vài người đang ngồi.", exp: "Dùng '坐' (ngồi) phù hợp với người trên xe." }
+                ]
+            },
+            p5: { 
+                name: "Trợ động từ 会", 
+                questions: [
+                    { q: "他 / 不高兴 / 的 / 会 / 。 (Sắp xếp câu)", options: ["他不高兴会的。", "他会不高兴的。", "不高兴他会的。"], correct: 1, res: "他会不高兴的。", py: "Tā huì bù gāoxìng de.", vi: "Anh ấy sẽ không vui đâu.", exp: "Chủ ngữ + 会 + V/Adj + 的 (Biểu thị khả năng xảy ra)." },
+                    { q: "我会照顾好自己。 (Dịch: Tôi sẽ chăm sóc tốt bản thân)", options: ["我会照顾好自己。", "我照顾好会自己。", "自己我会照顾好。"], correct: 0, res: "我会照顾好自己。", py: "Wǒ huì zhàogù hǎo zìjǐ.", vi: "Tôi sẽ chăm sóc tốt bản thân.", exp: "会 đứng trước động từ để chỉ khả năng." },
+                    { q: "快起床吧，你会迟到的。", options: ["Đúng", "Sai"], correct: 0, res: "快起床吧，你会迟到的。", py: "Kuài qǐchuáng ba, nǐ huì chídào de.", vi: "Mau dậy đi, bạn sẽ bị muộn đấy.", exp: "Dự đoán kết quả sẽ xảy ra." },
+                    { q: "喝杯热茶会很舒服。", options: ["Đúng", "Sai"], correct: 0, res: "喝杯热茶会很舒服。", py: "Hē bēi rè chá huì hěn shūfu.", vi: "Uống ly trà nóng sẽ rất thoải mái.", exp: "Dự đoán trạng thái cảm xúc." },
+                    { q: "你 _____ 感冒的。", options: ["会", "能", "可以"], correct: 0, res: "你会感冒的。", py: "Nǐ huì gǎnmào de.", vi: "Bạn sẽ bị cảm đấy.", exp: "Dùng 会 để chỉ khả năng khách quan." }
+                ]
+            }
+        };
+// Logic điều khiển trạng thái game
+        let currentFlashcardIndex = 0;
+        let knownCards = [];
+        let unknownCards = [];
+        let currentQuizType = '';
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+        let completedSections = { vocab: false, p3: false, p4: false, p5: false };
+
+        function showScreen(screenId) {
+            document.querySelectorAll('#game-container > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        // --- PHẦN 1: FLASHCARDS ---
+        function startFlashcards(list) {
+            currentFlashcardList = [...list];
+            currentFlashcardIndex = 0;
+            knownCards = [];
+            unknownCards = [];
+            showFlashcard();
+            showScreen('flashcard-screen');
+        }
+
+        function showFlashcard() {
+            const card = currentFlashcardList[currentFlashcardIndex];
+            const container = document.getElementById('flashcard-container');
+            container.innerHTML = `
+                <div class="flashcard-inner" onclick="this.classList.toggle('is-flipped')">
+                    <div class="flashcard-front">
+                        <div class="text-6xl mb-4 chinese-text text-amber-900">${card.h}</div>
+                        <div class="text-xl text-gray-500">${card.p}</div>
+                        <div class="mt-4 text-sm text-blue-500 italic">Chạm để xem nghĩa</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="text-2xl font-bold text-amber-900 mb-2">${card.m}</div>
+                        <div class="text-left w-full px-4">
+                            <p class="text-emerald-700 font-bold chinese-sub">${card.ex}</p>
+                            <p class="text-sm text-gray-600">${card.exp}</p>
+                            <p class="text-sm italic text-gray-800">${card.exv}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('flashcard-progress').innerText = `Thẻ ${currentFlashcardIndex + 1} / ${currentFlashcardList.length}`;
+        }
+
+        function nextCard(isKnown) {
+            const card = currentFlashcardList[currentFlashcardIndex];
+            if (isKnown) knownCards.push(card); else unknownCards.push(card);
+            
+            currentFlashcardIndex++;
+            if (currentFlashcardIndex < currentFlashcardList.length) {
+                showFlashcard();
+            } else {
+                finishFlashcards();
+            }
+        }
+
+        function finishFlashcards() {
+            const screen = document.getElementById('flashcard-screen');
+            screen.innerHTML = `
+                <div class="ghibli-card p-8 text-center">
+                    <h2 class="text-2xl font-bold text-amber-900 mb-4">Kết quả ôn tập</h2>
+                    <div class="flex justify-around mb-6">
+                        <div class="circle-stat stat-green"><span class="text-2xl font-bold">${knownCards.length}</span><span>Đã thuộc</span></div>
+                        <div class="circle-stat stat-red"><span class="text-2xl font-bold">${unknownCards.length}</span><span>Chưa thuộc</span></div>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        ${unknownCards.length > 0 ? `<button onclick="startFlashcards(unknownCards)" class="btn-ghibli">Ôn lại từ chưa thuộc</button>` : ''}
+                        <button onclick="location.reload()" class="btn-ghibli" style="background-color: #ddd;">Về menu chính</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- PHẦN 2: GAME TỪ VỰNG ---
+        let currentVocabGameIndex = 0;
+        let vocabGameScore = 0;
+        let vocabOptions = [];
+
+        function startVocabularyGame() {
+            currentVocabGameIndex = 0;
+            vocabGameScore = 0;
+            vocabOptions = [...vocabulary].sort(() => 0.5 - Math.random());
+            showVocabQuestion();
+            showScreen('vocab-game-screen');
+        }
+
+        function showVocabQuestion() {
+            const correctWord = vocabOptions[currentVocabGameIndex];
+            const others = vocabulary.filter(w => w.h !== correctWord.h).sort(() => 0.5 - Math.random()).slice(0, 3);
+            const choices = [...others, correctWord].sort(() => 0.5 - Math.random());
+            
+            const container = document.getElementById('vocab-question-container');
+            container.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="text-5xl font-bold text-amber-900 mb-2 chinese-text">${correctWord.h}</div>
+                    <div class="text-xl text-gray-600">${correctWord.p}</div>
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                    ${choices.map(choice => `<button onclick="checkVocabAnswer('${choice.h}', '${correctWord.h}')" class="btn-ghibli text-left px-6 py-4">${choice.m}</button>`).join('')}
+                </div>
+            `;
+            document.getElementById('vocab-progress').innerText = `Câu ${currentVocabGameIndex + 1} / 10`;
+        }
+
+        function checkVocabAnswer(selected, correct) {
+            if (selected === correct) vocabGameScore++;
+            currentVocabGameIndex++;
+            if (currentVocabGameIndex < 10) showVocabQuestion();
+            else {
+                completedSections.vocab = true;
+                checkUnlockComprehensive();
+                alert(`Bạn đã hoàn thành! Điểm: ${vocabGameScore}/10`);
+                showScreen('start-screen');
+                document.getElementById('check-vocab').classList.remove('hidden');
+            }
+        }
+
+        // --- PHẦN 3,4,5: QUIZ NGỮ PHÁP ---
+        function startQuiz(type) {
+            currentQuizType = type;
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            showQuizQuestion();
+            showScreen('quiz-screen');
+        }
+
+        function showQuizQuestion() {
+            const data = quizData[currentQuizType];
+            const q = data.questions[currentQuestionIndex];
+            document.getElementById('quiz-title').innerText = data.name;
+            const container = document.getElementById('quiz-question-container');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <p class="text-xl text-amber-900 font-bold mb-4 chinese-sub">${q.q}</p>
+                    <div class="grid grid-cols-1 gap-3">
+                        ${q.options.map((opt, idx) => `<button onclick="checkQuizAnswer(${idx})" class="btn-ghibli text-left">${opt}</button>`).join('')}
+                    </div>
+                </div>
+                <div id="quiz-explanation" class="hidden p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded text-sm"></div>
+                <button id="btn-next-quiz" onclick="nextQuizStep()" class="hidden btn-ghibli w-full mt-4" style="background-color: #6d4c41; color: white;">Tiếp theo</button>
+            `;
+            document.getElementById('quiz-progress').innerText = `Câu ${currentQuestionIndex + 1} / ${data.questions.length}`;
+        }
+
+        function checkQuizAnswer(idx) {
+            const q = quizData[currentQuizType].questions[currentQuestionIndex];
+            const expBox = document.getElementById('quiz-explanation');
+            const buttons = document.querySelectorAll('#quiz-question-container button');
+            
+            buttons.forEach(btn => btn.disabled = true);
+            expBox.classList.remove('hidden');
+            
+            if (idx === q.correct) {
+                quizScore++;
+                expBox.innerHTML = `<b class="text-emerald-700">Chính xác!</b><br>${q.res}<br><i class="text-gray-600">${q.py}</i><br>👉 ${q.exp}`;
+            } else {
+                expBox.innerHTML = `<b class="text-red-600">Chưa đúng.</b> Đáp án là: <b>${q.options[q.correct]}</b><br>${q.res}<br>👉 ${q.exp}`;
+            }
+            document.getElementById('btn-next-quiz').classList.remove('hidden');
+        }
+
+        function nextQuizStep() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData[currentQuizType].questions.length) {
+                showQuizQuestion();
+            } else {
+                completedSections[currentQuizType] = true;
+                checkUnlockComprehensive();
+                alert(`Hoàn thành phần này! Điểm: ${quizScore}/${quizData[currentQuizType].questions.length}`);
+                showScreen('start-screen');
+                document.getElementById(`check-${currentQuizType}`).classList.remove('hidden');
+            }
+        }
+
+        function checkUnlockComprehensive() {
+            if (completedSections.vocab && completedSections.p3 && completedSections.p4 && completedSections.p5) {
+                const btn = document.getElementById('btn-comprehensive');
+                btn.disabled = false;
+                btn.style.backgroundColor = "#d4a373";
+                btn.style.color = "#6d4c41";
+                btn.innerText = "🌟 Bài Tập Tổng Hợp (Đã mở)";
+            }
+        }
+<div id="exercise-screen" class="hidden ghibli-card p-6 overflow-hidden">
+            <h2 class="text-2xl font-bold text-amber-900 mb-4 border-b-2 border-amber-200 pb-2">Bài tập tổng hợp</h2>
+            
+            <div class="custom-scroll overflow-y-auto max-h-[70vh] pr-2">
+                <div class="mb-8">
+                    <h3 class="font-bold text-emerald-700 mb-3 underline">Phần 1: Chọn từ điền vào chỗ trống</h3>
+                    <div class="bg-amber-50 p-3 rounded-lg mb-4 text-sm flex flex-wrap gap-2 font-bold text-amber-800">
+                        <span>A. 还是</span> <span>B. 或者</span> <span>C. 记得</span> <span>D. 新鲜</span> <span>E. 只</span>
+                    </div>
+                    
+                    <div class="space-y-4 text-sm text-gray-800">
+                        <p>1. A: 你想喝咖啡 <select class="ex-select border-b-2 border-amber-500 outline-none bg-transparent font-bold px-1"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select> 喝茶？ B: 我喝茶。</p>
+                        <p>2. 今天下午我不在家，你可以在下午四点 <select class="ex-select border-b-2 border-amber-500 outline-none bg-transparent font-bold px-1"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select> 五点给我打电话。</p>
+                        <p>3. 这些水果非常 <select class="ex-select border-b-2 border-amber-500 outline-none bg-transparent font-bold px-1"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select> ，多吃点儿吧。</p>
+                        <p>4. 我 <select class="ex-select border-b-2 border-amber-500 outline-none bg-transparent font-bold px-1"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select> 去过一次北京，没去过别的地方。</p>
+                        <p>5. A: 你还 <select class="ex-select border-b-2 border-amber-500 outline-none bg-transparent font-bold px-1"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select> 他吗？ B: 当然，他是我的好朋友。</p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="font-bold text-emerald-700 mb-3 underline">Phần 2: Hoàn thành câu (Mô tả tranh)</h3>
+                    <div class="space-y-6">
+                        <div class="p-3 bg-white rounded border border-gray-200 shadow-sm">
+                            <p class="font-bold text-gray-700 mb-2">Hình 1 (Phòng khách):</p>
+                            <p class="chinese-sub">A: 桌子上放着什么？</p>
+                            <div class="flex flex-wrap items-center gap-1">
+                                <span>B: 桌子上</span>
+                                <input type="text" class="ex-input border-b-2 border-emerald-500 outline-none w-48 px-1" placeholder="đáp án...">
+                                <span>着很多花。</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded border border-gray-200 shadow-sm">
+                            <p class="font-bold text-gray-700 mb-2">Hình 2 (Cửa hàng quần áo):</p>
+                            <p class="chinese-sub">A: 你喜欢哪件衬衫？</p>
+                            <div class="flex flex-wrap items-center gap-1">
+                                <span>B: 我喜欢那件</span>
+                                <input type="text" class="ex-input border-b-2 border-emerald-500 outline-none w-32 px-1" placeholder="đáp án...">
+                                <span>的。</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded border border-gray-200 shadow-sm">
+                            <p class="font-bold text-gray-700 mb-2">Hình 3 (Ăn hoa quả):</p>
+                            <p class="chinese-sub">A: 水果新鲜吗？</p>
+                            <div class="flex flex-wrap items-center gap-1">
+                                <span>B: 这里的西瓜</span>
+                                <input type="text" class="ex-input border-b-2 border-emerald-500 outline-none w-32 px-1" placeholder="đáp án...">
+                                <span>。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="submitExercise()" class="btn-ghibli w-full bg-amber-700 text-white border-none py-4 text-xl mb-4">📤 Nộp Bài & Copy Kết Quả</button>
+                <div id="exercise-feedback" class="text-center mb-10"></div>
+            </div>
+            <button onclick="showScreen('start-screen')" class="absolute top-4 right-4 text-2xl">✖️</button>
+        </div>
+    </div>
+
+    <script>
+        function showExercise() { showScreen('exercise-screen'); }
+
+        function submitExercise() {
+            const selects = document.querySelectorAll('.ex-select');
+            const inputs = document.querySelectorAll('.ex-input');
+            let resultText = "BÀI LÀM HSK3 - BÀI 3\n--------------------------\n";
+            
+            const formatAns = (el) => el.value.trim() === "" ? "___" : el.value.trim();
+
+            resultText += "Phần 1: Chọn từ điền vào chỗ trống\n";
+            resultText += `1. ${formatAns(selects[0])}  2. ${formatAns(selects[1])}  3. ${formatAns(selects[2])}  4. ${formatAns(selects[3])}  5. ${formatAns(selects[4])}\n\n`;
+            
+            resultText += "Phần 2: Hoàn thành câu\n";
+            resultText += `Hình 1: 桌子上 ${formatAns(inputs[0])} 着很多花。\n`;
+            resultText += `Hình 2: 我喜欢那件 ${formatAns(inputs[1])} 的。\n`;
+            resultText += `Hình 3: 这里的西瓜 ${formatAns(inputs[2])} 。\n`;
+
+            navigator.clipboard.writeText(resultText).then(() => {
+                const feedback = document.getElementById('exercise-feedback');
+                feedback.innerHTML = `<div class="p-4 bg-green-100 text-green-800 rounded-lg animate-bounce">✨ Đã copy bài làm! Hãy dán để gửi cho giáo viên nhé.</div>`;
+            });
+        }
+    </script>
+</body>
+</html>
