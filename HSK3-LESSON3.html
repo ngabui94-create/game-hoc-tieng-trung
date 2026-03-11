@@ -226,29 +226,29 @@
         ];
 
         const quizData = {
-            p3: { 
+p3: { 
                 name: "1. 还是 và 或者", 
                 questions: [
-                    { q: "你喜欢喝咖啡 ___ 喝茶？", options: ["或者", "还是"], correct: 1, exp: "\n=> Câu hỏi lựa chọn dùng 还是." },
-                    { q: "今天晚上我们吃米饭 ___ 吃面条都可以。", options: ["或者", "还是"], correct: 0, exp: "\n=> Câu khẳng định dùng 或者." },
-                    { q: "明天是下雨 ___ 不下雨，我还不知道。", options: ["还是", "或者"], correct: 0, exp: "\n=> Phân vân giữa 2 lựa chọn dùng 还是." },
-                    { q: "周末我们可以去公园散步 ___ 在家看电影。", options: ["或者", "还是"], correct: 0, exp: "\n=> Lựa chọn tự do dùng 或者." },
-                    { q: "你想买这个红色的衣服 ___ 那个蓝色的衣服？", options: ["或者", "还是"], correct: 1, exp: "\n=> Câu hỏi lựa chọn dùng 还是." },
-                    { q: "他今天在办公室 ___ 在图书馆学习。", options: ["或者", "还是"], correct: 0, exp: "\n=> Khẳng định khả năng dùng 或者." },
-                    { q: "你今天晚上学习汉语 ___ 学习英语？", options: ["或者", "还是"], correct: 1, exp: "\n=> Câu hỏi dùng 还是." },
-                    { q: "我们可以坐地铁 ___ 坐公交车去学校。", options: ["或者", "还是"], correct: 0, exp: "\n=> Cách thức khẳng định dùng 或者." },
-                    { q: "小王今年二十岁 ___ 二十一岁，我记不清了。", options: ["还是", "或者"], correct: 0, exp: "\n=> Phân vân dùng 还是." },
-                    { q: "晚上你可以在家休息 ___ 去外面散步。", options: ["或者", "还是"], correct: 0, exp: "\n=> Gợi ý dùng 或者." }
+                    { q: "你喜欢喝咖啡 ___ 喝茶？", options: ["或者", "还是"], correct: 1, exp: "✨ 你喜欢喝咖啡还是喝茶？\n(Nǐ xǐhuan hē kāfēi háishi hē chá?)\n=> Bạn thích uống cà phê hay là uống trà?\n(Câu hỏi lựa chọn dùng 还是)" },
+                    { q: "今天晚上我们吃米饭 ___ 吃面条都可以。", options: ["或者", "还是"], correct: 0, exp: "✨ 今天晚上吃面条都可以。\n(Jīntiān wǎnshang wǒmen chī mǐfàn huòzhě chī miántiáo dōu kěyǐ.)\n=> Tối nay chúng ta ăn cơm hoặc ăn mì đều được.\n(Câu khẳng định dùng 或者)" },
+                    { q: "明天是下雨 ___ 不下雨，我还不知道。", options: ["还是", "或者"], correct: 0, exp: "✨ 天是下雨还是不下雨，我还不知道。\n(Míngtiān shì xià yǔ háishi bú xià yǔ, wǒ hái bù zhīdào.)\n=> Ngày mai là mưa hay không mưa, tôi vẫn chưa biết.\n(Dùng 还是 khi phân vân giữa các lựa chọn)" },
+                    { q: "周末我们可以去公园散步 ___ 在家看电影。", options: ["或者", "还是"], correct: 0, exp: "✨ 末我们可以去公园散步或者在家看电影。\n(Zhōumò wǒmen kěyǐ qù gōngyuán sànbù huòzhě zài jiā kàn diànyǐng.)\n=> Cuối tuần chúng ta có thể đi công viên đi dạo hoặc ở nhà xem phim.\n(Đưa ra các khả năng dùng 或者)" },
+                    { q: "你想买这个红色的衣服 ___ 那个蓝色的衣服？", options: ["或者", "还是"], correct: 1, exp: "✨ 你想买这个红色的衣服还是那个蓝色的衣服？\n(Nǐ xiǎng mǎi zhè ge hóngsè de yīfu háishi nà ge lánsè de yīfu?)\n=> Bạn muốn mua bộ quần áo màu đỏ này hay bộ màu xanh kia?\n(Câu hỏi lựa chọn dùng 还是)" },
+                    { q: "他今天在办公室 ___ 在图书馆学习。", options: ["或者", "还是"], correct: 0, exp: "✨ 他今天在办公室或者在图书馆学习。\n(Tā jīntiān zài bàngōngshì huòzhě zài túshūguǎn xuéxí.)\n=> Hôm nay anh ấy học ở văn phòng hoặc ở thư viện.\n(Câu khẳng định dùng 或者)" },
+                    { q: "你今天晚上学习汉语 ___ 学习英语？", options: ["或者", "还是"], correct: 1, exp: "✨ 你今天晚上学习汉语还是学习英语？\n(Nǐ jīntiān wǎnshang xuéxí Hànyǔ háishi xuéxí Yīngyǔ?)\n=> Tối nay bạn học tiếng Trung hay học tiếng Anh?\n(Câu hỏi dùng 还是)" },
+                    { q: "我们可以坐地铁 ___ 坐公交车去学校。", options: ["或者", "还是"], correct: 0, exp: "✨ 我们可以坐地铁 或者 坐公交车去学校。\n(Wǒmen kěyǐ zuò dìtiě huòzhě zuò gōngjiāochē qù xuéxiào.)\n=> Chúng ta có thể đi tàu điện ngầm hoặc đi xe buýt đến trường.\n(Đưa ra các cách thức lựa chọn dùng 或者)" },
+                    { q: "小王今年二十岁 ___ 二十一岁，我记不清了。", options: ["还是", "或者"], correct: 0, exp: "✨小王今年二十岁还是二十一岁，我记不清了。\n(Xiǎo Wáng jīnnián èrshí suì háishi èrshíyī suì, wǒ jì bù qīng le.)\n=> Tiểu Vương năm nay 20 tuổi hay là 21 tuổi, tôi không nhớ rõ nữa.\n(Dùng 还是 khi chưa xác định rõ lựa chọn)" },
+                    { q: "晚上你可以在家休息 ___ 去外面散步。", options: ["或者", "还是"], correct: 0, exp: "✨ 晚上你可以在家休息或者去外面散步。\n(Wǎnshang nǐ kěyǐ zài jiā xiūxi huòzhě qù wàimiàn sànbù.)\n=> Buổi tối bạn có thể nghỉ ngơi ở nhà hoặc ra ngoài đi dạo.\n(Đưa ra gợi ý dùng 或者)" }
                 ]
             },
             p4: { 
                 name: "2. Diễn tả sự tồn tại (V+着)", 
                 questions: [
-                    { type: "choice", q: "桌子上 _____ 着很多饮料。", options: ["喝", "买", "放"], correct: 2, exp: "✅ 桌子上放着 (Trên bàn có đặt...)" },
-                    { type: "choice", q: "我家楼上 _____ 着一个老师。", options: ["坐", "住", "放"], correct: 1, exp: "✅ 楼上住着 (Tầng trên có... ở)" },
-                    { type: "choice", q: "_____ 写着 320 元。", options: ["上面", "裤子", "还是"], correct: 0, exp: "✅上面写着 (Bên trên có viết...)" },
-                    { type: "choice", q: "桌子上 _____ 放着咖啡。", options: ["没", "不", "别"], correct: 0, exp: "✅ Phủ định V+着 dùng 没." },
-                    { type: "choice", q: "公共汽车上 _____ 着几个人。", options: ["放", "坐", "站"], correct: 1, exp: "✅ 坐着 (Đang ngồi)" },
+                    { type: "choice", q: "桌子上 _____ 着很多饮料。", options: ["喝", "买", "放"], correct: 2, exp: "桌子上放着 (Trên bàn có đặt...)" },
+                    { type: "choice", q: "我家楼上 _____ 着一个老师。", options: ["坐", "住", "放"], correct: 1, exp: "楼上住着 (Tầng trên có... ở)" },
+                    { type: "choice", q: "_____ 写着 320 元。", options: ["上面", "裤子", "还是"], correct: 0, exp: "上面写着 (Bên trên có viết...)" },
+                    { type: "choice", q: "桌子上 _____ 放着咖啡。", options: ["没", "不", "别"], correct: 0, exp: "Phủ định V+着 dùng 没." },
+                    { type: "choice", q: "公共汽车上 _____ 着几个人。", options: ["放", "坐", "站"], correct: 1, exp: "坐着 (Đang ngồi)" },
                     { type: "sort", q: "Sắp xếp: 放着 / 桌子上 / 一杯咖啡 / 。", words: ["放着", "桌子上", "一杯咖啡", "。"], correct: "桌子上放着一杯咖啡。", exp: "Đáp án: 桌子上放着一杯咖啡。" },
                     { type: "sort", q: "Sắp xếp: 没住着 / 我家楼上 / 老师 / 。", words: ["没住着", "我家楼上", "老师", "。"], correct: "我家楼上没住着老师。", exp: "Đáp án: 我家楼上没住着老师。" },
                     { type: "sort", q: "Sắp xếp: 写着 / 上面 / 320元 / 。", words: ["写着", "上面", "320元", "。"], correct: "上面写着320元。", exp: "Đáp án: 上面写着320元。" },
@@ -258,11 +258,11 @@
             p5: { 
                 name: "3. Khả năng với “会”", 
                 questions: [
-                    { type: "sort", q: "Sắp xếp: 会 / 不高兴 / 的 / 他 / 。", words: ["会", "不高兴", "的", "他", "。"], correct: "他会不高兴的。", exp: "✅ Đúng! Anh ấy sẽ không vui đâu." },
-                    { type: "sort", q: "Sắp xếp: 自己 / 我 / 照顾 / 会 / 好 / 。", words: ["自己", "我", "照顾", "会", "好", "。"], correct: "我会照顾好自己。", exp: "✅ Đúng! Tôi sẽ chăm sóc tốt bản thân." },
-                    { type: "sort", q: "Sắp xếp: 迟到 / 会 / 的 / 你 / 快起床吧， / 。", words: ["迟到", "会", "的", "你", "快起床吧，", "。"], correct: "快起床吧，你会迟到的。", exp: "✅ Đúng! Mau dậy đi kẻo muộn." },
-                    { type: "sort", q: "Sắp xếp: 感冒 / 的 / 会 / 你 / 。", words: ["感冒", "的", "会", "你", "。"], correct: "你会感冒的。", exp: "✅ Đúng! Bạn sẽ bị cảm đấy." },
-                    { type: "sort", q: "Sắp xếp: 舒服 / 很 / 热茶 / 喝杯 / 会 / 。", words: ["舒服", "很", "热茶", "喝杯", "会", "。"], correct: "喝杯热茶会很舒服。", exp: "✅ Đúng! Uống trà nóng sẽ rất dễ chịu." }
+                    { type: "sort", q: "Sắp xếp: 会 / 不高兴 / 的 / 他 / 。", words: ["会", "不高兴", "的", "他", "。"], correct: "他会不高兴的。", exp: "他会不高兴的。Anh ấy sẽ không vui đâu." },
+                    { type: "sort", q: "Sắp xếp: 自己 / 我 / 照顾 / 会 / 好 / 。", words: ["自己", "我", "照顾", "会", "好", "。"], correct: "我会照顾好自己。", exp: "我会照顾好自己。Tôi sẽ chăm sóc tốt bản thân." },
+                    { type: "sort", q: "Sắp xếp: 迟到 / 会 / 的 / 你 / 快起床吧， / 。", words: ["迟到", "会", "的", "你", "快起床吧，", "。"], correct: "快起床吧，你会迟到的。", exp: " 快起床吧，你会迟到的。Mau dậy đi kẻo muộn." },
+                    { type: "sort", q: "Sắp xếp: 感冒 / 的 / 会 / 你 / 。", words: ["感冒", "的", "会", "你", "。"], correct: "你会感冒的。", exp: "你会感冒的。Bạn sẽ bị cảm đấy." },
+                    { type: "sort", q: "Sắp xếp: 舒服 / 很 / 热茶 / 喝杯 / 会 / 。", words: ["舒服", "很", "热茶", "喝杯", "会", "。"], correct: "喝杯热茶会很舒服。", exp: "喝杯热茶会很舒服。Uống trà nóng sẽ rất dễ chịu." }
                 ]
             }
         };
