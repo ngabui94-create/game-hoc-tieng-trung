@@ -135,30 +135,63 @@
             </div>
         </div>
 
-        <div id="exercise-screen" class="ghibli-card p-6 hidden relative">
-            <button onclick="returnToStart()" class="absolute top-4 right-4 text-2xl">✖️</button>
-            <h2 class="text-xl font-bold text-amber-900 mb-4 uppercase">📝 Bài Tập Tổng Hợp</h2>
-            <div class="overflow-y-auto max-h-[65vh] custom-scroll pr-2 space-y-6">
-                
-                <div>
-                    <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 p-2 rounded">2. Chọn từ thích hợp điền vào chỗ trống:</h3>
-                    <p class="text-sm italic mb-2 text-amber-700">(舒服, 裤子, 衬衫, 或者, 还是)</p>
-                    <div class="space-y-4 text-sm chinese-sub">
-                        <p>(1) 你想喝点儿什么？茶 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 咖啡？</p>
-                        <p>(2) 这条 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 一点儿也不贵，买吧。</p>
-                        <p>(3) 我每个周末都在家看电视 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 听音乐，不工作。</p>
-                        <p>(4) 你穿昨天新买的那件 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 吧。</p>
-                        <p>(5) 我不喜欢南方，太热了，不 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 。</p>
-                    </div>
-                    <p class="text-sm italic my-2 text-amber-700 mt-4">(小心, 爬山, 只, 放, 记得)</p>
-                    <div class="space-y-4 text-sm chinese-sub">
-                        <p>(6) A: 你 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 是什么时候吗？ B: 去年8月。</p>
-                        <p>(7) A: 你跟我一起出去走走吧。 B: 我现在 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 想睡觉。</p>
-                        <p>(8) A: 饭菜好了吗？ B: 好了，已经 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 饭桌上了。</p>
-                        <p>(9) A: 您慢走，路上 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 点儿。 B: 谢谢。</p>
-                        <p>(10) A: 上个周末你去哪儿了？ B: 我跟朋友去 <input type="text" class="ex-select border-b-2 border-amber-400 w-20 text-center focus:outline-none"> 了。</p>
-                    </div>
+<div id="exercise-screen" class="ghibli-card p-6 hidden">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-amber-900">📝 Bài Tập Tổng Hợp</h2>
+        <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Đóng</button>
+    </div>
+    
+    <div class="overflow-y-auto max-h-[60vh] custom-scroll pr-2 text-amber-900">
+        <div class="mb-8">
+            <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">2. 选择恰当的词语填空</h3>
+            
+            <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2">
+                <span class="text-gray-600">Từ chọn 1:</span>
+                <span class="text-emerald-700">舒服</span> | <span class="text-emerald-700">裤子</span> | <span class="text-emerald-700">衬衫</span> | <span class="text-emerald-700">或者</span> | <span class="text-emerald-700">还是</span>
+            </div>
+            <div class="space-y-4 mb-8 chinese-text text-lg">
+                <p>(1) 你想喝点儿什么？茶 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 咖啡？</p>
+                <p>(2) 这条 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 一点儿也不贵，买吧。</p>
+                <p>(3) 我每个周末都在家看电视 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 听音乐，不工作。</p>
+                <p>(4) 你穿昨天新买的那件 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 吧。</p>
+                <p>(5) 我不喜欢南方，太热了，不 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 。</p>
+            </div>
+
+            <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2">
+                <span class="text-gray-600">Từ chọn 2:</span>
+                <span class="text-emerald-700">小心</span> | <span class="text-emerald-700">爬山</span> | <span class="text-emerald-700">只</span> | <span class="text-emerald-700">放</span> | <span class="text-emerald-700">记得</span>
+            </div>
+            <div class="space-y-4 chinese-text text-lg">
+                <p>(6) A: 你 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>小心</option><option>爬山</option><option>只</option><option>放</option><option>记得</option></select> 是什么时候吗？ B: 去年8月。</p>
+                <p>(7) A: 你跟我一起出去走走吧。 B: 我现在 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>小心</option><option>爬山</option><option>只</option><option>放</option><option>记得</option></select> 想睡觉。</p>
+                <p>(8) A: 饭菜好了吗？ B: 好了，已经 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>小心</option><option>爬山</option><option>只</option><option>放</option><option>记得</option></select> 饭桌上了。</p>
+                <p>(9) A: 您慢走，路上 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>小心</option><option>爬山</option><option>只</option><option>放</option><option>记得</option></select> 点儿。 B: 谢谢。</p>
+                <p>(10) A: 上个周末你去哪儿了？ B: 我跟朋友去 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none text-center text-emerald-700 rounded"><option value="____"></option><option>小心</option><option>爬山</option><option>只</option><option>放</option><option>记得</option></select> 了。</p>
+            </div>
+        </div>
+
+        <div class="mb-2">
+            <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">3. 用本课新学的语言点和词语描述图片</h3>
+            <div class="space-y-4 chinese-text text-lg">
+                <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
+                    <p class="text-sm font-bold text-amber-600 mb-2">Hình 1:</p>
+                    <p>A: 你想什么呢？</p>
+                    <p>B: 桌子上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none text-emerald-700 rounded"> 那么多好吃的。</p>
+                    <p>A: 水果 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-20 text-center outline-none text-emerald-700 rounded"> 面包都会对你的身体好。</p>
                 </div>
+                <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
+                    <p class="text-sm font-bold text-amber-600 mb-2">Hình 2:</p>
+                    <p>A: 我们什么时候去上海？</p>
+                    <p>B: 我不 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none text-emerald-700 rounded"> 了。你看看机票。</p>
+                    <p>A: 机票上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none text-emerald-700 rounded"> 12月4号。</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="submitExercise()" class="btn-ghibli w-full bg-amber-600 text-white py-3 uppercase mt-6 mb-4">📤 Nộp bài & Copy bài làm</button>
+        <div id="exercise-feedback" class="mt-4 hidden text-center font-bold text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200"></div>
+    </div>
+</div>
 
                 <div>
                     <h3 class="font-bold text-blue-800 mb-3 bg-blue-50 p-2 rounded">3. Sử dụng từ ngữ trong bài mô tả hình:</h3>
@@ -538,26 +571,34 @@ function showQuizStep() {
         function showExercise() { showScreen('exercise-screen'); }
         function returnToStart() { showScreen('start-screen'); }
 
-        function submitExercise() {
-            const selects = document.querySelectorAll('.ex-select');
-            const inputs = document.querySelectorAll('.ex-input');
-            const formatAns = (el) => el.value.trim() === "" ? "___" : el.value.trim();
+function submitExercise() {
+    const selects = document.querySelectorAll('.ex-select');
+    const inputs = document.querySelectorAll('.ex-input');
+    const formatAns = (el) => el.value.trim() === "" ? "___" : el.value.trim();
 
-            let res = "BÀI LÀM HSK3 - BÀI 3\n--------------------------\n";
-            res += "Phần 2: Điền từ\n";
-            res += `(1) ${formatAns(selects[0])} (2) ${formatAns(selects[1])} (3) ${formatAns(selects[2])} (4) ${formatAns(selects[3])} (5) ${formatAns(selects[4])}\n`;
-            res += `(6) ${formatAns(selects[5])} (7) ${formatAns(selects[6])} (8) ${formatAns(selects[7])} (9) ${formatAns(selects[8])} (10) ${formatAns(selects[9])}\n\n`;
-            res += "Phần 3: Mô tả hình ảnh\n";
-            res += `Hình 1: 桌子上 ${formatAns(inputs[0])} | ${formatAns(inputs[1])}\n`;
-            res += `Hình 2: 我不 ${formatAns(inputs[2])} | 机票上 ${formatAns(inputs[3])}\n`;
-            res += `Hình 3: 红 bear ${formatAns(inputs[4])} | 电脑旁边 ${formatAns(inputs[5])}\n`;
-            res += `Hình 4: 楼上 ${formatAns(inputs[6])} | 大学生 ${formatAns(inputs[7])}\n`;
+    let res = "BÀI LÀM HSK3 - BÀI 3\n--------------------------\n";
+    res += "Phần 2: Điền từ\n";
+    res += `(1) ${formatAns(selects[0])} (2) ${formatAns(selects[1])} (3) ${formatAns(selects[2])} (4) ${formatAns(selects[3])} (5) ${formatAns(selects[4])}\n`;
+    res += `(6) ${formatAns(selects[5])} (7) ${formatAns(selects[6])} (8) ${formatAns(selects[7])} (9) ${formatAns(selects[8])} (10) ${formatAns(selects[9])}\n\n`;
+    
+    res += "Phần 3: Mô tả hình ảnh\n";
+    res += `Hình 1: 桌子上 ${formatAns(inputs[0])} | ${formatAns(inputs[1])}\n`;
+    res += `Hình 2: 我不 ${formatAns(inputs[2])} | 机票上 ${formatAns(inputs[3])}\n`;
 
-            navigator.clipboard.writeText(res).then(() => {
-                const f = document.getElementById('exercise-feedback');
-                f.classList.remove('hidden'); f.innerText = "✅ Đã nộp bài và copy kết quả!";
-            });
-        }
+    // Lệnh copy vào Clipboard
+    navigator.clipboard.writeText(res).then(() => {
+        const feedback = document.getElementById('exercise-feedback');
+        feedback.innerHTML = `<p class="font-bold text-emerald-700">✅ Đã nộp bài & Copy thành công!</p><p class="text-xs text-gray-500 mt-1">Dán (Ctrl+V) vào tin nhắn để gửi cho giáo viên.</p>`;
+        feedback.classList.remove('hidden');
+        
+        // Hiệu ứng nút nộp bài
+        const btn = event.target;
+        btn.innerHTML = "ĐÃ COPY KẾT QUẢ!";
+        btn.style.backgroundColor = "#059669";
+    }).catch(err => {
+        alert("Lỗi khi copy bài: " + err);
+    });
+}
     </script>
 </body>
 </html>
