@@ -56,17 +56,24 @@
         .stat-red { border-color: #fca5a5; color: #b91c1c; }
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: var(--ghibli-brown); border-radius: 10px; }
+        .nav-btn {
+            padding: 6px 12px; background: white; border: 2px solid; border-radius: 999px;
+            font-size: 11px; font-weight: bold; transition: all 0.2s;
+        }
+        .nav-btn:active { transform: scale(0.9); }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div id="game-container" class="w-full max-w-xl px-4 mt-10 mb-10">
-        <div id="start-screen" class="ghibli-card p-8 text-center">
-            <h1 class="text-3xl font-bold text-amber-900 mb-2">HSK3 - Bài 3</h1>
-            <h2 class="text-xl text-emerald-700 font-bold mb-6 italic">桌子上放着很多饮料</h2>
+        
+        <div id="start-screen" class="ghibli-card p-8 text-center relative">
+            <button onclick="location.href='index.html'" class="absolute top-4 left-4 nav-btn border-emerald-400 text-emerald-600 hover:bg-emerald-50">🌳 Về vườn</button>
+            <h1 class="text-3xl font-bold text-amber-900 mb-2 mt-6">HSK3 - Bài 3</h1>
+            <h2 class="text-lg text-emerald-700 font-bold mb-6 italic">桌子上放着很多饮料</h2>
             <div class="grid grid-cols-1 gap-4">
-                <button onclick="startFlashcards(vocabulary)" class="btn-ghibli text-lg">🎴 Phần 1: Ôn tập 18 Từ vựng</button>
+                <button onclick="startFlashcards(vocabulary)" class="btn-ghibli text-lg">🎴 Phần 1: Ôn tập Từ vựng</button>
                 <button onclick="startQuiz('p3')" class="btn-ghibli text-lg relative" style="background-color: #fff1f2;">
                     ✨ 还是 / 或者 <span id="check-p3" class="absolute right-4 hidden">✅</span>
                 </button>
@@ -76,19 +83,22 @@
                 <button onclick="startQuiz('p5')" class="btn-ghibli text-lg relative" style="background-color: #f0f9ff;">
                     🔗 Khả năng với “会” <span id="check-p5" class="absolute right-4 hidden">✅</span>
                 </button>
-                <button id="btn-comprehensive" onclick="showExercise()" class="btn-ghibli text-lg mt-2" style="background-color: #e5e7eb; border-color: #9ca3af; color: #6b7280;" disabled>
-                    🔒 Bài Tập Tổng Hợp (Cần hoàn thành các phần trên)
+                <button id="btn-comprehensive" onclick="showExercise()" class="btn-ghibli text-lg mt-2 opacity-50" style="background-color: #e5e7eb; border-color: #9ca3af; color: #6b7280;" disabled>
+                    🔒 Bài Tập Tổng Hợp
                 </button>
             </div>
         </div>
 
         <div id="flashcard-screen" class="ghibli-card p-6 hidden">
             <div class="flex justify-between items-center mb-4">
-                <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold">🔙 Quay lại</button>
+                <div class="flex gap-2">
+                    <button onclick="location.href='index.html'" class="nav-btn border-emerald-400 text-emerald-600 hover:bg-emerald-50">🏠 Vườn</button>
+                    <button onclick="returnToStart()" class="nav-btn border-amber-400 text-amber-600 hover:bg-amber-50">📋 Menu</button>
+                </div>
                 <div class="text-amber-900 font-bold px-3 py-1 bg-amber-100 rounded-full text-xs"> Thẻ: <span id="card-index">1</span> / <span id="card-total">18</span> </div>
             </div>
             <div id="flashcard-inner" class="flashcard-inner mb-6" onclick="flipCard()">
-                <div class="flashcard-front shadow-lg">
+                <div class="flashcard-front shadow-lg text-center">
                     <h2 id="card-hanzi" class="chinese-text text-7xl text-amber-900"></h2>
                     <p class="mt-8 text-sm text-amber-600 animate-pulse font-bold">Chạm để lật thẻ 👆</p>
                 </div>
@@ -103,48 +113,44 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="markCard(false)" class="bg-rose-100 border-2 border-rose-400 text-rose-700 p-4 rounded-xl font-bold">Chưa thuộc</button>
-                <button onclick="markCard(true)" class="bg-emerald-100 border-2 border-emerald-400 text-emerald-700 p-4 rounded-xl font-bold">Đã thuộc</button>
+                <button onclick="markCard(false)" class="bg-rose-100 border-2 border-rose-400 text-rose-700 p-4 rounded-xl font-bold active:scale-95 transition-all">Chưa thuộc</button>
+                <button onclick="markCard(true)" class="bg-emerald-100 border-2 border-emerald-400 text-emerald-700 p-4 rounded-xl font-bold active:scale-95 transition-all">Đã thuộc</button>
             </div>
-        </div>
-
-        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
-             <h2 class="text-2xl font-bold text-amber-900 mb-6">Kết quả ghi nhớ</h2>
-             <div class="flex justify-around items-center mb-8">
-                <div class="circle-stat stat-green"><span id="stat-learned-percent" class="text-xl font-bold">0%</span><span class="text-[10px] font-bold">THUỘC</span></div>
-                <div class="circle-stat stat-red"><span id="stat-unlearned-percent" class="text-xl font-bold">0%</span><span class="text-[10px] font-bold">CẦN ÔN</span></div>
-             </div>
-             <div class="text-left mb-6">
-                <p class="font-bold text-amber-900 mb-2">Các từ cần học lại:</p>
-                <div id="unlearned-list" class="max-h-40 overflow-y-auto custom-scroll bg-amber-50 rounded-lg p-3 space-y-2 border border-amber-200"></div>
-             </div>
-             <button id="btn-relearn" onclick="relearnUnlearned()" class="btn-ghibli w-full bg-amber-500 text-white border-amber-700 mb-2 hidden">🔄 Học lại các từ chưa thuộc</button>
-             <button onclick="returnToStart()" class="btn-ghibli w-full">Về Menu chính</button>
         </div>
 
         <div id="play-screen" class="ghibli-card p-6 hidden">
-            <div class="flex justify-between mb-4"><div id="quiz-part-name" class="font-bold text-amber-900 text-xs uppercase"></div><div class="text-sm font-bold">Câu: <span id="quiz-idx-display"></span></div></div>
-            <div id="question-box" class="min-h-[120px] flex items-center justify-center text-center p-4 bg-white rounded-xl border-2 border-dashed border-amber-300 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex gap-2">
+                    <button onclick="location.href='index.html'" class="nav-btn border-emerald-400 text-emerald-600 hover:bg-emerald-50">🏠 Vườn</button>
+                    <button onclick="returnToStart()" class="nav-btn border-amber-400 text-amber-600 hover:bg-amber-50">📋 Menu</button>
+                </div>
+                <div class="text-xs font-bold text-amber-900 bg-amber-100 px-2 py-1 rounded-lg">Câu: <span id="quiz-idx-display"></span></div>
+            </div>
+            <div id="quiz-part-name" class="font-bold text-amber-900 text-sm mb-4 text-center underline decoration-amber-300"></div>
+            <div id="question-box" class="min-h-[120px] flex items-center justify-center text-center p-4 bg-white rounded-xl border-2 border-dashed border-amber-300 mb-6 shadow-inner">
                 <p id="question-text" class="chinese-sub text-xl text-amber-900 font-bold"></p>
             </div>
             <div id="options-container" class="grid grid-cols-1 gap-3"></div>
-            <div id="explanation-container" class="bg-amber-50 border-l-4 border-amber-500 p-4 mt-4 hidden rounded">
-                <p id="feedback-title" class="font-bold"></p>
-                <p id="explanation-text" class="text-sm italic"></p>
-                <button onclick="showNextQuestion()" class="bg-amber-600 text-white px-4 py-2 rounded-lg w-full font-bold mt-2">Tiếp theo</button>
+            <div id="explanation-container" class="bg-amber-50 border-l-4 border-amber-500 p-4 mt-4 hidden rounded-xl shadow-sm">
+                <p id="feedback-title" class="font-bold mb-1"></p>
+                <p id="explanation-text" class="text-sm italic text-gray-700 whitespace-pre-wrap"></p>
+                <button onclick="showNextQuestion()" class="bg-amber-600 text-white px-4 py-3 rounded-xl w-full font-bold mt-4 shadow-md active:scale-95 transition-all">Tiếp theo ➔</button>
             </div>
         </div>
 
         <div id="exercise-screen" class="ghibli-card p-6 hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold text-amber-900">📝 Bài Tập Tổng Hợp</h2>
-                <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Đóng</button>
+                <div class="flex gap-2">
+                    <button onclick="location.href='index.html'" class="nav-btn border-emerald-400 text-emerald-600 hover:bg-emerald-50">🏠 Vườn</button>
+                    <button onclick="returnToStart()" class="nav-btn border-amber-400 text-amber-600 hover:bg-amber-50">📋 Menu</button>
+                </div>
+                <h2 class="text-xl font-bold text-amber-900">📝 Bài Tập</h2>
             </div>
             
             <div class="overflow-y-auto max-h-[70vh] custom-scroll pr-2 text-amber-900">
                 <div class="mb-8">
                     <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">2. 选择恰当的词语填空</h3>
-                    <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2 text-emerald-700">
+                    <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2 text-emerald-700 shadow-inner">
                         舒服 | 裤子 | 衬衫 | 或者 | 还是
                     </div>
                     <div class="space-y-4 mb-8 chinese-text text-lg">
@@ -155,7 +161,7 @@
                         <p>(5) 我不喜欢南方，太热了，不 <select class="ex-select border-b-2 border-amber-500 bg-amber-50 outline-none rounded"><option value=""></option><option>舒服</option><option>裤子</option><option>衬衫</option><option>或者</option><option>还是</option></select> 。</p>
                     </div>
 
-                    <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2 text-emerald-700">
+                    <div class="bg-amber-50 p-3 rounded mb-4 border border-amber-200 text-sm font-bold flex flex-wrap justify-center gap-2 text-emerald-700 shadow-inner">
                         小心 | 爬山 | 只 | 放 | 记得
                     </div>
                     <div class="space-y-4 chinese-text text-lg">
@@ -168,34 +174,41 @@
                 </div>
 
                 <div class="mb-4">
-                    <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">3. 用本课新学的语言点和词语描述图片</h3>
+                    <h3 class="font-bold text-emerald-800 mb-3 bg-emerald-50 border border-emerald-200 p-2 rounded-lg">3. 用本课新学的语言点描述图片</h3>
                     <div class="space-y-4 chinese-text text-lg">
-                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
+                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg shadow-sm">
                             <p class="text-xs text-amber-600 font-bold mb-1">Hình 1</p>
-                            <p>B: 桌子上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none"> 那么多好吃的。</p>
-                            <p>A: 水果 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none"> 面包都会好。</p>
+                            <p>B: 桌子上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none" placeholder="..."> 那么多好吃的。</p>
+                            <p>A: 水果 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none" placeholder="..."> 面包都会好。</p>
                         </div>
-                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
+                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg shadow-sm">
                             <p class="text-xs text-amber-600 font-bold mb-1">Hình 2</p>
-                            <p>B: 我不 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none"> 了。你看。</p>
-                            <p>A: 机票上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none"> 12月4号。</p>
-                        </div>
-                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
-                            <p class="text-xs text-amber-600 font-bold mb-1">Hình 3</p>
-                            <p>A: 红的 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-20 text-center outline-none"> 黑的？</p>
-                            <p>B: 电脑旁边 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-20 text-center outline-none"> ，是你的吗？</p>
-                        </div>
-                        <div class="bg-white p-4 border-2 border-dashed border-amber-200 rounded-lg">
-                            <p class="text-xs text-amber-600 font-bold mb-1">Hình 4</p>
-                            <p>A: 你家楼上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-20 text-center outline-none"> 很多人吗？</p>
-                            <p>B: 他们是大学生 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-20 text-center outline-none"> 中学生？</p>
+                            <p>B: 我不 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none" placeholder="..."> 了。你看。</p>
+                            <p>A: 机票上 <input type="text" class="ex-input border-b-2 border-amber-500 bg-amber-50 w-24 text-center outline-none" placeholder="..."> 12月4号。</p>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="submitExercise(this)" class="btn-ghibli w-full bg-amber-600 text-white py-3 uppercase mt-6 mb-4">📤 Nộp bài & Copy bài làm</button>
-                <div id="exercise-feedback" class="mt-4 hidden text-center font-bold text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200"></div>
+                <button onclick="submitExercise(this)" class="btn-ghibli w-full bg-amber-600 text-white py-3 uppercase mt-6 mb-4 shadow-lg">📤 Nộp bài & Copy kết quả</button>
+                <div id="exercise-feedback" class="mt-4 hidden text-center font-bold text-emerald-700 bg-emerald-50 p-4 rounded-xl border border-emerald-200"></div>
             </div>
+        </div>
+
+        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
+             <div class="flex justify-start mb-4">
+                <button onclick="returnToStart()" class="nav-btn border-amber-400 text-amber-600 hover:bg-amber-50">📋 Menu</button>
+             </div>
+             <h2 class="text-2xl font-bold text-amber-900 mb-6">Kết quả ôn tập</h2>
+             <div class="flex justify-around items-center mb-8">
+                <div class="circle-stat stat-green shadow-sm"><span id="stat-learned-percent" class="text-xl font-bold">0%</span><span class="text-[10px] font-bold">THUỘC</span></div>
+                <div class="circle-stat stat-red shadow-sm"><span id="stat-unlearned-percent" class="text-xl font-bold">0%</span><span class="text-[10px] font-bold">CẦN ÔN</span></div>
+             </div>
+             <div class="text-left mb-6">
+                <p class="font-bold text-amber-900 mb-2">Từ cần học lại:</p>
+                <div id="unlearned-list" class="max-h-40 overflow-y-auto custom-scroll bg-amber-50 rounded-xl p-3 space-y-2 border border-amber-200"></div>
+             </div>
+             <button id="btn-relearn" onclick="relearnUnlearned()" class="btn-ghibli w-full bg-amber-500 text-white border-amber-700 mb-2 hidden">🔄 Học lại từ chưa thuộc</button>
+             <button onclick="returnToStart()" class="btn-ghibli w-full">Về Menu chính</button>
         </div>
     </div>
 
@@ -267,17 +280,20 @@ p3: {
             }
         };
 
-        // Biến lưu trữ điểm số game ngữ pháp
+        // Biến trạng thái
         let quizScores = { p3: 0, p4: 0, p5: 0 };
         let currentIdx = 0; let activeQuiz = '';
         let learned = []; let unlearned = []; let currentList = [];
         let completed = { p3: false, p4: false, p5: false };
 
+        // Điều hướng màn hình
         function showScreen(id) {
             document.querySelectorAll('#game-container > div').forEach(d => d.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
+        function returnToStart() { showScreen('start-screen'); }
 
+        // Logic Flashcards
         function startFlashcards(list) {
             currentList = list; currentIdx = 0; learned = []; unlearned = [];
             document.getElementById('card-total').innerText = currentList.length;
@@ -296,11 +312,8 @@ p3: {
         }
         function flipCard() { document.getElementById('audio-flip').play(); document.getElementById('flashcard-inner').classList.toggle('is-flipped'); }
         function markCard(isLearned) {
-            if (isLearned) learned.push(currentList[currentIdx]);
-            else unlearned.push(currentList[currentIdx]);
-            currentIdx++;
-            if (currentIdx < currentList.length) showFlashcard();
-            else showStats();
+            if (isLearned) learned.push(currentList[currentIdx]); else unlearned.push(currentList[currentIdx]);
+            currentIdx++; if (currentIdx < currentList.length) showFlashcard(); else showStats();
         }
         function showStats() {
             showScreen('flashcard-stat-screen');
@@ -308,140 +321,101 @@ p3: {
             const lp = Math.round((learned.length / total) * 100);
             document.getElementById('stat-learned-percent').innerText = lp + "%";
             document.getElementById('stat-unlearned-percent').innerText = (100 - lp) + "%";
-            const listDiv = document.getElementById('unlearned-list');
-            listDiv.innerHTML = unlearned.map(c => `<div class="p-2 bg-white rounded shadow-sm flex justify-between text-sm border-l-4 border-rose-400"><span class="chinese-text font-bold text-amber-900">${c.h}</span><span class="text-amber-700">${c.m}</span></div>`).join('');
+            document.getElementById('unlearned-list').innerHTML = unlearned.map(c => `<div class="p-2 bg-white rounded shadow-sm flex justify-between text-sm border-l-4 border-rose-400"><span class="chinese-text font-bold text-amber-900">${c.h}</span><span class="text-amber-700">${c.m}</span></div>`).join('');
             document.getElementById('btn-relearn').classList.toggle('hidden', unlearned.length === 0);
         }
         function relearnUnlearned() { startFlashcards(unlearned); }
 
-        function startQuiz(type) { 
-            activeQuiz = type; 
-            currentIdx = 0; 
-            quizScores[type] = 0; // Reset điểm khi bắt đầu lại
-            showQuizStep(); 
-            showScreen('play-screen'); 
-        }
-
+        // Logic Ngữ pháp
+        function startQuiz(type) { activeQuiz = type; currentIdx = 0; quizScores[type] = 0; showQuizStep(); showScreen('play-screen'); }
         function showQuizStep() {
             const q = quizData[activeQuiz].questions[currentIdx];
-            const optionsContainer = document.getElementById('options-container');
-            const questionText = document.getElementById('question-text');
-            const feedback = document.getElementById('explanation-container');
             document.getElementById('quiz-part-name').innerText = quizData[activeQuiz].name;
             document.getElementById('quiz-idx-display').innerText = (currentIdx + 1) + "/" + quizData[activeQuiz].questions.length;
-            questionText.innerText = q.q;
-            optionsContainer.innerHTML = '';
-            feedback.classList.add('hidden');
+            document.getElementById('question-text').innerText = q.q;
+            const container = document.getElementById('options-container');
+            container.innerHTML = ''; document.getElementById('explanation-container').classList.add('hidden');
+            
             if (q.type === "sort") {
-                optionsContainer.innerHTML = `<div id="answer-zone" class="min-h-[60px] p-3 border-2 border-dashed border-amber-400 rounded-xl mb-2 flex flex-wrap gap-2 bg-amber-50/50"></div><div id="word-bank" class="flex flex-wrap gap-2 justify-center mb-4"></div><button onclick="checkSortAnswer()" class="btn-ghibli w-full bg-amber-600 text-white shadow-md">Kiểm tra đáp án</button>`;
-                const wordBank = document.getElementById('word-bank');
+                container.innerHTML = `<div id="answer-zone" class="min-h-[60px] p-3 border-2 border-dashed border-amber-400 rounded-xl mb-2 flex flex-wrap gap-2 bg-amber-50/50 shadow-inner"></div><div id="word-bank" class="flex flex-wrap gap-2 justify-center mb-4"></div><button onclick="checkSortAnswer()" class="btn-ghibli w-full bg-amber-600 text-white shadow-md">Kiểm tra đáp án</button>`;
                 q.words.forEach(w => {
-                    const wordBtn = document.createElement('button');
-                    wordBtn.innerText = w;
-                    wordBtn.className = "px-4 py-2 bg-white border-2 border-amber-500 rounded-lg shadow-sm font-bold text-amber-900 active:scale-95";
-                    wordBtn.onclick = () => handleWordClick(wordBtn);
-                    wordBank.appendChild(wordBtn);
+                    const btn = document.createElement('button'); btn.innerText = w;
+                    btn.className = "px-4 py-2 bg-white border-2 border-amber-500 rounded-xl shadow-sm font-bold text-amber-900 active:scale-95";
+                    btn.onclick = () => {
+                        if (btn.parentElement.id === "word-bank") { document.getElementById('answer-zone').appendChild(btn); btn.classList.add('bg-amber-100'); }
+                        else { document.getElementById('word-bank').appendChild(btn); btn.classList.remove('bg-amber-100'); }
+                        document.getElementById('audio-flip').play();
+                    };
+                    document.getElementById('word-bank').appendChild(btn);
                 });
             } else {
-                optionsContainer.innerHTML = q.options.map((o, i) => `<button onclick="checkQuiz(${i})" class="btn-ghibli text-left px-6">${o}</button>`).join('');
+                container.innerHTML = q.options.map((o, i) => `<button onclick="checkQuiz(${i})" class="btn-ghibli text-left px-6 shadow-sm">${o}</button>`).join('');
             }
-        }
-        function handleWordClick(btn) {
-            const wordBank = document.getElementById('word-bank');
-            const answerZone = document.getElementById('answer-zone');
-            document.getElementById('audio-flip').play();
-            if (btn.parentElement.id === "word-bank") { answerZone.appendChild(btn); btn.classList.replace('bg-white', 'bg-amber-200'); }
-            else { wordBank.appendChild(btn); btn.classList.replace('bg-amber-200', 'bg-white'); }
-        }
-        function checkSortAnswer() {
-            const q = quizData[activeQuiz].questions[currentIdx];
-            const answerZone = document.getElementById('answer-zone');
-            const userAns = Array.from(answerZone.children).map(btn => btn.innerText.trim()).join('');
-            const isCorrect = userAns === q.correct.replace(/\s+/g, '');
-            if(isCorrect) quizScores[activeQuiz]++; // Cộng điểm ngữ pháp
-            showFeedback(isCorrect, q.exp);
         }
         function checkQuiz(i) {
             const q = quizData[activeQuiz].questions[currentIdx];
-            const isCorrect = i === q.correct;
-            if(isCorrect) quizScores[activeQuiz]++; // Cộng điểm ngữ pháp
-            showFeedback(isCorrect, q.exp);
+            const correct = (i === q.correct);
+            if(correct) quizScores[activeQuiz]++;
+            showFeedback(correct, q.exp);
             document.querySelectorAll('#options-container button').forEach(b => b.disabled = true);
+        }
+        function checkSortAnswer() {
+            const q = quizData[activeQuiz].questions[currentIdx];
+            const userAns = Array.from(document.getElementById('answer-zone').children).map(b => b.innerText.trim()).join('');
+            const correct = userAns === q.correct.replace(/\s+/g, '');
+            if(correct) quizScores[activeQuiz]++;
+            showFeedback(correct, q.exp);
         }
         function showFeedback(isCorrect, expText) {
             const fb = document.getElementById('explanation-container'); fb.classList.remove('hidden');
-            document.getElementById('feedback-title').innerText = isCorrect ? "Đúng rồi! ✅" : "Chưa đúng! ❌";
+            document.getElementById('feedback-title').innerText = isCorrect ? "Đúng rồi! 🌟" : "Chưa đúng rồi! ☘️";
+            document.getElementById('feedback-title').className = isCorrect ? "font-bold text-emerald-600" : "font-bold text-rose-600";
             document.getElementById('explanation-text').innerText = expText;
-            if(isCorrect) document.getElementById('audio-correct').play(); else document.getElementById('audio-wrong').play();
+            document.getElementById(isCorrect ? 'audio-correct' : 'audio-wrong').play();
         }
-        function showNextQuestion() { 
-            currentIdx++; 
-            if(currentIdx < quizData[activeQuiz].questions.length) showQuizStep(); 
-            else { completed[activeQuiz] = true; document.getElementById(`check-${activeQuiz}`).classList.remove('hidden'); unlock(); returnToStart(); } 
+        function showNextQuestion() {
+            currentIdx++;
+            if(currentIdx < quizData[activeQuiz].questions.length) showQuizStep();
+            else { 
+                completed[activeQuiz] = true; 
+                document.getElementById(`check-${activeQuiz}`).classList.remove('hidden'); 
+                unlockExercise(); returnToStart(); 
+            }
         }
-        function unlock() { 
-            if(completed.p3 && completed.p4 && completed.p5) { 
-                const b = document.getElementById('btn-comprehensive'); b.disabled = false; b.style.backgroundColor = "#d4a373"; b.style.color = "#fff"; b.innerText = "🌟 Bài Tập Tổng Hợp"; 
-            } 
+        function unlockExercise() {
+            if(completed.p3 && completed.p4 && completed.p5) {
+                const b = document.getElementById('btn-comprehensive');
+                b.disabled = false; b.classList.remove('opacity-50');
+                b.style.backgroundColor = "#d4a373"; b.style.color = "#fff"; b.innerText = "🌟 Bài Tập Tổng Hợp";
+            }
         }
         function showExercise() { showScreen('exercise-screen'); }
-        function returnToStart() { showScreen('start-screen'); }
 
-        // --- HÀM NỘP BÀI HOÀN THIỆN ---
+        // Logic Nộp bài
         function submitExercise(btn) {
             const selects = document.querySelectorAll('.ex-select');
             const inputs = document.querySelectorAll('.ex-input');
-            
-            // Hàm định dạng: (  đáp án  )
-            const formatAns = (el) => {
-                const val = el && el.value.trim() !== "" ? el.value.trim() : "___";
-                return `(  ${val}  )`; 
-            };
+            const formatAns = (el) => (el && el.value.trim() !== "") ? `( ${el.value.trim()} )` : "( ___ )";
 
-            let res = "KẾT QUẢ BÀI LÀM HSK3 - BÀI 3\n";
+            let res = "KẾT QUẢ HSK3 BÀI 3 - " + new Date().toLocaleDateString('vi-VN') + "\n";
             res += "---------------------------------\n\n";
-
-            // PHẦN MỚI: TỔNG HỢP KẾT QUẢ NGỮ PHÁP
-            res += "📊 KẾT QUẢ CÁC TRÒ CHƠI NGỮ PHÁP:\n";
-            res += `1. ✨ 还是 / 或者: ${quizScores.p3}/${quizData.p3.questions.length} câu đúng\n`;
-            res += `2. ❄️ Sự tồn tại (V+着): ${quizScores.p4}/${quizData.p4.questions.length} câu đúng\n`;
-            res += `3. 🔗 Khả năng với “会”: ${quizScores.p5}/${quizData.p5.questions.length} câu đúng\n`;
-            res += "---------------------------------\n\n";
+            res += "📊 ĐIỂM NGỮ PHÁP:\n";
+            res += `1. 还是/或者: ${quizScores.p3}/${quizData.p3.questions.length}\n`;
+            res += `2. V+着: ${quizScores.p4}/${quizData.p4.questions.length}\n`;
+            res += `3. 会 (Khả năng): ${quizScores.p5}/${quizData.p5.questions.length}\n\n`;
             
-            res += "📝 CHI TIẾT BÀI TẬP ĐIỀN TỪ:\n\n";
-            res += "Phần 2: Chọn từ điền vào chỗ trống\n";
-            res += `(1) 你想喝点儿什么？茶 ${formatAns(selects[0])} 咖啡？\n`;
-            res += `(2) 这条 ${formatAns(selects[1])} 一点儿也不贵，买吧。\n`;
-            res += `(3) 我每个周末都在家看电视 ${formatAns(selects[2])} 听音乐，不工作。\n`;
-            res += `(4) 你穿昨天新买的那件 ${formatAns(selects[3])} 吧。\n`;
-            res += `(5) 我不喜欢南方，太热了，不 ${formatAns(selects[4])} 。\n\n`;
-            
-            res += `(6) A: 我们看过这个电影，你 ${formatAns(selects[5])} 是什么时候吗？\n`;
-            res += `(7) A: 你跟我一起出去走走吧。 B: 我现在 ${formatAns(selects[6])} 想睡觉。\n`;
-            res += `(8) A: 饭菜做好了吗？ B: 做好了，已经 ${formatAns(selects[7])} 饭桌上了。\n`;
-            res += `(9) A: 您慢走，路上 ${formatAns(selects[8])} 点儿。\n`;
-            res += `(10) A: 上个周末你去哪儿了？ B: 我跟朋友去 ${formatAns(selects[9])} 了。\n\n`;
-            
-            res += "Phần 3: Mô tả hình ảnh\n";
-            res += `Hình 1:\n- B: 桌子上 ${formatAns(inputs[0])} 那么多好吃的。\n- A: 水果 ${formatAns(inputs[1])} 面包都会好。\n\n`;
-            res += `Hình 2:\n- B: 我不 ${formatAns(inputs[2])} 了。你看。\n- A: 机票上 ${formatAns(inputs[3])} 12月4号。\n\n`;
-            res += `Hình 3:\n- A: 红的 ${formatAns(inputs[4])} 黑的？\n- B: 电脑旁边 ${formatAns(inputs[5])} ，是你的吗？\n\n`;
-            res += `Hình 4:\n- A: 你家楼上 ${formatAns(inputs[6])} 很多人吗？\n- B: 他们是大学生 ${formatAns(inputs[7])} 中学生？\n`;
+            res += "📝 CHI TIẾT ĐIỀN TỪ:\n";
+            res += `(1-5): ${formatAns(selects[0])}, ${formatAns(selects[1])}, ${formatAns(selects[2])}, ${formatAns(selects[3])}, ${formatAns(selects[4])}\n`;
+            res += `(6-10): ${formatAns(selects[5])}, ${formatAns(selects[6])}, ${formatAns(selects[7])}, ${formatAns(selects[8])}, ${formatAns(selects[9])}\n\n`;
+            res += "🖼️ MÔ TẢ HÌNH:\n";
+            res += `H1: ${formatAns(inputs[0])} / ${formatAns(inputs[1])}\n`;
+            res += `H2: ${formatAns(inputs[2])} / ${formatAns(inputs[3])}\n`;
 
             navigator.clipboard.writeText(res).then(() => {
-                const feedback = document.getElementById('exercise-feedback');
-                if (feedback) {
-                    feedback.innerHTML = `<p class="font-bold">✅ Đã nộp bài & Copy thành công!</p><p class="text-xs text-gray-500">Hãy dán (Ctrl+V) toàn bộ báo cáo vào tin nhắn gửi giáo viên.</p>`;
-                    feedback.classList.remove('hidden');
-                }
-                
-                if (btn) {
-                    btn.innerHTML = "ĐÃ COPY TOÀN BỘ KẾT QUẢ!";
-                    btn.classList.remove('bg-amber-600');
-                    btn.classList.add('bg-emerald-600');
-                }
-            }).catch(err => {
-                alert("Có lỗi khi copy: " + err);
+                const fb = document.getElementById('exercise-feedback');
+                fb.innerHTML = `<p>✅ Đã nộp bài & Copy thành công!</p><p class='text-xs font-normal mt-1 text-gray-500'>Hãy gửi nội dung đã copy cho giáo viên của bạn.</p>`;
+                fb.classList.remove('hidden');
+                btn.innerText = "ĐÃ COPY KẾT QUẢ!"; btn.classList.replace('bg-amber-600', 'bg-emerald-600');
             });
         }
     </script>
