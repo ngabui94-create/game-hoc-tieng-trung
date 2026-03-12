@@ -64,25 +64,40 @@
         .sub-tab-btn { padding: 6px 15px; border-radius: 15px; border: 1px solid var(--ghibli-green); background: rgba(255,255,255,0.8); color: var(--ghibli-dark-green); font-size: 0.85rem; cursor: pointer; transition: 0.2s; font-family: inherit; }
         .sub-tab-btn.active { background: var(--ghibli-leaf); color: white; }
 
-        /* --- SEARCH & GRID --- */
+        /* --- SEARCH & GRID (Ô GAME ĐÃ ĐƯỢC PHÓNG TO) --- */
         .search-wrapper { position: relative; width: 85%; max-width: 320px; margin: 0 auto 20px; z-index: 20; }
         #gameSearch { width: 100%; padding: 8px 15px 8px 40px; border-radius: 20px; border: 2px solid var(--ghibli-green); outline: none; box-sizing: border-box; font-family: 'Quicksand'; }
         .koala-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 20px; }
 
-        .container { display: none; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 1100px; width: 94%; padding-bottom: 30px; z-index: 10; }
+        .container { display: none; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1100px; width: 94%; padding-bottom: 30px; z-index: 10; }
         .container.active { display: grid; }
-        @media (min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 15px; } }
         
-        .game-card { background: white; border-radius: 18px; padding: 12px; text-align: center; transition: 0.3s; text-decoration: none; color: inherit; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 12px rgba(0,0,0,0.05); border: 2px solid transparent; }
+        /* Điều chỉnh ô game to hơn trên máy tính */
+        @media (min-width: 768px) { 
+            .container { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } 
+            .game-card { padding: 25px 15px !important; }
+            .game-icon { font-size: 40px !important; }
+            .game-title { font-size: 0.9rem !important; }
+        }
+        
+        .game-card { background: white; border-radius: 18px; padding: 18px 10px; text-align: center; transition: 0.3s; text-decoration: none; color: inherit; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 12px rgba(0,0,0,0.05); border: 2px solid transparent; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--ghibli-leaf); background-color: #f9fff6; }
-        .game-icon { font-size: 28px; margin-bottom: 5px; }
-        .game-title { font-weight: 600; font-size: 0.75rem; color: var(--ghibli-wood); text-transform: uppercase; }
-        .new-badge { position: absolute; top: 6px; right: -25px; background: #ff6b6b; color: white; font-size: 0.5rem; padding: 2px 25px; transform: rotate(45deg); font-weight: bold; }
+        .game-icon { font-size: 35px; margin-bottom: 8px; }
+        .game-title { font-weight: 600; font-size: 0.8rem; color: var(--ghibli-wood); text-transform: uppercase; line-height: 1.2; }
+        .new-badge { position: absolute; top: 8px; right: -25px; background: #ff6b6b; color: white; font-size: 0.55rem; padding: 2px 25px; transform: rotate(45deg); font-weight: bold; }
 
+        /* --- TÀI LIỆU (NÚT DOWNLOAD MÀU XANH) --- */
         .doc-list { display: none; width: 92%; max-width: 800px; flex-direction: column; gap: 12px; z-index: 10; margin-bottom: 30px;}
         .doc-list.active { display: flex; }
-        .doc-card { background: white; padding: 15px; border-radius: 15px; border-left: 6px solid var(--ghibli-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .btn-download { background: var(--ghibli-wood); color: white; text-decoration: none; padding: 8px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        .doc-card { background: white; padding: 18px; border-radius: 15px; border-left: 6px solid var(--ghibli-green); box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .doc-info { flex: 1; min-width: 250px; }
+        .doc-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; color: var(--ghibli-dark-green); }
+        .doc-info p { margin: 0; font-size: 0.9rem; color: #666; line-height: 1.4; }
+        
+        /* Nút màu xanh dễ nhìn */
+        .btn-download { background: var(--ghibli-dark-green); color: white; text-decoration: none; padding: 10px 20px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 0 #2d4d28; }
+        .btn-download:hover { background: var(--ghibli-leaf); transform: translateY(-2px); }
+        .btn-download:active { transform: translateY(2px); box-shadow: none; }
 
         /* --- FOOTER --- */
         footer { margin-top: auto; width: 100%; background: rgba(255, 255, 255, 0.8); border-top: 2px solid var(--ghibli-green); padding: 12px; backdrop-filter: blur(10px); z-index: 10; box-sizing: border-box; }
@@ -192,38 +207,32 @@
         <button class="sub-tab-btn" onclick="filterSub('doc', 'doc-hsk6')">HSK 6</button>
         <button class="sub-tab-btn" onclick="filterSub('doc', 'doc-hsk30')" style="color: #ff6b6b; font-weight: bold;">HSK 3.0</button>
     </div>
-<div id="doc-hsk1" class="doc-list active">
-    <div class="doc-card">
-        <div class="doc-info">
-            <h3>Giáo trình chuẩn HSK 1 (Full bộ) 📚</h3>
-            <p>Trọn bộ tài liệu bao gồm Sách bài học (Coursebook), Sách bài tập (Workbook) và File nghe Audio. Đây là nền tảng quan trọng nhất để bạn bắt đầu chinh phục tiếng Trung một cách bài bản.</p>
+
+    <div id="doc-hsk1" class="doc-list active">
+        <div class="doc-card">
+            <div class="doc-info">
+                <h3>Giáo trình chuẩn HSK 1 (Full bộ) 📚</h3>
+                <p>Trọn bộ tài liệu bao gồm Sách bài học, Sách bài tập và File nghe Audio.</p>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1NsBSkqHFmWaBs3fFbnY0NS7N4qx9ziOz" target="_blank" class="btn-download">Tải về 📥</a>
         </div>
-        <a href="https://drive.google.com/drive/folders/1NsBSkqHFmWaBs3fFbnY0NS7N4qx9ziOz" target="_blank" class="btn-download">Tải về 📥</a>
+        <div class="doc-card">
+            <div class="doc-info">
+                <h3>Bảng 150 từ vựng HSK 1 📝</h3>
+                <p>Danh sách từ vựng kèm phiên âm, nghĩa tiếng Việt và ví dụ cụ thể.</p>
+            </div>
+            <a href="#" class="btn-download">Tải về 📥</a>
+        </div>
     </div>
 
-    <div class="doc-card">
-        <div class="doc-info">
-            <h3>Bảng 150 từ vựng HSK 1 📝</h3>
-            <p>Danh sách từ vựng kèm phiên âm, nghĩa tiếng Việt và ví dụ cụ thể giúp bạn ghi nhớ nhanh để đi thi.</p>
+    <div id="doc-hsk30" class="doc-list">
+        <div class="doc-card">
+            <div class="doc-info">
+                <h3>Giáo trình chuẩn HSK 3.0 - Quyển 1 (新HSK教程1) 🏆</h3>
+                <p>Hệ thống đánh giá năng lực 9 cấp mới nhất. Phát triển toàn diện 4 kỹ năng.</p>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1yjy6g10i9a0lBfKMFH3vlYuM0H-nXrTG?usp=drive_link" target="_blank" class="btn-download">Tải về 📥</a>
         </div>
-        <a href="#" class="btn-download">Tải về 📥</a>
-    </div>
-</div>
-<div id="doc-hsk30" class="doc-list">
-    <div class="doc-card">
-        <div class="doc-info">
-            <h3>Giáo trình chuẩn HSK 3.0 - Quyển 1 (新HSK教程1) 🏆</h3>
-            <p>
-                <b>Tổng quan:</b> Đây là bộ giáo trình mới nhất được biên soạn theo hệ thống đánh giá năng lực 9 cấp (HSK 3.0). 
-                Sách tập trung phát triển toàn diện 4 kỹ năng Nghe - Nói - Đọc - Viết ngay từ những bài đầu tiên.
-            </p>
-            <p style="font-size: 0.85rem; margin-top: 5px; color: #555;">
-                • <b>Nội dung:</b> Gồm các chủ đề giao tiếp căn bản, làm quen với hệ thống ngữ pháp và từ vựng mới.<br>
-                • <b>Số lượng bài:</b> Thiết kế khoa học giúp người mới bắt đầu dễ dàng tiếp cận.<br>
-                • <b>Kiến thức:</b> Cập nhật lượng từ vựng thực tế và các dạng bài tập theo format thi mới nhất.
-            </p>
-        </div>
-        <a href="https://drive.google.com/drive/folders/1yjy6g10i9a0lBfKMFH3vlYuM0H-nXrTG?usp=drive_link" target="_blank" class="btn-download">Tải về 📥</a>
     </div>
 </div>
 
@@ -266,7 +275,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Search
+        // Search logic
         const searchInput = document.getElementById('gameSearch');
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase().trim();
@@ -280,7 +289,7 @@
             }
         });
 
-        // Lá bay
+        // Falling leaves effect
         const container = document.getElementById('leaves-container');
         const leafIcons = ['🍃', '🍂', '🌿', '🌸', '✨'];
         for (let i = 0; i < 15; i++) {
