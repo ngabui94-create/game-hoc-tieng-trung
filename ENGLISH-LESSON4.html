@@ -35,15 +35,30 @@
 
         h1 { color: var(--ghibli-dark-green); font-size: 1.5rem; margin-bottom: 20px; }
 
+        /* Phần chỉnh tốc độ mới: 0.5x - 2.0x */
         .speed-control {
             margin-bottom: 15px;
-            background: rgba(157, 193, 131, 0.1);
-            padding: 10px;
-            border-radius: 15px;
+            background: rgba(157, 193, 131, 0.15);
+            padding: 12px 20px;
+            border-radius: 20px;
             display: inline-block;
+            border: 1px solid rgba(157, 193, 131, 0.3);
         }
-        .speed-control label { font-size: 0.85rem; color: var(--ghibli-dark-green); font-weight: 600; }
-        #speedRange { vertical-align: middle; cursor: pointer; accent-color: var(--ghibli-green); }
+        .speed-control label { font-size: 0.9rem; color: var(--ghibli-dark-green); font-weight: 600; margin-right: 10px; }
+        #speedRange { 
+            vertical-align: middle; 
+            cursor: pointer; 
+            accent-color: var(--ghibli-dark-green);
+            width: 150px;
+        }
+        #speedValue { 
+            display: inline-block;
+            min-width: 40px;
+            font-size: 0.9rem; 
+            font-weight: bold; 
+            color: var(--ghibli-wood);
+            margin-left: 10px;
+        }
 
         .audio-btn {
             background: var(--ghibli-green);
@@ -59,14 +74,14 @@
 
         .input-area { width: 100%; margin: 15px 0; }
 
-        input {
+        input[type="text"] {
             width: 90%; padding: 15px;
             border: 2px solid #ddd; border-radius: 15px;
             font-size: 1.1rem; font-family: inherit;
             text-align: center; outline: none; transition: 0.3s;
         }
 
-        input:focus { border-color: var(--ghibli-green); box-shadow: 0 0 10px rgba(157, 193, 131, 0.2); }
+        input[type="text"]:focus { border-color: var(--ghibli-green); box-shadow: 0 0 10px rgba(157, 193, 131, 0.2); }
 
         .feedback-container { min-height: 120px; margin: 10px 0; }
         .main-feedback { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
@@ -117,9 +132,9 @@
     <h1>English: Lesson 4 🎧</h1>
 
     <div class="speed-control">
-        <label>Tốc độ đọc: </label>
-        <input type="range" id="speedRange" min="0.5" max="1.2" step="0.1" value="0.8">
-        <span id="speedValue" style="font-size: 0.8rem; font-weight: bold;">0.8x</span>
+        <label>Tốc độ: </label>
+        <input type="range" id="speedRange" min="0.5" max="2.0" step="0.1" value="0.8">
+        <span id="speedValue">0.8x</span>
     </div>
     
     <button class="audio-btn" onclick="playAudio()">🔊</button>
@@ -188,6 +203,7 @@
 
     let currentIndex = 0;
 
+    // Cập nhật nhãn hiển thị tốc độ
     document.getElementById('speedRange').addEventListener('input', function() {
         document.getElementById('speedValue').innerText = this.value + 'x';
     });
@@ -197,7 +213,8 @@
         const msg = new SpeechSynthesisUtterance();
         msg.text = data[currentIndex].s;
         msg.lang = 'en-US';
-        msg.rate = document.getElementById('speedRange').value;
+        // Lấy tốc độ từ 0.5 đến 2.0
+        msg.rate = parseFloat(document.getElementById('speedRange').value);
         window.speechSynthesis.speak(msg);
     }
 
