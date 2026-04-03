@@ -37,16 +37,16 @@
 
         .audio-btn {
             background: var(--ghibli-green);
-            border: none; width: 80px; height: 80px;
+            border: none; width: 70px; height: 70px;
             border-radius: 50%; cursor: pointer;
-            font-size: 30px; color: white;
-            margin-bottom: 20px; transition: 0.3s;
+            font-size: 28px; color: white;
+            margin-bottom: 15px; transition: 0.3s;
             box-shadow: 0 5px 15px rgba(157, 193, 131, 0.4);
         }
 
         .audio-btn:hover { transform: scale(1.1); background: var(--ghibli-dark-green); }
 
-        .input-area { width: 100%; margin: 20px 0; }
+        .input-area { width: 100%; margin: 15px 0; }
 
         input {
             width: 90%; padding: 15px;
@@ -57,9 +57,20 @@
 
         input:focus { border-color: var(--ghibli-green); box-shadow: 0 0 10px rgba(157, 193, 131, 0.2); }
 
-        .feedback { height: 25px; margin: 10px 0; font-weight: 600; font-size: 0.9rem; }
+        .feedback-container { min-height: 100px; margin: 10px 0; }
+        .main-feedback { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
         .correct { color: #2ecc71; }
         .incorrect { color: #e74c3c; }
+
+        .detail-info { 
+            background: rgba(157, 193, 131, 0.15); 
+            padding: 10px; border-radius: 12px;
+            display: none; animation: fadeIn 0.5s;
+        }
+        .ipa { color: var(--ghibli-wood); font-style: italic; font-size: 1rem; margin: 4px 0; }
+        .translation { color: var(--ghibli-dark-green); font-weight: 600; font-size: 1rem; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .progress { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
 
@@ -72,21 +83,13 @@
 
         .btn-nav:hover { background: var(--ghibli-green); color: white; }
 
-        .back-home {
-            margin-top: 20px; text-decoration: none;
-            color: var(--ghibli-dark-green); font-size: 0.9rem; font-weight: bold;
-            display: block;
-        }
+        .back-home { margin-top: 20px; text-decoration: none; color: var(--ghibli-dark-green); font-size: 0.9rem; font-weight: bold; display: block; }
         
-        .hint-text { color: #999; font-style: italic; font-size: 0.8rem; margin-top: 10px; }
-
         #congrats-overlay {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95); border-radius: 22px;
+            background: rgba(255, 255, 255, 0.98); border-radius: 22px;
             flex-direction: column; align-items: center; justify-content: center; z-index: 100;
         }
-        #congrats-overlay h2 { color: var(--ghibli-dark-green); margin-bottom: 10px; }
-        #congrats-overlay p { color: var(--ghibli-wood); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -101,88 +104,123 @@
     <div class="progress" id="progress">Câu 1 / 36</div>
     <h1>English: Lesson 1 🎧</h1>
     
-    <button class="audio-btn" id="mainAudioBtn" onclick="playAudio()" title="Nghe câu hỏi">🔊</button>
+    <button class="audio-btn" onclick="playAudio()">🔊</button>
     
     <div class="input-area">
-        <input type="text" id="userInput" placeholder="Nhấn Enter để kiểm tra hoặc qua câu..." autocomplete="off">
+        <input type="text" id="userInput" placeholder="Nghe và gõ lại..." autocomplete="off">
     </div>
 
-    <div id="feedback" class="feedback"></div>
+    <div class="feedback-container">
+        <div id="mainFeedback" class="main-feedback"></div>
+        <div id="detailInfo" class="detail-info">
+            <div id="displayScript" style="font-weight: bold;"></div>
+            <div id="displayIpa" class="ipa"></div>
+            <div id="displayTrans" class="translation"></div>
+        </div>
+    </div>
     
     <div class="controls">
         <button class="btn-nav" onclick="checkAnswer()">Kiểm tra</button>
-        <button class="btn-nav" onclick="showHint()">Xem gợi ý</button>
+        <button class="btn-nav" onclick="showHint()">Gợi ý</button>
         <button class="btn-nav" onclick="nextQuestion()" id="nextBtn" style="display:none;">Câu tiếp theo ➔</button>
     </div>
-
-    <p class="hint-text">Mẹo: Nhấn Enter để sang câu mới và nghe tự động!</p>
 
     <a href="index.html" class="back-home">🌿 Quay về trang chủ</a>
 </div>
 
 <script>
-    const sentences = [
-        "I am a student.", "You are not a teacher.", "We are happy.", "They are not sad.",
-        "She is a woman.", "He is not tall.", "It is a dog.", "He is my father.",
-        "It is not your book.", "She is our teacher.", "They are not their oranges.",
-        "Her cat is small.", "His car is not big.", "This is my cat, its nose is pink.",
-        "The man is tall.", "I am not a woman.", "He is my father.", "She is not my mother.",
-        "She is a teacher.", "I am not a student.", "He is my brother.", "She is not my sister.",
-        "It is a baby.", "He is not a child.", "It is a dog.", "My cat is not big.",
-        "It is my book.", "His car is not small.", "It is an orange.", "It is not an apple.",
-        "He is tall.", "She is not short.", "His car is big.", "Her cat is not small.",
-        "They are happy.", "They are not sad."
+    const data = [
+        { s: "I am a student.", p: "/aɪ æm ə ˈstjuːdnt/", t: "Tôi là học sinh" },
+        { s: "You are not a teacher.", p: "/juː ɑː nɒt ə ˈtiːtʃə/", t: "Bạn không phải giáo viên" },
+        { s: "We are happy.", p: "/wiː ɑː ˈhæpi/", t: "Chúng tôi vui" },
+        { s: "They are not sad.", p: "/ðeɪ ɑː nɒt sæd/", t: "Họ không buồn" },
+        { s: "She is a woman.", p: "/ʃiː ɪz ə ˈwʊmən/", t: "Cô ấy là phụ nữ" },
+        { s: "He is not tall.", p: "/hiː ɪz nɒt tɔːl/", t: "Anh ấy không cao" },
+        { s: "It is a dog.", p: "/ɪt ɪz ə dɒɡ/", t: "Nó là con chó" },
+        { s: "He is my father.", p: "/hiː ɪz maɪ ˈfɑːðə/", t: "Ông ấy là bố tôi" },
+        { s: "It is not your book.", p: "/ɪt ɪz nɒt jɔː bʊk/", t: "Nó không phải sách bạn" },
+        { s: "She is our teacher.", p: "/ʃiː ɪz aʊə ˈtiːtʃə/", t: "Cô ấy là giáo viên của chúng tôi" },
+        { s: "They are not their oranges.", p: "/ðeɪ ɑː nɒt ðeə ˈɒrɪndʒɪz/", t: "Đây không phải cam của họ" },
+        { s: "Her cat is small.", p: "/hɜː kæt ɪz smɔːl/", t: "Mèo của cô ấy nhỏ" },
+        { s: "His car is not big.", p: "/hɪz kɑː ɪz nɒt bɪɡ/", t: "Xe anh ấy không to" },
+        { s: "This is my cat, its nose is pink.", p: "/ðɪs ɪz maɪ kæt ɪts noʊz ɪz pɪŋk/", t: "Đây là con mèo của tôi, mũi nó màu hồng" },
+        { s: "The man is tall.", p: "/ðə mæn ɪz tɔːl/", t: "Người đàn ông cao" },
+        { s: "I am not a woman.", p: "/aɪ æm nɒt ə ˈwʊmən/", t: "Tôi không phải phụ nữ" },
+        { s: "He is my father.", p: "/hiː ɪz maɪ ˈfɑːðə/", t: "Ông ấy là bố tôi" },
+        { s: "She is not my mother.", p: "/ʃiː ɪz nɒt maɪ ˈmʌðə/", t: "Bà ấy không phải mẹ tôi" },
+        { s: "She is a teacher.", p: "/ʃiː ɪz ə ˈtiːtʃə/", t: "Cô ấy là giáo viên" },
+        { s: "I am not a student.", p: "/aɪ æm nɒt ə ˈstjuːdnt/", t: "Tôi không phải học sinh" },
+        { s: "He is my brother.", p: "/hiː ɪz maɪ ˈbrʌðə/", t: "Anh ấy là anh tôi" },
+        { s: "She is not my sister.", p: "/ʃiː ɪz nɒt maɪ ˈsɪstə/", t: "Cô ấy không phải chị tôi" },
+        { s: "It is a baby.", p: "/ɪt ɪz ə ˈbeɪbi/", t: "Nó là em bé" },
+        { s: "He is not a child.", p: "/hiː ɪz nɒt ə tʃaɪld/", t: "Nó không phải trẻ con" },
+        { s: "It is a dog.", p: "/ɪt ɪz ə dɒɡ/", t: "Nó là chó" },
+        { s: "My cat is not big.", p: "/maɪ kæt ɪz nɒt bɪɡ/", t: "Mèo tôi không to" },
+        { s: "It is my book.", p: "/ɪt ɪz maɪ bʊk/", t: "Đó là sách tôi" },
+        { s: "His car is not small.", p: "/hɪz kɑː ɪz nɒt smɔːl/", t: "Xe anh ấy không nhỏ" },
+        { s: "It is an orange.", p: "/ɪt ɪz ən ˈɒrɪndʒ/", t: "Đó là quả cam" },
+        { s: "It is not an apple.", p: "/ɪt ɪz nɒt ən ˈæpl/", t: "Đó không phải táo" },
+        { s: "He is tall.", p: "/hiː ɪz tɔːl/", t: "Anh ấy cao" },
+        { s: "She is not short.", p: "/ʃiː ɪz nɒt ʃɔːt/", t: "Cô ấy không thấp" },
+        { s: "His car is big.", p: "/hɪz kɑː ɪz bɪɡ/", t: "Xe anh ấy to" },
+        { s: "Her cat is not small.", p: "/hɜː kæt ɪz nɒt smɔːl/", t: "Mèo cô ấy không nhỏ" },
+        { s: "They are happy.", p: "/ðeɪ ɑː ˈhæpi/", t: "Họ vui" },
+        { s: "They are not sad.", p: "/ðeɪ ɑː nɒt sæd/", t: "Họ không buồn" }
     ];
 
     let currentIndex = 0;
 
     function playAudio() {
-        window.speechSynthesis.cancel(); 
+        window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance();
-        msg.text = sentences[currentIndex];
+        msg.text = data[currentIndex].s;
         msg.lang = 'en-US';
-        msg.rate = 0.85; 
+        msg.rate = 0.85;
         window.speechSynthesis.speak(msg);
     }
 
     function updateUI() {
-        document.getElementById('progress').innerText = `Câu ${currentIndex + 1} / ${sentences.length}`;
+        document.getElementById('progress').innerText = `Câu ${currentIndex + 1} / ${data.length}`;
         document.getElementById('userInput').value = "";
-        document.getElementById('feedback').innerText = "";
+        document.getElementById('mainFeedback').innerText = "";
+        document.getElementById('detailInfo').style.display = "none";
         document.getElementById('nextBtn').style.display = "none";
         document.getElementById('userInput').focus();
-        
-        // Tự động phát âm thanh khi sang câu mới
-        // Delay nhẹ 300ms để trình duyệt kịp xử lý sau khi chuyển câu
-        setTimeout(playAudio, 300);
+        setTimeout(playAudio, 400);
     }
 
     function checkAnswer() {
-        const userText = document.getElementById('userInput').value.trim().toLowerCase();
-        const correctText = sentences[currentIndex].toLowerCase().replace(/[.,!?;]/g, "").trim();
-        const userCleaned = userText.replace(/[.,!?;]/g, "").trim();
+        const userCleaned = document.getElementById('userInput').value.trim().toLowerCase().replace(/[.,!?;]/g, "");
+        const correctCleaned = data[currentIndex].s.toLowerCase().replace(/[.,!?;]/g, "");
         
-        const feedbackEl = document.getElementById('feedback');
+        const mainFeedback = document.getElementById('mainFeedback');
+        const detailInfo = document.getElementById('detailInfo');
         
-        if (userCleaned === correctText) {
-            feedbackEl.innerText = "Chính xác! ✨";
-            feedbackEl.className = "feedback correct";
+        if (userCleaned === correctCleaned) {
+            mainFeedback.innerText = "Chính xác! ✨";
+            mainFeedback.className = "main-feedback correct";
+            
+            // Hiển thị thêm chi tiết
+            document.getElementById('displayScript').innerText = data[currentIndex].s;
+            document.getElementById('displayIpa').innerText = data[currentIndex].p;
+            document.getElementById('displayTrans').innerText = "→ " + data[currentIndex].t;
+            detailInfo.style.display = "block";
+            
             document.getElementById('nextBtn').style.display = "inline-block";
         } else {
-            feedbackEl.innerText = "Chưa đúng rồi, hãy nghe lại nhé!";
-            feedbackEl.className = "feedback incorrect";
-            playAudio(); // Tự động đọc lại nếu sai để người dùng nhận diện lỗi
+            mainFeedback.innerText = "Chưa đúng rồi, hãy nghe lại!";
+            mainFeedback.className = "main-feedback incorrect";
+            playAudio();
         }
     }
 
     function showHint() {
-        const hint = sentences[currentIndex];
-        document.getElementById('feedback').innerText = "Gợi ý: " + hint;
-        document.getElementById('feedback').className = "feedback";
+        document.getElementById('mainFeedback').innerText = "Gợi ý: " + data[currentIndex].s;
+        document.getElementById('mainFeedback').className = "main-feedback";
     }
 
     function nextQuestion() {
-        if (currentIndex < sentences.length - 1) {
+        if (currentIndex < data.length - 1) {
             currentIndex++;
             updateUI();
         } else {
@@ -190,7 +228,7 @@
         }
     }
 
-    document.getElementById('userInput').addEventListener('keypress', function (e) {
+    document.getElementById('userInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             if (document.getElementById('nextBtn').style.display === "inline-block") {
                 nextQuestion();
@@ -200,13 +238,7 @@
         }
     });
 
-    // Khởi tạo bài học
-    window.onload = function() {
-        // Vì chính sách của trình duyệt (Chrome/Safari), âm thanh tự động chỉ chạy 
-        // sau khi người dùng click ít nhất 1 lần vào trang.
-        // Câu đầu tiên người dùng nên bấm loa, các câu sau sẽ tự động 100%.
-        updateUI();
-    };
+    window.onload = updateUI;
 </script>
 
 </body>
