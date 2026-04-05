@@ -300,20 +300,55 @@
         // DỮ LIỆU NGHE CHÉP TỪNG BÀI KHÓA (MỚI)
         // ==========================================
         // Dán link raw trên github vào phần audioSrc: "" của từng câu
-        const lessonsData = [
+const lessonsData = [
             {
                 id: 1,
                 title: "Bài khóa 1",
                 desc: "孙月和王静聊王静的男朋友",
                 completed: false,
                 sentences: [
-                    { audioSrc: "", h: "听说你男朋友李进跟你是一个学校的，是你同学吗？", p: "Tīngshuō nǐ nánpéngyou Lǐ Jìn gēn nǐ shì yí ge xuéxiào de, shì nǐ tóngxué ma?", vi: "Nghe nói bạn trai Lý Tiến của bạn học cùng trường với bạn, là bạn học của bạn à?" },
-                    { audioSrc: "", h: "是的，他学的是新闻，我学的是法律，我和他不是一个班。", p: "Shì de, tā xué de shì xīnwén, wǒ xué de shì fǎlǜ, wǒ hé tā bú shì yí ge bān.", vi: "Đúng vậy, anh ấy học báo chí, tôi học luật, tôi và anh ấy không cùng lớp." },
-                    { audioSrc: "", h: "那你们俩是怎么认识的？", p: "Nà nǐmen liǎ shì zěnme rènshi de?", vi: "Vậy hai bạn quen nhau thế nào?" },
-                    { audioSrc: "", h: "我们是在一次足球比赛中认识的。", p: "Wǒmen shì zài yí cì zúqiú bǐsài zhōng rènshi de.", vi: "Chúng tôi quen nhau trong một trận đấu bóng đá." },
-                    { audioSrc: "", h: "我们班跟他们班比赛，他一个人踢进两个球，我对他印象很深，后来就慢慢熟悉了。", p: "Wǒmen bān gēn tāmen bān bǐsài, tā yí ge rén tī jìn liǎng ge qiú, wǒ duì tā yìnxiàng hěn shēn, hòulái jiù mànmàn shúxī le.", vi: "Lớp tôi thi đấu với lớp anh ấy, một mình anh ấy đá vào hai quả, tôi có ấn tượng rất sâu về anh ấy, sau này dần dần quen thuộc." },
-                    { audioSrc: "", h: "你为什么喜欢他？", p: "Nǐ wèi shénme xǐhuan tā?", vi: "Tại sao bạn lại thích anh ấy?" },
-                    { audioSrc: "", h: "他不仅足球踢得好，性格也不错。", p: "Tā bùjǐn zúqiú tī de hǎo, xìnggé yě búcuò.", vi: "Anh ấy không chỉ đá bóng giỏi, tính cách cũng không tồi." }
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-1.mp3", 
+                        h: "听说你男朋友李进跟你是一个学校 de, 是你同学吗？", 
+                        p: "Tīngshuō nǐ nánpéngyou Lǐ Jìn gēn nǐ shì yí ge xuéxiào de, shì nǐ tóngxué ma?", 
+                        vi: "Nghe nói bạn trai Lý Tiến của bạn học cùng trường với bạn, là bạn học của bạn à?" 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-2.mp3", 
+                        h: "是的，他学 de shì 新闻，我学 de shì 法律，我和他不是一个班。", 
+                        p: "Shì de, tā xué de shì xīnwén, wǒ xué de shì fǎlǜ, wǒ hé tā bú shì yí ge bān.", 
+                        vi: "Đúng vậy, anh ấy học báo chí, tôi học luật, tôi và anh ấy không cùng lớp." 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-3.mp3", 
+                        h: "那你们俩是怎么认识 de?", 
+                        p: "Nà nǐmen liǎ shì zěnme rènshi de?", 
+                        vi: "Vậy hai bạn quen nhau thế nào?" 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-4.mp3", 
+                        h: "我们是在一次足球比赛中认识 de。", 
+                        p: "Wǒmen shì zài yí cì zúqiú bǐsài zhōng rènshi de.", 
+                        vi: "Chúng tôi quen nhau trong một trận đấu bóng đá." 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-5.mp3", 
+                        h: "我们班跟他们班比赛，他一个人踢进两个球，我对他印象很深，后来就慢慢熟悉 le。", 
+                        p: "Wǒmen bān gēn tāmen bān bǐsài, tā yí ge rén tī jìn liǎng ge qiú, wǒ duì tā yìnxiàng hěn shēn, hòulái jiù mànmàn shúxī le.", 
+                        vi: "Lớp tôi thi đấu với lớp anh ấy, một mình anh ấy đá vào hai quả, tôi có ấn tượng rất sâu về anh ấy, sau này dần dần quen thuộc." 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-6.mp3", 
+                        h: "你为什么喜欢他？", 
+                        p: "Nǐ wèi shénme xǐhuan tā?", 
+                        vi: "Tại sao bạn lại thích anh ấy?" 
+                    },
+                    { 
+                        audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-7.mp3", 
+                        h: "他不仅足球踢 de 好，性格也不错。", 
+                        p: "Tā bùjǐn zúqiú tī de hǎo, xìnggé yě búcuò.", 
+                        vi: "Anh ấy không chỉ đá bóng giỏi, tính cách cũng không tồi." 
+                    }
                 ]
             },
             {
