@@ -120,15 +120,15 @@
             
             <div class="grid grid-cols-1 gap-4">
                 <button onclick="startFlashcards(vocabulary)" class="btn-ghibli text-lg relative">
-                    🎴 Phần 1: Học Từ Vựng Thẻ <span id="check-flashcard" class="absolute right-4 hidden">✅</span>
+                    🎴 Phần 1: Thẻ Từ Vựng <span id="check-flashcard" class="absolute right-4 hidden">✅</span>
                 </button>
                 
                 <button onclick="openDictationMenu()" class="btn-ghibli text-lg relative" style="background-color: #fef3c7;">
-                    🎧 Phần 2: Nghe Chép Chính Tả <span id="check-dictation" class="absolute right-4 hidden">✅</span>
+                    🎧 Phần 2: Nghe Chép Bài Khóa <span id="check-dictation" class="absolute right-4 hidden">✅</span>
                 </button>
                 
                 <button id="btn-form" class="btn-ghibli text-lg mt-2 transition-all duration-500" style="background-color: #e5e7eb; border-color: #9ca3af; color: #6b7280;" disabled>
-                    🔒 Phần 3: Bài Tập Google Form
+                    🔒 Phần 3: Bài Tập Tổng Hợp
                 </button>
             </div>
         </div>
@@ -355,7 +355,7 @@
                     { h: "你是在开玩笑吧？你们不是才认识一个月？", p: "Nǐ shì zài kāi wánxiào ba? Nǐmen bú shì cái rènshi yí ge yuè?", vi: "Em đang đùa à? Các em không phải mới quen một tháng sao?" },
                     { h: "虽然我们认识的时间不长，但我从来没这么快乐过。", p: "Suīrán wǒmen rènshi de shíjiān bù cháng, dàn wǒ cónglái méi zhème kuàilè guò.", vi: "Mặc dù thời gian chúng em quen nhau không dài, nhưng em chưa từng vui vẻ như thế này bao giờ." },
                     { h: "两个人在一起，最好能有共同的兴趣和爱好。", p: "Liǎng ge rén zài yìqǐ, zuìhǎo néng yǒu gòngtóng de xìngqù hé àihào.", vi: "Hai người ở bên nhau, tốt nhất nên có sở thích và đam mê chung." },
-                    { h: " chúng tôi có nhiều sở thích chung, thường xuyên cùng nhau đánh bóng, ca hát, nấu ăn。", p: "Wǒmen yǒu hěn duō gòngtóng de àihào, jīngcháng yìqǐ dǎqiú, chànggē, zuòcài.", vi: "Chúng em có rất nhiều sở thích chung, thường xuyên cùng nhau đánh bóng, ca hát, nấu ăn." },
+                    { h: " 我们有很多共同的爱好，经常一起打球、唱歌、做菜。", p: "Wǒmen yǒu hěn duō gòngtóng de àihào, jīngcháng yìqǐ dǎqiú, chànggē, zuòcài.", vi: "Chúng em có rất nhiều sở thích chung, thường xuyên cùng nhau đánh bóng, ca hát, nấu ăn." },
                     { h: "看来你真的找到适合你的人了。祝你们幸福！", p: "Kànlái nǐ zhēnde zhǎodào shìhé nǐ de rén le. Zhù nǐmen xìngfú!", vi: "Xem ra em thật sự đã tìm được người phù hợp với mình rồi. Chúc các em hạnh phúc!" }
                 ]
             },
@@ -367,7 +367,7 @@
                     { h: "听说您跟妻子结婚快二十年了？", p: "Tīngshuō nín gēn qīzi jiéhūn kuài èrshí nián le?", vi: "Nghe nói thầy và vợ kết hôn sắp được hai mươi năm rồi?" },
                     { h: "到6月9号，我们就结婚二十年了。这么多年，我们的生活一直挺幸福的。", p: "Dào 6 yuè 9 hào, wǒmen jiù jiéhūn èrshí nián le. Zhème duō nián, wǒmen de shēnghuó yìzhí tǐng xìngfú de.", vi: "Đến mùng 9 tháng 6 là chúng tôi kết hôn được hai mươi năm rồi. Bao nhiêu năm nay, cuộc sống của chúng tôi luôn rất hạnh phúc." },
                     { h: "我和丈夫刚结婚的时候，每天都觉得很新鲜，在一起有说不完的话。但是现在……", p: "Wǒ hé zhàngfu gāng jiéhūn de shíhou, měitiān dōu juéde hěn xīnxiān, zài yìqǐ yǒu shuō bù wán de huà. Dànshì xiànzài...", vi: "Tôi và chồng lúc mới kết hôn, mỗi ngày đều cảm thấy rất mới mẻ, ở bên nhau có nói không hết chuyện. Nhưng bây giờ..." },
-                    { h: "两个人共同生活，只有浪漫 và tươi mới cảm là không đủ.", p: "Liǎng ge rén gòngtóng shēnghuó, zhǐyǒu làngmàn hé xīnxiān gǎn shì bú gòu de.", vi: "Hai người chung sống, chỉ có sự lãng mạn và mới mẻ là không đủ." },
+                    { h: "两个人共同生活，只有浪漫和新鲜感是不够的。", p: "Liǎng ge rén gòngtóng shēnghuó, zhǐyǒu làngmàn hé xīnxiān gǎn shì bú gòu de.", vi: "Hai người chung sống, chỉ có sự lãng mạn và mới mẻ là không đủ." },
                     { h: "您说得对！我现在每天看到的都是他的缺点。", p: "Nín shuō de duì! Wǒ xiànzài měitiān kàndào de dōu shì tā de quēdiǎn.", vi: "Thầy nói đúng! Bây giờ mỗi ngày tôi nhìn thấy đều là khuyết điểm của anh ấy." },
                     { h: "两个人在一起时间长了，就会有很多问题。只有接受了他的缺点，你们才能更好地一起生活。", p: "Liǎng ge rén zài yìqǐ shíjiān cháng le, jiù huì yǒu hěn duō wèntí. Zhǐyǒu jiēshòu le tā de quēdiǎn, nǐmen cái néng gèng hǎo de yìqǐ shēnghuó.", vi: "Hai người ở bên nhau thời gian dài rồi, sẽ có rất nhiều vấn đề. Chỉ có chấp nhận khuyết điểm của đối phương, các bạn mới có thể chung sống tốt hơn." }
                 ]
@@ -389,10 +389,11 @@
                 audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson1/01-5.mp3",
                 completed: false,
                 sentences: [
-                    { h: "说到结婚，人们就会很自然地想起爱情。爱情是结婚的重要原因，但两个人共同生活，不仅需要浪漫的爱情，更需要性格上互相吸引。", p: "Shuōdào jiéhūn, rénmen jiù huì hěn zìrán de xiǎngqǐ àiqíng. Àiqíng shì jiéhūn de zhòngyào yuányīn, dàn liǎng ge rén gòngtóng shēnghuó, bùjǐn xūyào làngmàn de àiqíng, gèng xūyào xìnggé shàng hùxiāng xīyǐn.", vi: "Nhắc đến kết hôn, mọi người sẽ rất tự nhiên nghĩ đến tình yêu. Tình yêu là nguyên nhân kết hôn quan trọng, nhưng hai người cùng chung sống, không chỉ cần tình yêu lãng mạn, càng cần sự thu hút lẫn nhau về tính cách." },
+                    { h: "说到结婚，人们就会很自然地想起爱情。", p: "Shuōdào jiéhūn, rénmen jiù huì hěn zìrán de xiǎngqǐ àiqíng. ", vi: "Nhắc đến kết hôn, mọi người sẽ rất tự nhiên nghĩ đến tình yêu. " },
+                    { h: "爱情是结婚的重要原因，但两个人共同生活，不仅需要浪漫的爱情，更需要性格上互相吸引。", p: "Àiqíng shì jiéhūn de zhòngyào yuányīn, dàn liǎng ge rén gòngtóng shēnghuó, bùjǐn xūyào làngmàn de àiqíng, gèng xūyào xìnggé shàng hùxiāng xīyǐn.", vi: "Tình yêu là nguyên nhân kết hôn quan trọng, nhưng hai người cùng chung sống, không chỉ cần tình yêu lãng mạn, càng cần sự thu hút lẫn nhau về tính cách." },
                     { h: "我丈夫是一个很幽默的人。即使是很普通的事情，从他嘴里说出来也会变得很有意思。", p: "Wǒ zhàngfu shì yí ge hěn yōumò de rén. Jíshǐ shì hěn pǔtōng de shìqing, cóng tā zuǐ lǐ shuō chūlái yě huì biànde hěn yǒu yìsi.", vi: "Chồng tôi là một người rất hài hước. Dù là chuyện rất bình thường, từ miệng anh ấy nói ra cũng sẽ trở nên rất thú vị." },
                     { h: "在我难过的时候，他总是有办法让我高兴起来。", p: "Zài wǒ nánguò de shíhou, tā zǒngshì yǒu bànfǎ ràng wǒ gāoxìng qǐlái.", vi: "Lúc tôi buồn bã, anh ấy luôn có cách làm tôi vui lên." },
-                    { h: "而且他的脾气也不错，结婚十年了，我们俩几乎没因为什么事红过脸，很多人都特别羡慕 chúng tôi.", p: "Érqiě tā de píqi yě búcuò, jiéhūn shí nián le, wǒmen liǎ jīhū méi yīnwèi shénme shì hóng guò liǎn, hěn duō rén dōu tèbié xiànmù wǒmen.", vi: "Hơn nữa tính khí anh ấy cũng không tồi, kết hôn mười năm rồi, hai người chúng tôi hầu như chưa từng đỏ mặt vì chuyện gì, rất nhiều người đều đặc biệt ngưỡng mộ chúng tôi." }
+                    { h: "而且他的脾气也不错，结婚十年了，我们俩几乎没因为什么事红过脸，很多人都特别羡慕我们。", p: "Érqiě tā de píqi yě búcuò, jiéhūn shí nián le, wǒmen liǎ jīhū méi yīnwèi shénme shì hóng guò liǎn, hěn duō rén dōu tèbié xiànmù wǒmen.", vi: "Hơn nữa tính khí anh ấy cũng không tồi, kết hôn mười năm rồi, hai người chúng tôi hầu như chưa từng đỏ mặt vì chuyện gì, rất nhiều người đều đặc biệt ngưỡng mộ chúng tôi." }
                 ]
             }
         ];
@@ -592,7 +593,7 @@
                 btn.disabled = false;
                 btn.className = "btn-ghibli text-lg mt-2 bg-emerald-100 border-emerald-500 text-emerald-800";
                 btn.innerHTML = '📝 Phần 3: Bài Tập Google Form (Đã mở khóa)';
-                btn.onclick = () => window.open('https://forms.google.com/', '_blank'); 
+                btn.onclick = () => window.open('https://forms.gle/KninNTAi99ZFSqASA', '_blank'); 
             }
         }
 
