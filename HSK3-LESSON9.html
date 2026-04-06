@@ -78,7 +78,7 @@
                 <button onclick="startQuiz('p5')" class="btn-ghibli text-lg" style="background-color: #e0f2fe;">⏱️ Phần 5: Ngữ pháp A跟B一样 <span id="check-p5" class="hidden">✅</span></button>
                 <button onclick="startQuiz('p6')" class="btn-ghibli text-lg" style="background-color: #f5f3ff;">🕰️ Phần 6: Ngữ pháp A跟B一样 (+ Tính từ) <span id="check-p6" class="hidden">✅</span></button>
                 <button id="btn-exercise" onclick="showExercise()" class="btn-ghibli text-lg" style="background-color: #e5e7eb; color: #9ca3af;" disabled>🔒 Bài tập tổng hợp</button>
-                <button onclick="goHome()" class="btn-ghibli text-lg mt-4 bg-emerald-600 text-white border-emerald-700">🏡 Quay về vườn</button>
+                <button onclick="window.location.href='index.html'" class="btn-ghibli text-lg mt-4 bg-emerald-600 text-white border-emerald-700">🏡 Quay về vườn</button>
             </div>
         </div>
 
@@ -128,7 +128,7 @@
             </div>
             <div class="grid grid-cols-2 gap-4 border-t-2 border-amber-100 pt-5">
                 <button onclick="returnToMenu()" class="btn-ghibli bg-white text-amber-800 border-amber-300">📋 Quay lại menu</button>
-                <button onclick="goHome()" class="btn-ghibli bg-emerald-600 text-white border-emerald-700">🏡 Quay về vườn</button>
+                <button onclick="window.location.href='index.html'" class="btn-ghibli bg-emerald-600 text-white border-emerald-700">🏡 Quay về vườn</button>
             </div>
         </div>
 
@@ -230,8 +230,6 @@
         </div>
     </div>
 
-    <div id="toast-msg" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-emerald-700 text-white px-6 py-3 rounded-xl shadow-lg hidden font-bold z-50 text-center w-[90%] max-w-sm"></div>
-
 <script>
     const vocabulary = [
         { h: "中文", p: "Zhōngwén", m: "tiếng Trung Quốc", ex: "我会说中文。", vi: "Tôi biết nói tiếng Trung Quốc." },
@@ -325,18 +323,7 @@
     let currentFlashcardPool = [], knownCards = [], unknownCards = [];
     let selectedWords = [], poolWords = [];
 
-    // --- NAVIGATION & UI ---
-    function showToast(msg) {
-        const t = document.getElementById('toast-msg');
-        t.innerText = msg;
-        t.classList.remove('hidden');
-        setTimeout(() => t.classList.add('hidden'), 3000);
-    }
-
-    function goHome() {
-        showToast('🏡 Tính năng quay về trang chủ không khả dụng trong bản xem trước!');
-    }
-
+    // --- NAVIGATION ---
     function returnToStart() {
         document.querySelectorAll('.ghibli-card').forEach(c => c.classList.add('hidden'));
         document.getElementById('start-screen').classList.remove('hidden');
@@ -580,9 +567,7 @@
             fb.classList.remove('hidden');
             fb.innerText = "✅ Đã copy đầy đủ kết quả game & bài làm!";
             setTimeout(() => fb.classList.add('hidden'), 3000);
-        }).catch(err => {
-            showToast("⚠️ Lỗi khi copy! Bạn hãy chọn văn bản và copy thủ công.");
-        });
+        }).catch(err => alert("Lỗi khi copy! Bạn hãy chọn văn bản và copy thủ công."));
     }
 </script>
 </body>
