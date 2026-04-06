@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK4 Bài 17 - 人与自然</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Noto+Sans+SC:wght@500;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghibli-green: #a8d5ba;
+            --ghibli-brown: #d4a373;
+            --ghibli-sky: #caf0f8;
+            --ghibli-wood: #6d4c41;
+            --ghibli-dark-green: #4f7942;
+        }
+
+        body {
+            font-family: 'Quicksand', 'Nunito', sans-serif;
+            background: linear-gradient(180deg, var(--ghibli-sky) 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chinese-text { font-family: 'Noto Sans SC', sans-serif; font-weight: 700; }
+        .chinese-sub { font-family: 'Noto Sans SC', sans-serif; }
+
+        .ghibli-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid var(--ghibli-wood);
+            border-radius: 20px;
+            box-shadow: 0 10px 0 var(--ghibli-brown);
+        }
+
+        .btn-ghibli {
+            background-color: var(--ghibli-green);
+            color: var(--ghibli-wood);
+            border: 2px solid var(--ghibli-wood);
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: bold;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .btn-ghibli:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 0 var(--ghibli-brown);
+            background-color: #95c7a9;
+        }
+        
+        .btn-ghibli:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: white;
+            border: 2px solid var(--ghibli-wood);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 0 var(--ghibli-brown);
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%; height: 380px;
+            transition: transform 0.6s; transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard-inner.is-flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 15px;
+            padding: 24px;
+            border: 2px solid var(--ghibli-wood);
+        }
+        .flashcard-front { background-color: #fff; }
+        .flashcard-back { background-color: #fef3c7; transform: rotateY(180deg); }
+        
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--ghibli-brown); border-radius: 10px; }
+        .hidden { display: none; }
+
+        .circle-stat {
+            position: relative;
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border: 6px solid #f3f4f6;
+        }
+        .stat-green { border-color: #a8d5ba; color: #4f7942; }
+        .stat-red { border-color: #fca5a5; color: #b91c1c; }
+
+        .dictation-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 3px dashed var(--ghibli-brown);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .dictation-input:focus {
+            border-color: var(--ghibli-green);
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="window.location.href='index.html'" class="btn-home" title="Về Vườn">🏡</button>
+
+    <div id="game-container" class="w-full max-w-xl px-4 mt-16 mb-10">
+        <!-- START SCREEN -->
+        <div id="start-screen" class="ghibli-card p-8 text-center">
+            <h1 class="text-3xl font-bold text-amber-900 mb-2">HSK4 - Bài 17</h1>
+            <h2 class="text-2xl text-emerald-700 font-bold mb-4 chinese-text">人与自然</h2>
+            <p class="text-sm text-gray-600 mb-4 font-bold">Giáo viên: Nga Học HSK</p>
+            <div class="mx-auto mb-6 text-6xl">🌿</div>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="startFlashcards(vocabulary)" class="btn-ghibli text-lg relative">
+                    🎴 Phần 1: Học Từ Vựng  <span id="check-flashcard" class="absolute right-4 hidden">✅</span>
+                </button>
+                
+                <button onclick="openDictationMenu()" class="btn-ghibli text-lg relative" style="background-color: #fef3c7;">
+                    🎧 Phần 2: Nghe Chép Bài Khóa <span id="check-dictation" class="absolute right-4 hidden">✅</span>
+                </button>
+                
+                <button id="btn-form" class="btn-ghibli text-lg mt-2 transition-all duration-500" style="background-color: #e5e7eb; border-color: #9ca3af; color: #6b7280;" disabled>
+                    🔒 Phần 3: Bài Tập 
+                </button>
+            </div>
+        </div>
+
+        <!-- FLASHCARD SCREEN -->
+        <div id="flashcard-screen" class="ghibli-card p-6 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Về Menu</button>
+                <div class="text-amber-900 font-bold px-3 py-1 bg-amber-100 rounded-full text-xs">
+                    Thẻ: <span id="card-index">1</span> / <span id="card-total">39</span>
+                </div>
+            </div>
+            <div class="mb-6">
+                <div id="flashcard-inner" class="flashcard-inner" onclick="flipCard()">
+                    <div class="flashcard-front shadow-lg">
+                        <h2 id="card-hanzi" class="chinese-text text-6xl text-amber-900 leading-tight"></h2>
+                        <p class="mt-8 text-sm text-amber-600 animate-pulse font-bold">Chạm để lật thẻ 👆</p>
+                    </div>
+                    <div class="flashcard-back shadow-lg overflow-y-auto custom-scroll">
+                        <h3 id="card-pinyin" class="text-3xl font-bold text-emerald-700 mb-1"></h3>
+                        <p id="card-mean" class="text-xl text-amber-900 mb-4 font-bold border-b-2 border-amber-200 pb-2 w-full text-center"></p>
+                        <div class="text-left w-full space-y-3">
+                            <p id="card-example-cn" class="chinese-sub text-xl text-amber-800 leading-relaxed font-medium"></p>
+                            <p id="card-example-py" class="text-sm text-emerald-600 italic font-semibold"></p>
+                            <p id="card-example-vi" class="text-sm text-gray-600 bg-white p-2 rounded-lg border border-amber-100"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="markCard(false)" class="bg-rose-100 border-2 border-rose-400 text-rose-700 p-4 rounded-xl font-bold hover:bg-rose-200">Chưa thuộc</button>
+                <button onclick="markCard(true)" class="bg-emerald-100 border-2 border-emerald-400 text-emerald-700 p-4 rounded-xl font-bold hover:bg-emerald-200">Đã thuộc</button>
+            </div>
+        </div>
+
+        <!-- FLASHCARD STATS -->
+        <div id="flashcard-stat-screen" class="ghibli-card p-8 text-center hidden">
+             <h2 class="text-3xl font-bold text-amber-900 mb-8">Kết quả ghi nhớ</h2>
+             <div class="flex justify-around items-center mb-8">
+                <div class="circle-stat stat-green">
+                    <span id="stat-learned-percent" class="text-xl font-bold">0%</span>
+                    <span class="text-[10px] uppercase font-bold">Thuộc</span>
+                </div>
+                <div class="circle-stat stat-red">
+                    <span id="stat-unlearned-percent" class="text-xl font-bold">0%</span>
+                    <span class="text-[10px] uppercase font-bold">Cần ôn</span>
+                </div>
+             </div>
+             <div class="text-left mb-6">
+                <p class="font-bold text-amber-900 mb-2">Danh sách cần lưu ý:</p>
+                <div id="unlearned-list" class="max-h-48 overflow-y-auto custom-scroll bg-amber-50 rounded-lg border border-amber-200 p-2 space-y-2"></div>
+             </div>
+             <div class="grid grid-cols-1 gap-3">
+                 <button id="btn-relearn" onclick="relearnUnlearned()" class="btn-ghibli w-full bg-amber-500 text-white border-amber-700 hidden">🔄 Học lại các từ chưa thuộc</button>
+                 <button onclick="endFlashcardSession()" class="btn-ghibli w-full">🔙 Hoàn thành & Về Menu</button>
+             </div>
+        </div>
+
+        <!-- DICTATION MENU -->
+        <div id="dictation-menu-screen" class="ghibli-card p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="returnToStart()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Về Menu Chính</button>
+                <h2 class="text-xl font-bold text-emerald-800">Chọn Bài Khóa</h2>
+            </div>
+            <div id="lesson-list" class="grid grid-cols-1 gap-3"></div>
+        </div>
+
+        <!-- DICTATION GAME -->
+        <div id="dictation-screen" class="ghibli-card p-6 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="backToDictationMenu()" class="text-amber-700 text-sm font-bold hover:underline">🔙 Về DS Bài khóa</button>
+                <div class="text-emerald-800 font-bold text-sm" id="dictation-title-display">Bài 17: <span id="dict-step">1</span>/10</div>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center space-y-4 mt-2">
+                <div class="w-full bg-emerald-50 p-4 rounded-xl border-2 border-emerald-200 shadow-sm">
+                    <audio id="lesson-audio-player" controls class="w-full h-10 outline-none rounded-lg"></audio>
+                </div>
+
+                <div class="w-full bg-white border-2 border-dashed border-amber-300 p-3 rounded-xl text-center">
+                    <p class="text-xs text-amber-800 font-bold mb-1">GỢI Ý CÂU ĐANG NGHE:</p>
+                    <div id="sentence-range-hint" class="chinese-text text-2xl text-emerald-700 tracking-widest">-- ... --</div>
+                </div>
+                
+                <div class="w-full relative mt-2">
+                    <input type="text" id="dict-input" class="dictation-input chinese-text" placeholder="Nghe và gõ chữ Hán..." autocomplete="off">
+                </div>
+
+                <div id="dict-answer-box" class="w-full hidden space-y-3">
+                    <div id="dict-feedback" class="w-full p-2 rounded-lg text-center font-bold text-sm"></div>
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-center space-y-2">
+                        <p class="chinese-text text-2xl text-amber-900" id="ans-hanzi"></p>
+                        <p class="text-emerald-700 italic font-semibold text-lg" id="ans-pinyin"></p>
+                        <p class="text-gray-600 border-t border-amber-200 pt-2 text-sm" id="ans-vi"></p>
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <button id="btn-next-dict" onclick="nextDictation()" class="btn-ghibli w-full bg-emerald-500 border-emerald-700 text-white hidden py-3 text-lg">Câu tiếp theo ➡️</button>
+                    <p id="enter-instruction" class="text-[10px] text-gray-400 text-center mt-2 font-bold uppercase tracking-wider">Nhấn ENTER để kiểm tra</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL SUCCESS -->
+        <div id="dictation-end-screen" class="ghibli-card p-8 text-center hidden">
+            <h2 class="text-3xl font-bold text-amber-900 mb-4">Tuyệt vời!</h2>
+            <div class="text-6xl mb-4">🏆</div>
+            <p class="text-amber-800 mb-6 font-bold text-xl">Bạn đã luyện xong tất cả bài khóa bài 17!</p>
+            <button onclick="endDictationSession()" class="btn-ghibli w-full py-3 text-lg bg-emerald-100 border-emerald-500 text-emerald-800">🔙 Về Menu Chính</button>
+        </div>
+    </div>
+
+    <!-- AUDIO ASSETS -->
+    <audio id="audio-click" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+    <audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3"></audio>
+    <audio id="audio-flip" src="https://assets.mixkit.co/active_storage/sfx/2045/2045-preview.mp3"></audio>
+
+    <script>
+        const completedStatus = { flashcard: false, dictation: false };
+
+        function playAudio(audioId) {
+            const audio = document.getElementById(audioId);
+            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        }
+
+        function returnToStart() {
+            playAudio('audio-click');
+            const audioPlayer = document.getElementById('lesson-audio-player');
+            if (audioPlayer) audioPlayer.pause();
+            document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        // TỪ VỰNG BÀI 17
+        const vocabulary = [
+            { h: "凉快", p: "liángkuai", m: "Mát mẻ", ex: "今天晚上很凉快，我们出去走走吧。", exp: "Jīntiān wǎnshang hěn liángkuai, wǒmen chūqù zǒuzou ba.", exv: "Tối nay rất mát, chúng ta ra ngoài đi dạo nhé." },
+            { h: "气温", p: "qìwēn", m: "Nhiệt độ không khí", ex: "今天天气这么热，气温肯定超过了35度。", exp: "Jīntiān tiānqì zhème rè, qìwēn kěndìng chāoguò le sānshíwǔ dù.", exv: "Hôm nay trời nóng như vậy, nhiệt độ chắc chắn đã vượt 35 độ." },
+            { h: "热闹", p: "rènao", m: "Náo nhiệt", ex: "春节的时候，大家坐在一起聊天儿，非常热闹。", exp: "Chūnjié de shíhou, dàjiā zuò zài yìqǐ liáotiānr, fēicháng rènao.", exv: "Vào Tết, mọi người ngồi cùng nhau trò chuyện, rất náo nhiệt." },
+            { h: "香山", p: "Xiāng Shān", m: "Hương Sơn", ex: "秋天我们去香山。", exp: "Qiūtiān wǒmen qù Xiāng Shān.", exv: "Mùa thu chúng tôi đi Hương Sơn." },
+            { h: "长城", p: "Chángchéng", m: "Vạn Lý Trường Thành", ex: "我们参观了长城。", exp: "Wǒmen cānguān le Chángchéng.", exv: "Chúng tôi đã tham quan Vạn Lý Trường Thành." },
+            { h: "云", p: "yún", m: "Mây", ex: "天上有很多白云。", exp: "Tiān shang yǒu hěn duō báiyún.", exv: "Trên trời có rất nhiều mây trắng." },
+            { h: "广播", p: "guǎngbō", m: "Phát thanh", ex: "今天的广播节目很有趣。", exp: "Jīntiān de guǎngbō jiémù hěn yǒuqù.", exv: "Chương trình phát thanh hôm nay rất thú vị." },
+            { h: "照", p: "zhào", m: "Chụp ảnh", ex: "我给你照一张照片吧。", exp: "Wǒ gěi nǐ zhào yì zhāng zhàopiàn ba.", exv: "Tôi chụp cho bạn một tấm ảnh nhé." },
+            { h: "倒", p: "dào", m: "Lại, nhưng lại", ex: "这个地方不大，倒很安静。", exp: "Zhège dìfang bú dà, dào hěn ānjìng.", exv: "Nơi này không lớn, nhưng lại rất yên tĩnh." },
+            { h: "约", p: "yuē", m: "Hẹn; khoảng", ex: "我们约好明天见面。", exp: "Wǒmen yuē hǎo míngtiān jiànmiàn.", exv: "Chúng tôi hẹn gặp nhau vào ngày mai." },
+            { h: "毛", p: "máo", m: "Lông", ex: "这只猫的毛很长。", exp: "Zhè zhī māo de máo hěn cháng.", exv: "Lông của con mèo này rất dài." },
+            { h: "抱", p: "bào", m: "Ôm, bế", ex: "小孩子看到妈妈就想抱一抱。", exp: "Xiǎoháizi kàndào māma jiù xiǎng bào yí bào.", exv: "Đứa trẻ thấy mẹ là muốn ôm ngay." },
+            { h: "干", p: "gàn", m: "Làm", ex: "你在干什么？", exp: "Nǐ zài gàn shénme?", exv: "Bạn đang làm gì?" },
+            { h: "严格", p: "yángé", m: "Nghiêm khắc", ex: "老师对我们要求很严格。", exp: "Lǎoshī duì wǒmen yāoqiú hěn yángé.", exv: "Giáo viên yêu cầu chúng tôi rất nghiêm khắc." },
+            { h: "难受", p: "nánshòu", m: "Khó chịu", ex: "我今天有点难受。", exp: "Wǒ jīntiān yǒudiǎn nánshòu.", exv: "Hôm nay tôi hơi khó chịu." },
+            { h: "六一儿童节", p: "Liùyī Értóngjié", m: "Ngày thiếu nhi", ex: "孩子们过儿童节。", exp: "Háizimen guò Értóngjié.", exv: "Trẻ em đón ngày thiếu nhi." },
+            { h: "亚洲", p: "Yàzhōu", m: "Châu Á", ex: "中国在亚洲。", exp: "Zhōngguó zài Yàzhōu.", exv: "Trung Quốc ở châu Á." },
+            { h: "趟", p: "tàng", m: "Chuyến/lần", ex: "我去一趟商店。", exp: "Wǒ qù yí tàng shāngdiàn.", exv: "Tôi đi một chuyến đến cửa hàng." },
+            { h: "放暑假", p: "fàng shǔjià", m: "Nghỉ hè", ex: "学校下周放暑假。", exp: "Xuéxiào xià zhōu fàng shǔjià.", exv: "Tuần sau trường nghỉ hè." },
+            { h: "老虎", p: "lǎohǔ", m: "Hổ", ex: "动物园里有很多老虎。", exp: "Dòngwùyuán lǐ yǒu hěn duō lǎohǔ.", exv: "Trong sở thú có nhiều con hổ." },
+            { h: "入口", p: "rùkǒu", m: "Lối vào", ex: "学校的入口在那边。", exp: "Xuéxiào de rùkǒu zài nàbiān.", exv: "Lối vào trường ở bên kia." },
+            { h: "出口", p: "chūkǒu", m: "Lối ra", ex: "地铁的出口就在前面。", exp: "Dìtiě de chūkǒu jiù zài qiánmiàn.", exv: "Lối ra tàu điện ngầm ở ngay phía trước." },
+            { h: "排队", p: "páiduì", m: "Xếp hàng", ex: "请大家按顺序排队。", exp: "Qǐng dàjiā àn shùnxù páiduì.", exv: "Mọi người hãy xếp hàng theo thứ tự." },
+            { h: "活泼", p: "huópō", m: "Hoạt bát", ex: "她是一个很活泼的女孩。", exp: "Tā shì yí gè hěn huópō de nǚhái.", exv: "Cô ấy là một cô gái rất hoạt bát." },
+            { h: "社会", p: "shèhuì", m: "Xã hội", ex: "手机为社会带来很多方便。", exp: "Shǒujī wèi shèhuì dàilái hěn duō fāngbiàn.", exv: "Điện thoại mang lại nhiều tiện lợi cho xã hội." },
+            { h: "竞争", p: "jìngzhēng", m: "Cạnh tranh", ex: "植物会为了阳光和水而竞争。", exp: "Zhíwù huì wèile yángguāng hé shuǐ ér jìngzhēng.", exv: "Thực vật cạnh tranh vì ánh sáng và nước." },
+            { h: "森林", p: "sēnlín", m: "Rừng", ex: "我们要保护森林。", exp: "Wǒmen yào bǎohù sēnlín.", exv: "Chúng ta phải bảo vệ rừng." },
+            { h: "剩", p: "shèng", m: "Còn lại", ex: "我吃了两个包子，剩下一个给你。", exp: "Wǒ chī le liǎng gè bāozi, shèngxià yí gè gěi nǐ.", exv: "Tôi ăn 2 cái bánh, còn lại 1 cái cho bạn." },
+            { h: "暖和", p: "nuǎnhuo", m: "Ấm áp", ex: "今天的天气很暖和。", exp: "Jīntiān de tiānqì hěn nuǎnhuo.", exv: "Hôm nay thời tiết rất ấm." },
+            { h: "细", p: "xì", m: "Nhỏ, mảnh", ex: "她的腰很细。", exp: "Tā de yāo hěn xì.", exv: "Eo của cô ấy rất nhỏ." },
+            { h: "海洋", p: "hǎiyáng", m: "Đại dương", ex: "海洋里有很多动物。", exp: "Hǎiyáng lǐ yǒu hěn duō dòngwù.", exv: "Trong đại dương có nhiều động vật." },
+            { h: "底", p: "dǐ", m: "Đáy", ex: "海底非常安静。", exp: "Hǎidǐ fēicháng ānjìng.", exv: "Đáy biển rất yên tĩnh." },
+            { h: "各种各样", p: "gè zhǒng gè yàng", m: "Đủ loại", ex: "这里有各种各样的水果。", exp: "Zhèlǐ yǒu gè zhǒng gè yàng de shuǐguǒ.", exv: "Ở đây có đủ loại trái cây." },
+            { h: "美人鱼", p: "Měirényú", m: "Nàng tiên cá", ex: "小孩子喜欢美人鱼。", exp: "Xiǎoháizi xǐhuan Měirényú.", exv: "Trẻ con thích nàng tiên cá." },
+            { h: "公里", p: "gōnglǐ", m: "Km", ex: "学校离我家三公里。", exp: "Xuéxiào lí wǒ jiā sān gōnglǐ.", exv: "Trường cách nhà tôi 3 km." },
+            { h: "亮光", p: "liàngguāng", m: "Ánh sáng", ex: "房间里只有一点亮光。", exp: "Fángjiān lǐ zhǐyǒu yìdiǎn liàngguāng.", exv: "Trong phòng chỉ có một chút ánh sáng." },
+            { h: "仍然", p: "réngrán", m: "Vẫn", ex: "下雨了，他仍然去上班。", exp: "Xiàyǔ le, tā réngrán qù shàngbān.", exv: "Trời mưa nhưng anh ấy vẫn đi làm." },
+            { h: "排列", p: "páiliè", m: "Sắp xếp", ex: "请把这些书按大小排列好。", exp: "Qǐng bǎ zhèxiē shū àn dàxiǎo páiliè hǎo.", exv: "Hãy sắp xếp sách theo kích thước." },
+            { h: "梦", p: "mèng", m: "Giấc mơ", ex: "昨天晚上我做了一个梦。", exp: "Zuótiān wǎnshang wǒ zuò le yí gè mèng.", exv: "Tối qua tôi đã mơ một giấc mơ." }
+        ];
+
+        // BÀI KHÓA BÀI 17
+        const lessonsData = [
+            { id: 1, title: "Bài khóa 1", desc: "小夏和安娜在聊天气", audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson17/17-1.mp3", completed: false, sentences: [
+                { h: "最近天气越来越凉快了，风一刮，草地上就会有一层厚厚的黄叶，看来秋天已经到了。", p: "Zuìjìn tiānqì yuè lái yuè liángkuai le, fēng yì guā, cǎodì shang jiù huì yǒu yì céng hòuhòu de huáng yè, kànlái qiūtiān yǐjīng dào le.", vi: "Gần đây thời tiết ngày càng mát mẻ, gió vừa thổi, trên bãi cỏ liền có một lớp lá vàng dày, xem ra mùa thu đã đến rồi." },
+                { h: "这几天香山特别热闹，随着气温的降低，那里许多植物的叶子都由绿变黄或者变红，吸引了很多游客参观，咱们今天也去看看吧。", p: "Zhè jǐ tiān Xiāng Shān tèbié rènao, suízhe qìwēn de jiàngdī, nàlǐ xǔduō zhíwù de yèzi dōu yóu lǜ biàn huáng huòzhě biàn hóng, xīyǐnle hěn duō yóukè cānguān, zánmen jīntiān yě qù kànkan ba.", vi: "Mấy ngày nay Hương Sơn đặc biệt náo nhiệt, cùng với sự giảm xuống của nhiệt độ, lá của rất nhiều thực vật ở đó đều từ xanh chuyển sang vàng hoặc đỏ, thu hút rất nhiều du khách đến tham quan, chúng ta hôm nay cũng đi xem đi." },
+                { h: "你看天上的云，今天肯定有大雨。再说，香山上看红叶的人太多了。咱们改天去长城吧，广播里说那里也有不少专门看红叶的好地方。", p: "Nǐ kàn tiān shang de yún, jīntiān kěndìng yǒu dàyǔ. Zàishuō, Xiāng Shān shang kàn hóngyè de rén tài duō le. Zánmen gǎitiān qù Chángchéng ba, guǎngbō lǐ shuō nàlǐ yě yǒu bùshǎo zhuānmén kàn hóngyè de hǎo dìfang.", vi: "Bạn xem mây trên trời kìa, hôm nay chắc chắn có mưa to. Hơn nữa, người trên Hương Sơn xem lá đỏ quá nhiều. Hôm khác chúng ta đi Vạn Lý Trường Thành nhé, trên đài phát thanh nói ở đó cũng có không ít chỗ chuyên ngắm lá đỏ rất đẹp." },
+                { h: "真可惜，我还想多照点儿香山的照片呢。去长城倒是一个好主意，那我们明天去吧。", p: "Zhēn kěxī, wǒ hái xiǎng duō zhào diǎnr Xiāng Shān de zhàopiàn ne. Qù Chángchéng dào shì yí gè hǎo zhǔyì, nà wǒmen míngtiān qù ba.", vi: "Thật đáng tiếc, tôi còn muốn chụp thêm mấy tấm ảnh Hương Sơn nữa. Đi Vạn Lý Trường Thành ngược lại là một ý kiến hay, vậy chúng ta ngày mai đi nhé." },
+                { h: "明天恐怕也不行，明天是我爸的生日。", p: "Míngtiān kǒngpà yě bùxíng, míngtiān shì wǒ bà de shēngrì.", vi: "Ngày mai e là cũng không được, ngày mai là sinh nhật bố tôi." },
+                { h: "没关系，那我们再约时间。", p: "Méi guānxì, nà wǒmen zài yuē shíjiān.", vi: "Không sao, vậy chúng ta hẹn thời gian sau." }
+            ]},
+            { id: 2, title: "Bài khóa 2", desc: "小林和小李在聊小李的狗", audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson17/17-2.mp3", completed: false, sentences: [
+                { h: "你的这只大黑狗真漂亮，而且这么聪明，每次见了都想抱一抱它。", p: "Nǐ de zhè zhī dà hēigǒu zhēn piàoliang, érqiě zhème cōngmíng, měicì jiànle dōu xiǎng bào yí bào tā.", vi: "Con chó đen lớn này của bạn đẹp thật, hơn nữa lại thông minh như vậy, mỗi lần thấy đều muốn ôm nó một cái." },
+                { h: "狗是很聪明的动物，只要稍微花点儿时间教教它，它就能学会很多东西。", p: "Gǒu shì hěn cōngmíng de dòngwù, zhǐyào shāowēi huā diǎnr shíjiān jiāojiao tā, tā jiù néng xuéhuì hěn duō dōngxi.", vi: "Chó là loài động vật rất thông minh, chỉ cần dành chút thời gian dạy nó, nó liền có thể học được rất nhiều thứ." },
+                { h: "听你这么一说，我现在也想养一只狗了。每次你让它干什么，它就像能听懂你的话一样去做。你教它是不是用了什么特别的方法？", p: "Tīng nǐ zhème yì shuō, wǒ xiànzài yě xiǎng yǎng yì zhī gǒu le. Měicì nǐ ràng tā gàn shénme, tā jiù xiàng néng tīngdǒng nǐ de huà yíyàng qù zuò. Nǐ jiāo tā shì bú shì yòngle shénme tèbié de fāngfǎ?", vi: "Nghe bạn nói vậy, tôi bây giờ cũng muốn nuôi một con chó rồi. Mỗi lần bạn bảo nó làm gì, nó giống như có thể nghe hiểu lời bạn mà đi làm. Bạn dạy nó có phải dùng phương pháp gì đặc biệt không?" },
+                { h: "要让它完成一些任务，只教一次是不够的，应该耐心地一遍一遍地教给它，使它熟悉，然后它就会严格按照你的要求做了。", p: "Yào ràng tā wánchéng yìxiē rènwu, zhǐ jiāo yí cì shì bú gòu de, yīnggāi nàixīn de yí biàn yí biàn de jiāo gěi tā, shǐ tā shúxī, ránhòu tā jiù huì yángé ànzhào nǐ de yāoqiú zuò le.", vi: "Muốn nó hoàn thành một số nhiệm vụ, chỉ dạy một lần là không đủ, nên kiên nhẫn hết lần này đến lần khác dạy cho nó, làm nó quen, sau đó nó liền sẽ làm nghiêm ngặt theo yêu cầu của bạn." },
+                { h: "看来没有想的那么容易。", p: "Kànlái méiyǒu xiǎng de nàme róngyì.", vi: "Xem ra không dễ như đã nghĩ." },
+                { h: "狗是我们的好朋友，它能听懂人的话，明白人的心情。在你心里难受的时候，它会一直陪着你。", p: "Gǒu shì wǒmen de hǎo péngyou, tā néng tīngdǒng rén de huà, míngbai rén de xīnqíng. Zài nǐ xīn lǐ nánshòu de shíhou, tā huì yìzhí péizhe nǐ.", vi: "Chó là người bạn tốt của chúng ta, nó có thể nghe hiểu tiếng người, hiểu được tâm trạng của người. Lúc trong lòng bạn khó chịu, nó sẽ luôn ở bên bạn." }
+            ]},
+            { id: 3, title: "Bài khóa 3", desc: "马克和小夏在聊动物", audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson17/17-3.mp3", completed: false, sentences: [
+                { h: "上个月我去了趟北京动物园，那里约有500种动物，听导游说北京动物园是亚洲最大的动物园之一。", p: "Shàng gè yuè wǒ qùle tàng Běijīng Dòngwùyuán, nàlǐ yuē yǒu wǔbǎi zhǒng dòngwù, tīng dǎoyóu shuō Běijīng Dòngwùyuán shì Yàzhōu zuì dà de dòngwùyuán zhī yī.", vi: "Tháng trước tôi đi một chuyến đến Sở thú Bắc Kinh, ở đó có khoảng 500 loài động vật, nghe hướng dẫn viên nói Sở thú Bắc Kinh là một trong những sở thú lớn nhất châu Á." },
+                { h: "去年放暑假的时候，我也去过一次，在那儿看了马、熊猫、老虎等动物。我特别喜欢熊猫，可惜它们当时大多在睡觉。", p: "Qùnián fàng shǔjià de shíhou, wǒ yě qùguo yí cì, zài nàr kànle mǎ, xióngmāo, lǎohǔ děng dòngwù. Wǒ tèbié xǐhuan xióngmāo, kěxī tāmen dāngshí dàduō zài shuìjiào.", vi: "Kỳ nghỉ hè năm ngoái tôi cũng từng đi một lần, ở đó đã xem ngựa, gấu trúc, hổ... Tôi đặc biệt thích gấu trúc, tiếc là lúc đó đa số chúng đang ngủ." },
+                { h: "我去的那天正赶上六一儿童节，许多父母带着孩子去动物园。入口处排队的人很多，动物园里热闹极了。熊猫也变得特别活泼，我还给它们照了不少照片呢。", p: "Wǒ qù de nà tiān zhèng gǎnshàng Liùyī Értóngjié, xǔduō fùmǔ dàizhe háizi qù dòngwùyuán. Rùkǒu chù páiduì de rén hěn duō, dòngwùyuán lǐ rènao jí le. Xióngmāo yě biàn de tèbié huópō, wǒ hái gěi tāmen zhàole bùshǎo zhàopiàn ne.", vi: "Ngày tôi đi đúng dịp Tết thiếu nhi 1/6, rất nhiều bố mẹ đưa con đi sở thú. Ở lối vào người xếp hàng rất đông, trong sở thú cực kỳ náo nhiệt. Gấu trúc cũng trở nên đặc biệt hoạt bát, tôi còn chụp cho chúng không ít ảnh nữa." },
+                { h: "大熊猫身子胖胖的，样子可爱极了。", p: "Dàxióngmāo shēnzi pàngpàng de, yàngzi kě'ài jí le.", vi: "Gấu trúc lớn thân hình mập mạp, dáng vẻ cực kỳ đáng yêu." },
+                { h: "不过，它们数量不多，现在全世界一共才有一千多只吧。", p: "Búguò, tāmen shùliàng bù duō, xiànzài quán shìjiè yígòng cái yǒu yìqiān duō zhī ba.", vi: "Tuy nhiên, số lượng chúng không nhiều, bây giờ toàn thế giới tổng cộng mới có hơn một nghìn con thôi." },
+                { h: "以前只有中国有大熊猫，为了表示友好，从1957年开始，中国把大熊猫作为礼物送给其他一些国家。现在，很多国家的人们在本国都能看到大熊猫了。", p: "Yǐqián zhǐyǒu Zhōngguó yǒu dàxióngmāo, wèile biǎoshì yǒuhǎo, cóng 1957 nián kāishǐ, Zhōngguó bǎ dàxióngmāo zuòwéi lǐwù sòng gěi qítā yìxiē guójiā. Xiànzài, hěn duō guójiā de rénmen zài běnguó dōu néng kàndào dàxióngmāo le.", vi: "Trước đây chỉ Trung Quốc có gấu trúc lớn, để thể hiện sự hữu nghị, từ năm 1957, Trung Quốc đem gấu trúc lớn làm quà tặng cho một số quốc gia khác. Hiện nay, người dân nhiều nước đều có thể thấy gấu trúc lớn ngay tại nước mình rồi." }
+            ]},
+            { id: 4, title: "Bài khóa 4", desc: "植物的竞争", audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson17/17-4.mp3", completed: false, sentences: [
+                { h: "不仅社会上的人与人之间有竞争，森林里的各种植物之间也有竞争，这一点儿也不奇怪。", p: "Bùjǐn shèhuì shang de rén yǔ rén zhījiān yǒu jìngzhēng, sēnlín lǐ de gèzhǒng zhíwù zhījiān yě yǒu jìngzhēng, zhè yìdiǎnr yě bù qíguài.", vi: "Không chỉ giữa người với người trong xã hội có sự cạnh tranh, giữa các loại thực vật trong rừng cũng có cạnh tranh, điều này một chút cũng không kỳ lạ." },
+                { h: "植物会为了阳光、空气和水而竞争。", p: "Zhíwù huì wèile yángguāng, kōngqì hé shuǐ ér jìngzhēng.", vi: "Thực vật sẽ cạnh tranh vì ánh sáng, không khí và nước." },
+                { h: "一些高大的植物往往能获得更多的阳光、空气和水，而剩下的一些比较矮小的植物就只能长在这些高大植物的下面。", p: "Yìxiē gāodà de zhíwù wǎngwǎng néng huòdé gèng duō de yángguāng, kōngqì hé shuǐ, ér shèngxià de yìxiē bǐjiào ǎixiǎo de zhíwù jiù zhǐ néng zhǎng zài zhèxiē gāodà zhíwù de xiàmiàn.", vi: "Một số thực vật cao lớn thường có thể nhận được nhiều ánh sáng, không khí và nước hơn, mà một số thực vật khá thấp bé còn lại thì chỉ có thể mọc dưới những thực vật cao lớn này." },
+                { h: "由于气候条件不同，世界各地植物叶子的样子也很不相同。", p: "Yóuyú qìhòu tiáojiàn bùtóng, shìjiè gèdì zhíwù yèzi de yàngzi yě hěn bù xiāngtóng.", vi: "Do điều kiện khí hậu khác nhau, hình dáng lá cây của thực vật ở các nơi trên thế giới cũng rất không giống nhau." },
+                { h: "在暖和、水分比较多的地方，叶子往往长得又大又厚；在阳光特别厉害、水分少的地方，叶子就会长得又细又长。", p: "Zài nuǎnhuo, shuǐfèn bǐjiào duō de dìfang, yèzi wǎngwǎng zhǎng de yòu dà yòu hòu; zài yángguāng tèbié lìhai, shuǐfèn shǎo de dìfang, yèzi jiù huì zhǎng de yòu xì yòu cháng.", vi: "Ở nơi ấm áp, độ ẩm khá nhiều, lá cây thường mọc vừa to vừa dày; ở nơi ánh nắng đặc biệt gay gắt, độ ẩm ít, lá cây sẽ mọc vừa nhỏ vừa dài." }
+            ]},
+            { id: 5, title: "Bài khóa 5", desc: "海底世界", audioSrc: "https://raw.githubusercontent.com/ngabui94-create/game-hoc-tieng-trung/main/audio/hsk4/lesson17/17-5.mp3", completed: false, sentences: [
+                { h: "地球上大约71%的地方是蓝色的海洋，在美丽的海底世界里，生活着各种各样的植物和动物。", p: "Dìqiú shang dàyuē bǎi fēn zhī qīshíyī de dìfang shì lánsè de hǎiyáng, zài měilì de hǎidǐ shìjiè lǐ, shēnghuózhe gèzhǒnggèyàng de zhíwù hé dòngwù.", vi: "Trên trái đất khoảng 71% diện tích là đại dương xanh thẳm, trong thế giới dưới đáy biển tươi đẹp, có đủ các loại thực vật và động vật sinh sống." },
+                { h: "我们小时候都听过美人鱼的故事，其实真正的海底世界比故事里写的更美。", p: "Wǒmen xiǎoshíhou dōu tīngguo měirényú de gùshi, qíshí zhēnzhèng de hǎidǐ shìjiè bǐ gùshi lǐ xiě de gèng měi.", vi: "Hồi nhỏ chúng ta đều nghe qua câu chuyện nàng tiên cá, thực ra thế giới đáy biển chân thực còn đẹp hơn trong truyện viết." },
+                { h: "科学研究发现，海洋底部看上去非常安静，然而却不是一点儿声音也没有，海底的动物们一直在“说话”，只不过人的耳朵是听不到的。", p: "Kēxué yánjiū fāxiàn, hǎiyáng dǐbù kàn shàngqù fēicháng ānjìng, rán'ér què bú shì yìdiǎnr shēngyīn yě méiyǒu, hǎidǐ de dòngwùmen yìzhí zài “shuōhuà”, zhǐ búguò rén de ěrduo shì tīngbúdào de.", vi: "Nghiên cứu khoa học phát hiện, dưới đáy đại dương nhìn có vẻ vô cùng tĩnh lặng, tuy nhiên lại không phải một chút âm thanh cũng không có, các động vật dưới đáy biển vẫn luôn đang \"nói chuyện\", chỉ là tai con người không nghe được mà thôi." },
+                { h: "另外，就算在几公里深的海底也仍然能看到东西，许多鱼会发出各种颜色的亮光，像一个个排列起来的灯，美极了，就像在梦里一样。", p: "Lìngwài, jiùsuàn zài jǐ gōnglǐ shēn de hǎidǐ yě réngrán néng kàndào dōngxi, xǔduō yú huì fāchū gè zhǒng yánsè de liàngguāng, xiàng yí gègè páiliè qǐlái de dēng, měi jí le, jiù xiàng zài mèng lǐ yíyàng.", vi: "Ngoài ra, cho dù ở đáy biển sâu vài km cũng vẫn có thể nhìn thấy đồ vật, nhiều loài cá sẽ phát ra ánh sáng đủ loại màu sắc, giống như từng chiếc đèn được xếp thành hàng, đẹp cực kỳ, cứ như ở trong mơ vậy." }
+            ]}
+        ];
+
+        let currentFlashList = [], flashcardIdx = 0, learnedCount = 0, unlearnedItems = [];
+        function startFlashcards(list) {
+            playAudio('audio-click');
+            currentFlashList = [...list];
+            flashcardIdx = 0; learnedCount = 0; unlearnedItems = [];
+            document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
+            document.getElementById('flashcard-screen').classList.remove('hidden');
+            document.getElementById('card-total').innerText = currentFlashList.length;
+            updateFlashcard();
+        }
+        function updateFlashcard() {
+            const card = currentFlashList[flashcardIdx];
+            document.getElementById('card-index').innerText = flashcardIdx + 1;
+            document.getElementById('card-hanzi').innerText = card.h;
+            document.getElementById('card-pinyin').innerText = card.p;
+            document.getElementById('card-mean').innerText = card.m;
+            document.getElementById('card-example-cn').innerText = card.ex;
+            document.getElementById('card-example-py').innerText = card.exp;
+            document.getElementById('card-example-vi').innerText = card.exv;
+            document.getElementById('flashcard-inner').classList.remove('is-flipped');
+        }
+        function flipCard() { playAudio('audio-flip'); document.getElementById('flashcard-inner').classList.toggle('is-flipped'); }
+        function markCard(learned) {
+            if (learned) learnedCount++; else unlearnedItems.push(currentFlashList[flashcardIdx]);
+            flashcardIdx++;
+            if (flashcardIdx < currentFlashList.length) updateFlashcard(); else showFlashcardStats();
+        }
+        function showFlashcardStats() {
+            document.getElementById('flashcard-screen').classList.add('hidden');
+            document.getElementById('flashcard-stat-screen').classList.remove('hidden');
+            const learnedPercent = Math.round((learnedCount / currentFlashList.length) * 100);
+            document.getElementById('stat-learned-percent').innerText = learnedPercent + "%";
+            document.getElementById('stat-unlearned-percent').innerText = (100 - learnedPercent) + "%";
+            const listContainer = document.getElementById('unlearned-list');
+            listContainer.innerHTML = unlearnedItems.length > 0 ? '' : '<p class="text-center py-4 font-bold text-emerald-700">Tuyệt vời! Bạn đã thuộc hết.</p>';
+            unlearnedItems.forEach(item => {
+                listContainer.innerHTML += `<div class="flex justify-between border-b border-amber-200 pb-1 text-sm"><span class="font-bold text-amber-900">${item.h}</span><span class="text-gray-600">${item.m}</span></div>`;
+            });
+            document.getElementById('btn-relearn').classList.toggle('hidden', unlearnedItems.length === 0);
+        }
+        function relearnUnlearned() { startFlashcards(unlearnedItems); }
+        function endFlashcardSession() { completedStatus.flashcard = true; document.getElementById('check-flashcard').classList.remove('hidden'); checkUnlockForm(); returnToStart(); }
+
+        let currentLessonIdx = -1, dictStep = 0;
+        function openDictationMenu() {
+            playAudio('audio-click');
+            document.querySelectorAll('.ghibli-card').forEach(el => el.classList.add('hidden'));
+            document.getElementById('dictation-menu-screen').classList.remove('hidden');
+            renderLessonList();
+        }
+        function renderLessonList() {
+            const listContainer = document.getElementById('lesson-list');
+            listContainer.innerHTML = '';
+            let allCompleted = true;
+            lessonsData.forEach((lesson, index) => {
+                if (!lesson.completed) allCompleted = false;
+                const btn = document.createElement('button');
+                btn.className = `btn-ghibli text-left py-4 relative flex flex-col ${lesson.completed ? 'opacity-80 bg-emerald-100' : ''}`;
+                btn.onclick = () => startDictationLesson(index);
+                btn.innerHTML = `<span class="font-bold">${lesson.title}</span><span class="text-xs">${lesson.desc}</span>${lesson.completed ? '<span class="absolute right-4 text-xl">✅</span>' : ''}`;
+                listContainer.appendChild(btn);
+            });
+            if (allCompleted && lessonsData.length > 0) {
+                document.getElementById('dictation-menu-screen').classList.add('hidden');
+                document.getElementById('dictation-end-screen').classList.remove('hidden');
+            }
+        }
+        function startDictationLesson(index) {
+            playAudio('audio-click');
+            currentLessonIdx = index;
+            dictStep = 0;
+            document.getElementById('dictation-menu-screen').classList.add('hidden');
+            document.getElementById('dictation-screen').classList.remove('hidden');
+            document.getElementById('lesson-audio-player').src = lessonsData[currentLessonIdx].audioSrc;
+            loadDictationStep();
+        }
+        function backToDictationMenu() { 
+            const player = document.getElementById('lesson-audio-player');
+            player.pause();
+            openDictationMenu(); 
+        }
+        function loadDictationStep() {
+            const lesson = lessonsData[currentLessonIdx];
+            const sentenceObj = lesson.sentences[dictStep];
+            document.getElementById('dictation-title-display').innerHTML = `Bài 17: Câu <span id="dict-step">${dictStep + 1}</span>/${lesson.sentences.length}`;
+            const rawH = sentenceObj.h.replace(/[，。？！、\s“”：]/g, '');
+            document.getElementById('sentence-range-hint').innerText = `${rawH.substring(0, 2)} ... ${rawH.substring(rawH.length - 2)}`;
+            const inputField = document.getElementById('dict-input');
+            inputField.value = ""; inputField.disabled = false;
+            document.getElementById('dict-answer-box').classList.add('hidden');
+            document.getElementById('btn-next-dict').classList.add('hidden');
+            inputField.focus();
+        }
+        function cleanChineseText(text) { return text.replace(/[^\u4e00-\u9fa5]/g, '').trim(); }
+        function checkDictation() {
+            const sentenceObj = lessonsData[currentLessonIdx].sentences[dictStep];
+            const feedback = document.getElementById('dict-feedback');
+            const userInput = cleanChineseText(document.getElementById('dict-input').value);
+            const correctInput = cleanChineseText(sentenceObj.h);
+            
+            if (userInput === correctInput) {
+                playAudio('audio-correct');
+                feedback.innerText = "Chính xác! 🌟";
+                feedback.className = "w-full p-2 rounded-lg text-center bg-emerald-100 text-emerald-700 font-bold";
+            } else {
+                playAudio('audio-wrong');
+                feedback.innerText = "Chưa đúng! Đáp án:";
+                feedback.className = "w-full p-2 rounded-lg text-center bg-rose-100 text-rose-700 font-bold";
+            }
+            document.getElementById('ans-hanzi').innerText = sentenceObj.h;
+            document.getElementById('ans-pinyin').innerText = sentenceObj.p;
+            document.getElementById('ans-vi').innerText = sentenceObj.vi;
+            document.getElementById('dict-answer-box').classList.remove('hidden');
+            document.getElementById('dict-input').disabled = true;
+            
+            const btnNext = document.getElementById('btn-next-dict');
+            btnNext.innerText = (dictStep === lessonsData[currentLessonIdx].sentences.length - 1) ? "Hoàn thành Bài khóa 🏆" : "Câu tiếp theo ➡️";
+            btnNext.classList.remove('hidden');
+        }
+        function nextDictation() {
+            if (dictStep < lessonsData[currentLessonIdx].sentences.length - 1) {
+                dictStep++;
+                loadDictationStep();
+            } else {
+                lessonsData[currentLessonIdx].completed = true;
+                openDictationMenu();
+            }
+        }
+        function endDictationSession() { completedStatus.dictation = true; document.getElementById('check-dictation').classList.remove('hidden'); checkUnlockForm(); returnToStart(); }
+
+        function checkUnlockForm() {
+            const allDictDone = lessonsData.every(l => l.completed);
+            if (completedStatus.flashcard && allDictDone) {
+                const btn = document.getElementById('btn-form');
+                btn.disabled = false;
+                btn.className = "btn-ghibli text-lg mt-2 bg-emerald-100 border-emerald-500 text-emerald-800 shadow-md";
+                btn.innerHTML = '📝 Phần 3: Bài Tập (Đã mở khóa)';
+                btn.onclick = () => window.open('https://forms.gle/KninNTAi99ZFSqASA', '_blank');
+            }
+        }
+
+        document.addEventListener("keydown", function(e) {
+            const dictScreen = document.getElementById('dictation-screen');
+            if (e.key === "Enter" && !dictScreen.classList.contains('hidden')) {
+                e.preventDefault();
+                const btnNext = document.getElementById('btn-next-dict');
+                const inputField = document.getElementById('dict-input');
+                if (!btnNext.classList.contains('hidden')) nextDictation();
+                else if (!inputField.disabled) checkDictation();
+            }
+        });
+    </script>
+</body>
+</html>
+
