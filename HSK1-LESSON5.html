@@ -75,7 +75,7 @@
         .menu-btn h3 { margin: 0; color: var(--ghibli-dark-green); }
 
         /* Flashcards */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 380px; margin: 20px 0; }
+        .flashcard-container { perspective: 1000px; width: 100%; height: 420px; margin: 20px 0; }
         .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
         .flashcard.flipped { transform: rotateY(180deg); }
         .flashcard-face { 
@@ -84,17 +84,21 @@
             border-radius: 25px; border: 2px solid var(--ghibli-green); background: white; 
             padding: 25px; box-sizing: border-box; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
-        .flashcard-back { transform: rotateY(180deg); background: #f0f9f0; }
+        .flashcard-back { transform: rotateY(180deg); background: #f8fff8; justify-content: space-evenly; }
         .flashcard .cn { font-size: 5rem; color: var(--ghibli-dark-green); font-weight: bold; margin: 0; }
-        .flashcard .pinyin { font-size: 1.5rem; color: #666; margin: 5px 0; }
-        .flashcard .vi { font-size: 1.8rem; color: var(--ghibli-wood); font-weight: 700; margin-bottom: 15px; }
+        .flashcard .pinyin { font-size: 1.6rem; color: #444; margin: 2px 0; font-weight: 600; }
+        .flashcard .type { font-size: 0.9rem; color: #888; background: #eee; padding: 2px 10px; border-radius: 10px; margin-bottom: 5px; }
+        .flashcard .vi { font-size: 1.8rem; color: var(--ghibli-wood); font-weight: 700; margin-bottom: 10px; }
         
         .example-box { 
-            background: rgba(255,255,255,0.7); padding: 10px 15px; border-radius: 12px; 
-            border-left: 4px solid var(--ghibli-green); text-align: left; width: 90%;
+            background: white; padding: 12px 15px; border-radius: 15px; 
+            border: 1px dashed var(--ghibli-green); text-align: left; width: 95%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-        .example-box .ex-cn { font-size: 1.1rem; color: #333; margin-bottom: 3px; }
-        .example-box .ex-vi { font-size: 0.9rem; color: #666; font-style: italic; }
+        .example-box .ex-label { font-size: 0.75rem; color: var(--ghibli-leaf); font-weight: bold; text-transform: uppercase; margin-bottom: 4px; display: block;}
+        .example-box .ex-cn { font-size: 1.2rem; color: #222; margin-bottom: 2px; font-weight: 600; }
+        .example-box .ex-p { font-size: 0.95rem; color: #666; margin-bottom: 4px; }
+        .example-box .ex-vi { font-size: 1rem; color: var(--ghibli-dark-green); font-style: italic; }
 
         .vocab-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .btn-vocab { padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -127,7 +131,7 @@
 </head>
 <body>
 
-<a href="index.html" class="exit-button">🏠 Quay về vườn</a>
+<a href="#" class="exit-button" onclick="location.reload()">🏠 Quay về vườn</a>
 
 <div class="game-container">
     <!-- MÀN HÌNH CHÍNH -->
@@ -170,10 +174,14 @@
                     <p style="color:#aaa; font-size:0.8rem; margin-top:20px">Chạm để lật mặt sau ✨</p>
                 </div>
                 <div class="flashcard-face flashcard-back">
-                    <div class="pinyin" id="v-p">jiā</div>
-                    <div class="vi" id="v-vi">nhà, gia đình</div>
+                    <div id="v-p" class="pinyin">jiā</div>
+                    <div id="v-type" class="type">Danh từ</div>
+                    <div id="v-vi" class="vi">nhà, gia đình</div>
+                    
                     <div class="example-box">
+                        <span class="ex-label">Ví dụ ứng dụng:</span>
                         <div class="ex-cn" id="v-ex-cn">我家有三口人。</div>
+                        <div class="ex-p" id="v-ex-p">Wǒ jiā yǒu sān kǒu rén.</div>
                         <div class="ex-vi" id="v-ex-vi">Nhà tôi có 3 người.</div>
                     </div>
                 </div>
@@ -243,24 +251,24 @@
     }
 
     const vocabList = [
-        {cn: '家', p: 'jiā', vi: 'nhà, gia đình', ex: '你家有几口人？', exVi: 'Nhà bạn có mấy người?'},
-        {cn: '有', p: 'yǒu', vi: 'có', ex: '我有两个姐姐。', exVi: 'Tôi có 2 người chị gái.'},
-        {cn: '口', p: 'kǒu', vi: 'lượng từ (người)', ex: '我家有三口人。', exVi: 'Nhà tôi có 3 người.'},
-        {cn: '女儿', p: 'nǚ’ér', vi: 'con gái', ex: '她是我女儿。', exVi: 'Cô ấy là con gái tôi.'},
-        {cn: '几', p: 'jǐ', vi: 'mấy', ex: '你有几个中国朋友？', exVi: 'Bạn có mấy người bạn Trung Quốc?'},
-        {cn: '岁', p: 'suì', vi: 'tuổi', ex: '你女儿今年四岁了。', exVi: 'Con gái bạn năm nay 4 tuổi rồi.'},
-        {cn: '了', p: 'le', vi: 'trợ từ (biến đổi)', ex: '她二十岁了。', exVi: 'Cô ấy 20 tuổi rồi (đã sang tuổi mới).'},
-        {cn: '今年', p: 'jīnnián', vi: 'năm nay', ex: '今年我二十岁。', exVi: 'Năm nay tôi 20 tuổi.'},
-        {cn: '多', p: 'duō', vi: 'bao nhiêu (mức độ)', ex: '你女儿多大了？', exVi: 'Con gái bạn bao nhiêu tuổi rồi?'},
-        {cn: '大', p: 'dà', vi: 'lớn, to', ex: '这个家很大。', exVi: 'Ngôi nhà này rất lớn.'},
-        {cn: '爷爷', p: 'yéye', vi: 'ông nội', ex: '我爷爷今年七十岁。', exVi: 'Ông nội tôi năm nay 70 tuổi.'},
-        {cn: '奶奶', p: 'nǎinai', vi: 'bà nội', ex: '我奶奶在中国。', exVi: 'Bà nội tôi ở Trung Quốc.'},
-        {cn: '爸爸', p: 'bàba', vi: 'bố', ex: '我爸爸是医生。', exVi: 'Bố tôi là bác sĩ.'},
-        {cn: '妈妈', p: 'māma', vi: 'mẹ', ex: '妈妈，我爱你。', exVi: 'Mẹ ơi, con yêu mẹ.'},
-        {cn: '哥哥', p: 'gēge', vi: 'anh trai', ex: '我有两个哥哥。', exVi: 'Tôi có 2 người anh trai.'},
-        {cn: '姐姐', p: 'jiějie', vi: 'chị gái', ex: '我姐姐很大了。', exVi: 'Chị gái tôi lớn rồi.'},
-        {cn: '弟弟', p: 'dìdi', vi: 'em trai', ex: '他是我弟弟。', exVi: 'Cậu ấy là em trai tôi.'},
-        {cn: '妹妹', p: 'mèimei', vi: 'em gái', ex: '你妹妹多大了？', exVi: 'Em gái bạn bao nhiêu tuổi rồi?'}
+        {cn: '家', p: 'jiā', type: 'Danh từ', vi: 'nhà, gia đình', ex: '你家有几口人？', exP: 'Nǐ jiā yǒu jǐ kǒu rén?', exVi: 'Nhà bạn có mấy người?'},
+        {cn: '有', p: 'yǒu', type: 'Động từ', vi: 'có', ex: '我有两个姐姐。', exP: 'Wǒ yǒu liǎng gè jiějie.', exVi: 'Tôi có 2 người chị gái.'},
+        {cn: '口', p: 'kǒu', type: 'Lượng từ', vi: 'lượng từ (người)', ex: '我家有三口人。', exP: 'Wǒ jiā yǒu sān kǒu rén.', exVi: 'Nhà tôi có 3 người.'},
+        {cn: '女儿', p: 'nǚ’ér', type: 'Danh từ', vi: 'con gái', ex: '她是我女儿。', exP: 'Tā shì wǒ nǚ’ér.', exVi: 'Cô ấy là con gái tôi.'},
+        {cn: '几', p: 'jǐ', type: 'Đại từ', vi: 'mấy', ex: '你有几个中国朋友？', exP: 'Nǐ yǒu jǐ gè Zhōngguó péngyou?', exVi: 'Bạn có mấy người bạn Trung Quốc?'},
+        {cn: '岁', p: 'suì', type: 'Lượng từ', vi: 'tuổi', ex: '你女儿今年四岁了。', exP: 'Nǐ nǚ’ér jīnnián sì suì le.', exVi: 'Con gái bạn năm nay 4 tuổi rồi.'},
+        {cn: '了', p: 'le', type: 'Trợ từ', vi: 'trợ từ (biến đổi)', ex: '她二十岁了。', exP: 'Tā èrshí suì le.', exVi: 'Cô ấy 20 tuổi rồi (đã sang tuổi mới).'},
+        {cn: '今年', p: 'jīnnián', type: 'Danh từ', vi: 'năm nay', ex: '今年我二十岁。', exP: 'Jīnnián wǒ èrshí suì.', exVi: 'Năm nay tôi 20 tuổi.'},
+        {cn: '多', p: 'duō', type: 'Phó từ', vi: 'bao nhiêu (mức độ)', ex: '你女儿多大了？', exP: 'Nǐ nǚ’ér duō dà le?', exVi: 'Con gái bạn bao nhiêu tuổi rồi?'},
+        {cn: '大', p: 'dà', type: 'Tính từ', vi: 'lớn, to', ex: '这个家很大。', exP: 'Zhège jiā hěn dà.', exVi: 'Ngôi nhà này rất lớn.'},
+        {cn: '爷爷', p: 'yéye', type: 'Danh từ', vi: 'ông nội', ex: '我爷爷今年七十岁。', exP: 'Wǒ yéye jīnnián qīshí suì.', exVi: 'Ông nội tôi năm nay 70 tuổi.'},
+        {cn: '奶奶', p: 'nǎinai', type: 'Danh từ', vi: 'bà nội', ex: '我奶奶在中国。', exP: 'Wǒ nǎinai zài Zhōngguó.', exVi: 'Bà nội tôi ở Trung Quốc.'},
+        {cn: '爸爸', p: 'bàba', type: 'Danh từ', vi: 'bố', ex: '我爸爸是医生。', exP: 'Wǒ bàba shì yīshēng.', exVi: 'Bố tôi là bác sĩ.'},
+        {cn: '妈妈', p: 'māma', type: 'Danh từ', vi: 'mẹ', ex: '妈妈，我爱你。', exP: 'Māma, wǒ ài nǐ.', exVi: 'Mẹ ơi, con yêu mẹ.'},
+        {cn: '哥哥', p: 'gēge', type: 'Danh từ', vi: 'anh trai', ex: '我有两个哥哥。', exP: 'Wǒ yǒu liǎng gè gēge.', exVi: 'Tôi có 2 người anh trai.'},
+        {cn: '姐姐', p: 'jiějie', type: 'Danh từ', vi: 'chị gái', ex: '我姐姐很大了。', exP: 'Wǒ jiějie hěn dà le.', exVi: 'Chị gái tôi lớn rồi.'},
+        {cn: '弟弟', p: 'dìdi', type: 'Danh từ', vi: 'em trai', ex: '他是我弟弟。', exP: 'Tā shì wǒ dìdi.', exVi: 'Cậu ấy là em trai tôi.'},
+        {cn: '妹妹', p: 'mèimei', type: 'Danh từ', vi: 'em gái', ex: '你妹妹多大了？', exP: 'Nǐ mèimei duō dà le?', exVi: 'Em gái bạn bao nhiêu tuổi rồi?'}
     ];
 
     const questions = [
@@ -311,8 +319,10 @@
         // Cập nhật nội dung thẻ
         document.getElementById('v-cn').innerText = v.cn;
         document.getElementById('v-p').innerText = v.p;
+        document.getElementById('v-type').innerText = v.type;
         document.getElementById('v-vi').innerText = v.vi;
         document.getElementById('v-ex-cn').innerText = v.ex;
+        document.getElementById('v-ex-p').innerText = v.exP; // Thêm Pinyin ví dụ
         document.getElementById('v-ex-vi').innerText = v.exVi;
     }
 
@@ -356,7 +366,7 @@
         }
     }
 
-    // QUIZ LOGIC (Original)
+    // QUIZ LOGIC
     function startQuiz() {
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('vocab-summary-screen').style.display = 'none';
