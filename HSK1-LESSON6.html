@@ -1,576 +1,387 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSK1 - Bài 6: Tôi biết nói tiếng Trung</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HSK 1 - Bài 6: 我会说汉语 | Nga Học HSK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ghibli-green: #9dc183;
-            --ghibli-dark-green: #4f7942;
-            --ghibli-sky: #d0f0f7;
-            --ghibli-wood: #8b5a2b;
-            --ghibli-leaf: #7fb069;
-            --ghibli-pink: #ffb7c5;
-            --white-glass: rgba(255, 255, 255, 0.96);
+            --primary: #8bc34a; 
+            --primary-dark: #558b2f;
+            --secondary: #ffb74d; 
+            --bg-color: #f1f8e9; 
+            --card-bg: #ffffff;
+            --text-main: #33691e;
+            --text-muted: #5d4037;
+            --hanzi-color: #d84315;
+            --font-cn: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif; 
+        }
+
+        * {
+            box-sizing: border-box; margin: 0; padding: 0;
+            font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background: var(--ghibli-sky);
-            background-image: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0)), 
-                url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#cddc39 1.5px, transparent 1.5px);
+            background-size: 25px 25px;
+            color: var(--text-main);
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding-bottom: 50px;
         }
 
-        .btn-back-home {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: white;
-            color: var(--ghibli-wood);
-            padding: 10px 15px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 2px solid var(--ghibli-pink);
-            box-shadow: 0 4px 0 var(--ghibli-pink);
-            transition: 0.2s;
-            z-index: 10;
-        }
-        .btn-back-home:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 var(--ghibli-pink);
-            background: var(--ghibli-pink);
-            color: white;
+        .branding {
+            width: 100%; background: #fff; text-align: center; padding: 6px 0;
+            font-size: 0.8rem; font-weight: 800; color: var(--primary-dark);
+            letter-spacing: 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-transform: uppercase;
         }
 
-        .btn-back-menu {
-            background: white; 
-            color: var(--ghibli-dark-green); 
-            padding: 8px 18px; 
-            border-radius: 20px;
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            border: 2px solid var(--ghibli-green);
-            cursor: pointer; 
-            margin-bottom: 20px; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px;
-            box-shadow: 0 3px 0 var(--ghibli-green);
-            transition: 0.2s;
-            text-decoration: none;
-        }
-        .btn-back-menu:hover { background: var(--ghibli-green); color: white; transform: translateY(-2px); }
-
-        .game-container {
-            background: var(--white-glass);
-            border-radius: 25px;
-            padding: 40px 30px 30px 30px;
-            max-width: 800px;
-            width: 100%;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
-            border: 5px solid var(--ghibli-green);
-            position: relative;
+        .header {
+            width: 100%; max-width: 800px; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border-radius: 0 0 20px 20px;
+            box-shadow: 0 5px 15px rgba(139, 195, 74, 0.3);
         }
 
-        #quiz-screen, #result-screen, #vocab-screen, #vocab-summary-screen { display: none; }
-        #intro-screen { display: block; }
-
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 25px; }
-        .menu-btn {
-            background: white; border: 2px solid var(--ghibli-green); padding: 20px;
-            border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 20px; text-align: left;
+        .btn-back {
+            background: rgba(255,255,255,0.2); color: white; text-decoration: none;
+            padding: 8px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 5px; border: 1px solid rgba(255,255,255,0.5);
         }
-        .menu-btn:hover { transform: translateY(-3px); background: #f0f9f0; border-color: var(--ghibli-dark-green); }
-        .menu-btn h3 { margin: 0; color: var(--ghibli-dark-green); }
 
-        /* Flashcards */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 350px; margin: 20px 0; }
-        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
-        .flashcard.flipped { transform: rotateY(180deg); }
-        .flashcard-face { 
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            border-radius: 25px; border: 2px solid var(--ghibli-green); background: white; 
-            padding: 25px; box-sizing: border-box; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        .header h2 { font-size: 1.15rem; text-align: center; flex: 1; margin: 0 10px; }
+        .header-spacer { width: 80px; }
+
+        .tabs {
+            display: flex; justify-content: space-between; gap: 5px;
+            margin: 20px auto; background: white; padding: 6px;
+            border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 95%; max-width: 600px;
         }
-        .flashcard-back { transform: rotateY(180deg); background: #f0f9f0; }
-        .flashcard .cn { font-size: 4.5rem; color: var(--ghibli-dark-green); font-weight: bold; margin: 0; }
-        .flashcard .pinyin { font-size: 1.4rem; color: #666; margin: 5px 0; }
-        .flashcard .vi { font-size: 1.8rem; color: var(--ghibli-wood); font-weight: 700; margin-bottom: 15px; }
-        .flashcard .example { font-size: 1.1rem; color: #444; background: rgba(255,255,255,0.7); padding: 10px; border-radius: 10px; line-height: 1.4; border-left: 4px solid var(--ghibli-pink); }
 
-        /* Vocab Footer Buttons */
-        .vocab-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .btn-vocab { padding: 15px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-not-learned { background: #ffeaa7; color: #d35400; box-shadow: 0 4px 0 #fab1a0; }
-        .btn-learned { background: var(--ghibli-green); color: white; box-shadow: 0 4px 0 var(--ghibli-dark-green); }
-        .btn-vocab:active { transform: translateY(3px); box-shadow: none; }
+        .tab-btn {
+            flex: 1; border: none; background: transparent;
+            padding: 10px 0; border-radius: 25px;
+            font-size: 0.9rem; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; transition: all 0.2s;
+            text-align: center; white-space: nowrap;
+        }
 
-        /* Summary UI */
-        .summary-stats { display: flex; justify-content: space-around; margin: 20px 0; }
-        .stat-circle { width: 100px; height: 100px; border-radius: 50%; border: 8px solid #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; }
-        .stat-learned { border-color: var(--ghibli-green); color: var(--ghibli-dark-green); }
-        .stat-review { border-color: #ff7675; color: #d63031; }
-        .review-list { text-align: left; background: #fffcf5; padding: 20px; border-radius: 15px; border: 1px solid #ffeaa7; max-height: 250px; overflow-y: auto; margin: 15px 0; }
-        .review-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .tab-btn.active {
+            background: var(--secondary); color: white;
+            box-shadow: 0 4px 10px rgba(255, 183, 77, 0.4);
+        }
 
-        /* Quiz UI */
-        .game-stats { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; color: var(--ghibli-dark-green); }
-        .progress-bar { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
-        #progress, #vocab-progress { height: 100%; background: var(--ghibli-green); width: 0%; transition: 0.4s; }
-        .question-box { font-size: 1.3rem; color: var(--ghibli-wood); margin-bottom: 20px; line-height: 1.8; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .option-btn { background: white; border: 2px solid var(--ghibli-leaf); padding: 15px 10px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.2s; }
-        .option-btn.correct { background: var(--ghibli-dark-green) !important; color: white !important; }
-        .option-btn.wrong { background: #ff7675 !important; color: white !important; }
+        .section { display: none; width: 100%; max-width: 800px; padding: 0 15px; animation: fadeIn 0.4s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Chips */
-        .word-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 20px;}
-        .chip { background: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; border: 2px solid var(--ghibli-green); transition: 0.2s; box-shadow: 2px 2px 0px var(--ghibli-green); font-size: 1.1rem;}
-        .chip.selected { opacity: 0.2; pointer-events: none;}
-        .answer-area { min-height: 60px; border: 2px dashed var(--ghibli-leaf); border-radius: 15px; margin-bottom: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 15px; background: #fffcf5; }
-        .chip-in-answer { background: var(--ghibli-pink); color: white; border-color: #ff9aa2; }
+        .hanzi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .hanzi-card {
+            background: var(--card-bg); border-radius: 15px; padding: 20px;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border-top: 4px solid var(--primary);
+        }
+        .char-display { font-family: var(--font-cn); font-size: 4rem; color: var(--hanzi-color); line-height: 1.2; }
+        .pinyin {
+            background: #e3f2fd; color: #1565c0; padding: 4px 15px; border-radius: 12px;
+            font-weight: 800; font-size: 1.1rem; display: inline-block; margin-bottom: 10px;
+        }
+        .meaning { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: var(--text-muted); }
+        
+        .hanzi-details {
+            background: #f5f5f5; border-radius: 10px; padding: 12px; margin-bottom: 10px;
+            text-align: left; font-size: 0.95rem; color: #424242; border-left: 4px solid var(--primary);
+        }
+        .hanzi-details p { margin-bottom: 5px; }
+        .hanzi-details b { color: var(--primary-dark); }
+        .memo { font-size: 0.95rem; background: #fff8e1; padding: 12px; border-radius: 10px; color: #5d4037; text-align: left; border-left: 4px solid var(--secondary); line-height: 1.4;}
 
-        .feedback-box { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; text-align: left; font-size: 0.95rem; background: #f9f9f9; border-left: 5px solid var(--ghibli-green); }
-        .btn-main { background: var(--ghibli-wood); color: white; border: none; padding: 12px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; margin-top: 15px; font-weight: bold; box-shadow: 0 4px 0 #5d3d1d; }
-        .btn-main:active { transform: translateY(2px); box-shadow: none; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .flashcard { width: 100%; height: 260px; perspective: 1000px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.5s; transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px;
+        }
+        .flashcard-front { background: #fff; border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .flashcard-front .word-cn { font-family: var(--font-cn); font-size: 3.5rem; color: var(--text-main); }
+        .flashcard-front .hint { position: absolute; bottom: 10px; font-size: 0.8rem; color: #aaa; }
+        .flashcard-back { background: #fffde7; transform: rotateY(180deg); border: 2px solid var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .flashcard-back .py { font-size: 1.3rem; font-weight: bold; color: #1976d2; margin-bottom: 5px; }
+        .flashcard-back .mn { font-size: 1.2rem; font-weight: 800; color: #e65100; margin-bottom: 15px; }
+        .example-box { background: white; padding: 10px; border-radius: 10px; width: 100%; }
+        .ex-cn { font-family: var(--font-cn); font-size: 1.1rem; color: #333; margin-bottom: 2px; }
+        .ex-py { font-size: 0.9rem; color: #666; margin-bottom: 2px; }
+        .ex-vn { font-size: 0.9rem; color: var(--primary-dark); font-style: italic; }
 
-        ruby { ruby-align: center; }
-        rt { font-size: 0.55em; color: #666; font-weight: 400; }
+        .game-container { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); text-align: center; }
+        .game-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 800; color: var(--primary-dark); font-size: 1rem; }
+        .progress-bar { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), #ff9800); width: 0%; transition: width 0.3s; }
+        .question-text { font-size: 1.2rem; font-weight: 700; margin-bottom: 25px; color: var(--text-muted); line-height: 1.4; }
+        .question-highlight { font-family: var(--font-cn); font-size: 2.5rem; color: var(--hanzi-color); display: block; margin: 10px 0; font-weight: normal; }
+        
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn {
+            background: #f8f9fa; border: 2px solid #e0e0e0; padding: 15px; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; color: #424242; cursor: pointer; transition: all 0.2s; font-family: var(--font-cn);
+        }
+        .option-btn:active { transform: scale(0.98); }
+        .option-btn.correct { background: #4CAF50 !important; color: white !important; border-color: #388E3C !important; }
+        .option-btn.wrong { background: #F44336 !important; color: white !important; border-color: #D32F2F !important; }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 400px; padding: 25px;
+            border-radius: 20px; text-align: center; animation: popIn 0.3s;
+        }
+        .modal-icon { font-size: 4rem; margin-bottom: 10px; line-height: 1; }
+        .modal-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .modal-title.t-correct { color: #4CAF50; }
+        .modal-title.t-wrong { color: #F44336; }
+        .modal-desc { font-size: 1.05rem; color: #555; margin-bottom: 20px; line-height: 1.5; }
+        .btn-next {
+            background: var(--primary); color: white; border: none; padding: 12px 30px;
+            border-radius: 25px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%;
+        }
+
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .game-result { display: none; flex-direction: column; align-items: center; gap: 15px; }
+        .score-circle {
+            width: 100px; height: 100px; border-radius: 50%; border: 5px solid var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 900; color: var(--primary-dark); margin: 10px 0;
+        }
+        .btn-play-again {
+            background: var(--secondary); color: white; border: none; padding: 12px 30px;
+            border-radius: 25px; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="game-container">
-    <!-- NÚT QUAY VỀ TRANG CHỦ -->
-    <a href="index.html" class="btn-back-home" id="home-link">
-        🏡 Quay về vườn
-    </a>
+    <div class="branding">© Bản Quyền Thuộc Về Nga Học HSK</div>
 
-    <!-- CỔNG VƯỜN -->
-    <div id="intro-screen">
-        <div style="background: var(--ghibli-pink); color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-bottom: 15px;">🌸 Nga Học HSK</div>
-        <h1>Bài 6: <ruby>我会说汉语<rt>Wǒ huì shuō Hànyǔ</rt></ruby></h1>
-        <p>Hôm nay bạn muốn gieo mầm kiến thức hay thử thách bản thân?</p>
-        
-        <div class="menu-grid">
-            <button class="menu-btn" onclick="startVocab()">
-                <div style="font-size: 2.5rem">🗂️</div>
-                <div>
-                    <h3>Học Từ Vựng (Flashcards)</h3>
-                    <p>Học 15 từ vựng Bài 6 kèm ví dụ và theo dõi ghi nhớ.</p>
-                </div>
-            </button>
-            <button class="menu-btn" onclick="startQuiz()">
-                <div style="font-size: 2.5rem">⚔️</div>
-                <div>
-                    <h3>Thử Thách Bài 6 (30 câu)</h3>
-                    <p>Kiểm tra kỹ năng từ vựng, ngữ pháp và sắp xếp câu.</p>
-                </div>
-            </button>
-        </div>
+    <header class="header">
+        <a href="index.html" class="btn-back">❮ Về Vườn</a>
+        <h2>Bài 6: 我会说汉语</h2>
+        <div class="header-spacer"></div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('hanzi')">✏️ Hán Tự</button>
+        <button class="tab-btn" onclick="switchTab('vocab')">🃏 Từ Vựng</button>
+        <button class="tab-btn" onclick="switchTab('game')">🎮 Luyện Tập</button>
     </div>
 
-    <!-- ÔN TẬP TỪ VỰNG -->
-    <div id="vocab-screen">
-        <button class="btn-back-menu" onclick="resetToMenu()">🪴 Về Menu</button>
-        <div class="game-stats">
-            <span id="vocab-count">Từ: 1/15</span>
-            <span id="learned-stats-header">Đã thuộc: 0/15</span>
-        </div>
-        <div class="progress-bar"><div id="vocab-progress"></div></div>
-        
-        <div class="flashcard-container" onclick="document.getElementById('card6').classList.toggle('flipped')">
-            <div class="flashcard" id="card6">
-                <div class="flashcard-face">
-                    <div class="cn" id="v-cn">会</div>
-                    <p style="color:#aaa; font-size:0.85rem; margin-top:30px">Chạm để lật mặt sau ✨</p>
-                </div>
-                <div class="flashcard-face flashcard-back">
-                    <div class="pinyin" id="v-p">huì</div>
-                    <div class="vi" id="v-vi">biết</div>
-                    <div class="example" id="v-ex">我会说汉语。<br>(Wǒ huì shuō Hànyǔ)</div>
-                </div>
+    <!-- HÁN TỰ (Đã lược bỏ các chữ đã học ở bài trước) -->
+    <section id="hanzi" class="section active">
+        <div class="hanzi-grid" id="hanzi-container"></div>
+    </section>
+
+    <!-- TỪ VỰNG (Giữ đầy đủ) -->
+    <section id="vocab" class="section">
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">
+            * Chạm vào thẻ để lật xem mặt sau
+        </p>
+        <div class="vocab-grid" id="vocab-container"></div>
+    </section>
+
+    <!-- LUYỆN TẬP -->
+    <section id="game" class="section">
+        <div class="game-container" id="quiz-area">
+            <div class="game-header">
+                <span id="score-display">Điểm: 0</span>
+                <span id="question-count">Câu: 1/15</span>
             </div>
-        </div>
-
-        <div class="vocab-controls">
-            <button class="btn-vocab btn-not-learned" onclick="nextVocab(false)">❓ Chưa thuộc</button>
-            <button class="btn-vocab btn-learned" onclick="nextVocab(true)">✅ Đã thuộc</button>
-        </div>
-    </div>
-
-    <!-- TỔNG KẾT TỪ VỰNG -->
-    <div id="vocab-summary-screen">
-        <h1>Bảng Tổng Kết Ghi Nhớ</h1>
-        <div class="summary-stats">
-            <div class="stat-circle stat-learned">
-                <span id="percent-learned">0%</span>
-                <small>Đã thuộc</small>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
             </div>
-            <div class="stat-circle stat-review">
-                <span id="percent-not-learned">0%</span>
-                <small>Cần ôn lại</small>
-            </div>
-        </div>
-        
-        <p style="text-align: left; font-weight: bold; color: #d63031;">🏮 Danh sách từ chưa thuộc:</p>
-        <div class="review-list" id="review-list-container">
-            <!-- Items added here -->
+            <div id="question-text" class="question-text"></div>
+            <div class="options-grid" id="options-container"></div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn-main" style="background: var(--ghibli-green); box-shadow: 0 4px 0 var(--ghibli-dark-green);" onclick="startVocab()">Luyện lại 🔄</button>
-            <button class="btn-main" onclick="startQuiz()">Thách thức ⚔️</button>
+        <div class="game-container game-result" id="result-area">
+            <div style="font-size: 5rem;" id="medal-emoji">🏆</div>
+            <div class="score-circle" id="final-score">150</div>
+            <h2 id="result-title">Tuyệt vời!</h2>
+            <p id="result-desc" style="color: #555;">Bạn đã hoàn thành bài luyện tập.</p>
+            <button class="btn-play-again" onclick="startGame()">↻ Chơi lại nhé</button>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div id="explanation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-icon" class="modal-icon">✅</div>
+            <h3 id="modal-title" class="modal-title">Đúng rồi!</h3>
+            <p id="modal-desc" class="modal-desc"></p>
+            <button class="btn-next" onclick="nextQuestion()">Tiếp tục ❯</button>
         </div>
     </div>
 
-    <!-- TRẮC NGHIỆM -->
-    <div id="quiz-screen">
-        <button class="btn-back-menu" onclick="resetToMenu()">🪴 Về Menu</button>
-        <div class="game-stats">
-            <span id="question-count">Câu: 1/30</span>
-            <span id="score-display">Điểm: 0</span>
-        </div>
-        <div class="progress-bar"><div id="progress"></div></div>
-        <div id="question-content">
-            <div class="question-box" id="question-text"></div>
-            <div id="answer-section"></div>
-        </div>
-        <div id="feedback-box" class="feedback-box">
-            <div id="result-status"></div>
-            <div id="explanation-text" style="font-style:italic; margin-top:8px; color:#555; border-top:1px solid #ddd; padding-top:8px"></div>
-        </div>
-        <button id="next-btn" class="btn-main" style="display: none;" onclick="handleNext()">Tiếp tục ➡</button>
-    </div>
-
-    <!-- KẾT QUẢ CUỐI CÙNG -->
-    <div id="result-screen">
-        <h1>Kết Quả Khu Vườn</h1>
-        <span id="rank-icon" style="font-size: 5rem;">🌱</span>
-        <div style="font-size: 2.5rem; font-weight: bold; color: var(--ghibli-dark-green);" id="final-score">0đ</div>
-        <p id="correct-count-text"></p>
-        <button class="btn-main" onclick="resetToMenu()">Về Cổng Vườn 🔄</button>
-    </div>
-</div>
-
-<audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
-<audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"></audio>
-<audio id="audio-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-<audio id="audio-win" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
-
-<script>
-    const sounds = {
-        correct: document.getElementById('audio-correct'),
-        wrong: document.getElementById('audio-wrong'),
-        click: document.getElementById('audio-click'),
-        win: document.getElementById('audio-win')
-    };
-
-    function playSound(type) {
-        sounds[type].currentTime = 0;
-        sounds[type].play().catch(() => {});
-    }
-
-    const vocabList = [
-        {cn: '会', p: 'huì', vi: 'biết (kỹ năng)', ex: '我会说汉语。<br>(Wǒ huì shuō Hànyǔ)'},
-        {cn: '说', p: 'shuō', vi: 'nói', ex: '你说什么？<br>(Nǐ shuō shénme?)'},
-        {cn: '妈妈', p: 'māma', vi: 'mẹ', ex: '我妈妈 là老师。<br>(Wǒ māma shì lǎoshī)'},
-        {cn: '菜', p: 'cài', vi: 'món ăn, rau', ex: '中国菜很好吃。<br>(Zhōngguó cài hěn hǎochī)'},
-        {cn: '很', p: 'hěn', vi: 'rất', ex: '我很忙。<br>(Wǒ hěn máng)'},
-        {cn: '好吃', p: 'hǎochī', vi: 'ngon', ex: '这个汉堡很好吃。<br>(Zhè ge hànbǎo hěn hǎochī)'},
-        {cn: '做', p: 'zuò', vi: 'làm, nấu', ex: '你会做饭吗？<br>(Nǐ huì zuò fàn ma?)'},
-        {cn: '写', p: 'xiě', vi: 'viết', ex: '我会写汉字。<br>(Wǒ huì xiě hànzì)'},
-        {cn: '汉字', p: 'Hànzì', vi: 'chữ Hán', ex: '这个汉字怎么写？<br>(Zhè ge hànzì zěnme xiě?)'},
-        {cn: '字', p: 'zì', vi: 'chữ', ex: '这个字很好看。<br>(Zhè ge zì hěn hǎokàn)'},
-        {cn: '怎么', p: 'zěnme', vi: 'thế nào', ex: '这个怎么读？<br>(Zhè ge zěnme dú?)'},
-        {cn: '读', p: 'dú', vi: 'đọc', ex: '请大声读。<br>(Qǐng dàshēng dú)'},
-        {cn: '英语', p: 'Yīngyǔ', vi: 'tiếng Anh', ex: '我不说英语。<br>(Wǒ bù shuō Yīngyǔ)'},
-        {cn: '法语', p: 'Fǎyǔ', vi: 'tiếng Pháp', ex: '他会说法语。<br>(Tā huì shuō Fǎyǔ)'},
-        {cn: '日语', p: 'Rìyǔ', vi: 'tiếng Nhật', ex: '我会说一点日语。<br>(Wǒ huì shuō yīdiǎn Rìyǔ)'}
-    ];
-
-    const rawQuestions = [
-        { type: 'mc', q: "Từ nào nghĩa là 'biết' (thông qua học tập)?", options: ["<ruby>会<rt>huì</rt></ruby>", "<ruby>说<rt>shuō</rt></ruby>", "<ruby>做<rt>zuò</rt></ruby>", "<ruby>读<rt>dú</rt></ruby>"], a: 0, exp: "会 (huì) dùng cho kỹ năng cần học mới biết." },
-        { type: 'mc', q: "Từ nào nghĩa là 'món ăn' hoặc 'rau'?", options: ["<ruby>字<rt>zì</rt></ruby>", "<ruby>菜<rt>cài</rt></ruby>", "<ruby>写<rt>xiě</rt></ruby>", "<ruby>做<rt>zuò</rt></ruby>"], a: 1, exp: "菜 (cài) nghĩa là rau hoặc món ăn (ví dụ: 中国菜)." },
-        { type: 'mc', q: "Phiên âm của '写' là gì?", options: ["xiě", "xuě", "xué", "xiè"], a: 0, exp: "写 (xiě) là động từ 'viết'." },
-        { type: 'mc', q: "Nghĩa của từ '好吃' (hǎochī) là:", options: ["Dễ làm", "Rất tốt", "Ngon miệng", "Vui vẻ"], a: 2, exp: "好吃 (hǎochī) là ngon miệng." },
-        { type: 'mc', q: "Từ nào dùng để hỏi 'như thế nào' (cách thức)?", options: ["<ruby>什么<rt>shénme</rt></ruby>", "<ruby>哪儿<rt>nǎr</rt></ruby>", "<ruby>怎么<rt>zěnme</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>"], a: 2, exp: "怎么 (zěnme) + Động từ." },
-        { type: 'mc', q: "Đâu là từ 'Tiếng Pháp'?", options: ["<ruby>英语<rt>Yīngyǔ</rt></ruby>", "<ruby>日语<rt>Rìyǔ</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>法语<rt>Fǎyǔ</rt></ruby>"], a: 3, exp: "法语 (Fǎyǔ) là tiếng Pháp." },
-        { type: 'mc', q: "Chọn chữ Hán cho 'Mẹ':", options: ["<ruby>妈妈<rt>māma</rt></ruby>", "<ruby>奶奶<rt>nǎinai</rt></ruby>", "<ruby>姐姐<rt>jiějie</rt></ruby>", "<ruby>妹妹<rt>mèimei</rt></ruby>"], a: 0, exp: "妈妈 (māma) là mẹ." },
-        { type: 'mc', q: "Từ '读' (dú) có nghĩa là:", options: ["Viết", "Đọc", "Nói", "Nghe"], a: 1, exp: "读 (dú) là đọc." },
-        { type: 'mc', q: "Hán tự '汉字' nghĩa là gì?", options: ["Tiếng Trung", "Người Trung Quốc", "Chữ Hán", "Trung Quốc"], a: 2, exp: "汉字 (Hànzì) là chữ Hán." },
-        { type: 'mc', q: "Phó từ chỉ mức độ 'rất' là:", options: ["<ruby>不<rt>bù</rt></ruby>", "<ruby>太<rt>tài</rt></ruby>", "<ruby>很<rt>hěn</rt></ruby>", "<ruby>都<rt>dōu</rt></ruby>"], a: 2, exp: "很 (hěn) đứng trước tính từ." },
-        { type: 'sort', q: "Sắp xếp: 会 / 我 / 说 / 汉语 / 。", a: ["我", "会", "说", "汉语", "。"], exp: "S + 会 + V + O." },
-        { type: 'sort', q: "Sắp xếp: 不会 / 妈妈 / 做 / 中国菜 / 。", a: ["妈妈", "不会", "做", "中国菜", "。"], exp: "Phủ định là 不会." },
-        { type: 'mc', q: "Câu nào đúng ngữ pháp?", options: ["<ruby>我写汉字很。<rt>Wǒ xiě Hànzì hěn.</rt></ruby>", "<ruby>我写汉字。<rt>Wǒ xiě Hànzì.</rt></ruby>", "<ruby>我会 write 汉字。<rt>Wǒ huì xiě Hànzì.</rt></ruby>", "<ruby>我写会汉字。<rt>Wǒ xiě huì Hànzì.</rt></ruby>"], a: 2, exp: "会 đứng trước động từ chính." },
-        { type: 'mc', q: "Dịch: 'Món ăn mẹ nấu rất ngon'", options: ["<ruby>妈妈菜很好吃。<rt>Māma cài hěn hǎochī.</rt></ruby>", "<ruby>妈妈做的菜很好吃。<rt>Māma zuò de cài hěn hǎochī.</rt></ruby>", "<ruby>妈妈菜好吃很。<rt>Māma cài hǎochī hěn.</rt></ruby>", "<ruby>妈妈做菜好吃。<rt>Māma zuò cài hǎochī.</rt></ruby>"], a: 1, exp: "Cấu trúc định ngữ với 的." },
-        { type: 'sort', q: "Sắp xếp: 很好吃 / 中国菜 / 。", a: ["中国菜", "很好吃", "。"], exp: "Chủ ngữ + 很 + Tính từ." },
-        { type: 'mc', q: "Phủ định của '妈妈做的菜很好吃' là:", options: ["<ruby>妈妈做的菜很不好吃。<rt>Māma zuò de cài hěn bù hǎochī.</rt></ruby>", "<ruby>妈妈做的菜不很好吃。<rt>Māma zuò de cài bù hěn hǎochī.</rt></ruby>", "<ruby>妈妈做的菜不好吃。<rt>Māma zuò de cài bù hǎochī.</rt></ruby>", "<ruby>妈妈做的菜没好吃。<rt>Māma zuò de cài méi hǎochī.</rt></ruby>"], a: 2, exp: "Phủ định tính từ dùng 不." },
-        { type: 'mc', q: "Bạn biết làm món Trung Quốc không?", options: ["<ruby>你会做中国菜 ma？<rt>Nǐ huì zuò Zhōngguó cài ma?</rt></ruby>", "<ruby>你会写中国菜 ma？<rt>Nǐ huì xiě Zhōngguó cài ma?</rt></ruby>", "<ruby>你做中国菜 ma？<rt>Nǐ zuò Zhōngguó cài ma?</rt></ruby>", "<ruby>你会说中国菜 ma？<rt>Nǐ huì shuō Zhōngguó cài ma?</rt></ruby>"], a: 0, exp: "Nấu ăn dùng 做." },
-        { type: 'sort', q: "Sắp xếp: 会 / 你 / 写 / 汉字 / 吗 / ？", a: ["你", "会", "写", "汉字", "吗", "？"], exp: "Câu hỏi với 吗." },
-        { type: 'mc', q: "Tôi biết nói tiếng Anh (英语):", options: ["<ruby>我会说英语。<rt>Wǒ huì shuō Yīngyǔ.</rt></ruby>", "<ruby>我英语会说。<rt>Wǒ Yīngyǔ huì shuō.</rt></ruby>", "<ruby>我会写英语。<rt>Wǒ huì xiě Yīngyǔ.</rt></ruby>", "<ruby>我英语说会。<rt>Wǒ Yīngyǔ shuō huì.</rt></ruby>"], a: 0, exp: "S + 会 + V + O." },
-        { type: 'mc', q: "Điền vào chỗ trống: '你的___名字是什么？'", options: ["<ruby>中国<rt>Zhōngguó</rt></ruby>", "<ruby>汉字<rt>Hànzì</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>谁<rt>shéi</rt></ruby>"], a: 2, exp: "汉语名字: Tên tiếng Trung." },
-        { type: 'sort', q: "Sắp xếp: 怎么 / 写 / 这个字 / ？", a: ["怎么", "写", "这个字", "？"], exp: "Cách viết chữ này." },
-        { type: 'mc', q: "Để hỏi 'Chữ này đọc thế nào?', ta nói:", options: ["<ruby>这个字什么读？<rt>Zhè ge zì shénme dú?</rt></ruby>", "<ruby>这个字怎么读？<rt>Zhè ge zì zěnme dú?</rt></ruby>", "<ruby>这个字怎么写？<rt>Zhè ge zì zěnme xiě?</rt></ruby>", "<ruby>这个字读什么？<rt>Zhè ge zì dú shénme?</rt></ruby>"], a: 1, exp: "怎么读: Đọc thế nào." },
-        { type: 'sort', q: "Sắp xếp: 怎么 / 你的 / 汉语名字 / 读 / ？", a: ["你的", "汉语名字", "怎么", "读", "？"], exp: "Hỏi cách đọc tên." },
-        { type: 'mc', q: "Chọn từ điền vào chỗ trống: '你会___汉字吗？'", options: ["<ruby>说<rt>shuō</rt></ruby>", "<ruby>做<rt>zuò</rt></ruby>", "<ruby>写<rt>xiě</rt></ruby>", "<ruby>很<rt>hěn</rt></ruby>"], a: 2, exp: "Viết chữ Hán dùng 写." },
-        { type: 'sort', q: "Sắp xếp: 我 / 汉字 / 会 / 读 / ， / 不会 / 写 / 。", a: ["我", "会", "读", "汉字", "，", "不会", "写", "。"], exp: "Biết đọc nhưng không biết viết." },
-        { type: 'mc', q: "Tiếng Nhật là gì?", options: ["<ruby>法语<rt>Fǎyǔ</rt></ruby>", "<ruby>英语<rt>Yīngyǔ</rt></ruby>", "<ruby>汉语<rt>Hànyǔ</rt></ruby>", "<ruby>日语<rt>Rìyǔ</rt></ruby>"], a: 3, exp: "日语 là tiếng Nhật." },
-        { type: 'mc', q: "Dịch: 'Chữ này tôi biết đọc, không biết viết'", options: ["<ruby>这个字我会读，不会写。<rt>Zhè ge zì wǒ huì dú, bú huì xiě.</rt></ruby>", "<ruby>这个字我会写，不会读。<rt>Zhè ge zì wǒ huì xiě, bú huì dú.</rt></ruby>", "<ruby>这个字我不读，不写。<rt>Zhè ge zì wǒ bù dú, bù xiě.</rt></ruby>", "<ruby>这个字会写会读。<rt>Zhè ge zì huì xiě huì dú.</rt></ruby>"], a: 0, exp: "Dùng 会 và 不会." },
-        { type: 'sort', q: "Sắp xếp: 吗 / 做 / 妈妈 / 菜 / 会 / ？", a: ["妈妈", "会", "做", "菜", "吗", "？"], exp: "Câu hỏi năng nguyện." },
-        { type: 'mc', q: "Hán tự của 'Zì' (chữ) là:", options: ["<ruby>子<rt>zǐ</rt></ruby>", "<ruby>字<rt>zì</rt></ruby>", "<ruby>自<rt>zì</rt></ruby>", "<ruby>学<rt>xué</rt></ruby>"], a: 1, exp: "字 là chữ." },
-        { type: 'mc', q: "Khen món ăn ngon:", options: ["<ruby>很好看<rt>hěn hǎokàn</rt></ruby>", "<ruby>很好听<rt>hěn hǎotīng</rt></ruby>", "<ruby>很好吃<rt>hěn hǎochī</rt></ruby>", "<ruby>很好学<rt>hěn hǎoxué</rt></ruby>"], a: 2, exp: "好吃 = ngon." }
-    ];
-
-    let currentVocabIdx = 0;
-    let learnedCount = 0;
-    let notLearnedList = [];
-    let questions = [];
-    let curIdx = 0;
-    let score = 0;
-    let correctCount = 0;
-    let selectedOrder = [];
-
-    function resetToMenu() {
-        document.getElementById('home-link').style.display = 'flex';
-        document.getElementById('intro-screen').style.display = 'block';
-        document.getElementById('vocab-screen').style.display = 'none';
-        document.getElementById('vocab-summary-screen').style.display = 'none';
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'none';
-    }
-
-    // --- VOCABULARY ---
-    function startVocab() {
-        playSound('click');
-        currentVocabIdx = 0;
-        learnedCount = 0;
-        notLearnedList = [];
-        document.getElementById('home-link').style.display = 'none';
-        document.getElementById('intro-screen').style.display = 'none';
-        document.getElementById('vocab-summary-screen').style.display = 'none';
-        document.getElementById('vocab-screen').style.display = 'block';
-        updateVocabCard();
-    }
-
-    function updateVocabCard() {
-        const v = vocabList[currentVocabIdx];
-        document.getElementById('card6').classList.remove('flipped');
-        document.getElementById('vocab-count').innerText = `Từ: ${currentVocabIdx + 1}/15`;
-        document.getElementById('learned-stats-header').innerText = `Đã thuộc: ${learnedCount}/15`;
-        document.getElementById('vocab-progress').style.width = `${((currentVocabIdx + 1) / 15) * 100}%`;
-        
-        document.getElementById('v-cn').innerText = v.cn;
-        document.getElementById('v-p').innerText = v.p;
-        document.getElementById('v-vi').innerText = v.vi;
-        document.getElementById('v-ex').innerHTML = v.ex;
-    }
-
-    function nextVocab(learned) {
-        playSound('click');
-        if(learned) {
-            learnedCount++;
-        } else {
-            notLearnedList.push(vocabList[currentVocabIdx]);
+    <script>
+        // --- ÂM THANH ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function playSound(type) {
+            if (!audioCtx) audioCtx = new AudioContext();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+            if (type === 'click') { osc.frequency.setValueAtTime(600, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1); osc.start(); osc.stop(now + 0.1); }
+            else if (type === 'correct') { osc.frequency.setValueAtTime(523, now); osc.frequency.exponentialRampToValueAtTime(659, now + 0.2); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3); osc.start(); osc.stop(now + 0.3); }
+            else if (type === 'wrong') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3); osc.start(); osc.stop(now + 0.3); }
         }
-        
-        currentVocabIdx++;
-        if (currentVocabIdx >= vocabList.length) {
-            showVocabSummary();
-            return;
+
+        // --- DỮ LIỆU ---
+        const hanziData = [
+            { char: '会', pinyin: 'huì', meaning: 'biết, hội', type: 'Hội ý', radical: '人 (Nhân), 云 (Vân)', memo: 'Người (人) tụ họp trên mây (云) để HỘI họp và học những điều chưa BIẾT.' },
+            { char: '说', pinyin: 'shuō', meaning: 'nói', type: 'Hình thanh', radical: '讠 (Ngôn)', memo: 'Dùng lời nói (讠) để trao đổi NÓI chuyện.' },
+            { char: '菜', pinyin: 'cài', meaning: 'món ăn, rau', type: 'Hình thanh', radical: '艹 (Thảo)', memo: 'Món ăn làm từ rau cỏ (艹) hái trên cây (木) bởi bàn tay (爫).' },
+            { char: '做', pinyin: 'zuò', meaning: 'làm, nấu', type: 'Hình thanh', radical: '亻 (Nhân)', memo: 'Người (亻) đang cầm công cụ cổ (故) để LÀM việc.' },
+            { char: '写', pinyin: 'xiě', meaning: 'viết', type: 'Hội ý', radical: '冖 (Mịch - mái che)', memo: 'Dưới mái che (冖) đang VIẾT chữ (与).' },
+            { char: '怎', pinyin: 'zěn', meaning: 'thế nào', type: 'Hình thanh', radical: '心 (Tâm)', memo: 'Lòng (心) đang tự hỏi làm việc đó NHƯ THẾ NÀO.' },
+            { char: '读', pinyin: 'dú', meaning: 'đọc', type: 'Hình thanh', radical: '讠 (Ngôn)', memo: 'Dùng lời nói (讠) để ĐỌC sách, bán (卖) kiến thức.' }
+        ];
+
+        const vocabData = [
+            { word: '会', pinyin: 'huì', meaning: 'Biết (do học tập)', ex_cn: '我会说汉语。', ex_py: 'Wǒ huì shuō Hànyǔ.', ex_vn: 'Tôi biết nói tiếng Trung.' },
+            { word: '说', pinyin: 'shuō', meaning: 'Nói', ex_cn: '你会说什么？', ex_py: 'Nǐ huì shuō shénme?', ex_vn: 'Bạn biết nói gì?' },
+            { word: '妈妈', pinyin: 'māma', meaning: 'Mẹ', ex_cn: '我妈妈不会做饭。', ex_py: 'Wǒ māma bú huì zuò fàn.', ex_vn: 'Mẹ tôi không biết nấu cơm.' },
+            { word: '菜', pinyin: 'cài', meaning: 'Món ăn, rau', ex_cn: '中国菜很好吃。', ex_py: 'Zhōngguó cài hěn hǎochī.', ex_vn: 'Món ăn Trung Quốc rất ngon.' },
+            { word: '很', pinyin: 'hěn', meaning: 'Rất', ex_cn: '我很好。', ex_py: 'Wǒ hěn hǎo.', ex_vn: 'Tôi rất khỏe.' },
+            { word: '好吃', pinyin: 'hǎochī', meaning: 'Ngon', ex_cn: '这个菜好吃吗？', ex_py: 'Zhè ge cài hǎochī ma?', ex_vn: 'Món này ngon không?' },
+            { word: '做', pinyin: 'zuò', meaning: 'Làm, nấu', ex_cn: '你会做中国菜吗？', ex_py: 'Nǐ huì zuò Zhōngguó cài ma?', ex_vn: 'Bạn biết nấu món Trung Quốc không?' },
+            { word: '写', pinyin: 'xiě', meaning: 'Viết', ex_cn: '写汉字。', ex_py: 'Xiě Hànzì.', ex_vn: 'Viết chữ Hán.' },
+            { word: '汉字', pinyin: 'Hànzì', meaning: 'Chữ Hán', ex_cn: '汉字很难。', ex_py: 'Hànzì hěn nán.', ex_vn: 'Chữ Hán rất khó.' },
+            { word: '怎么', pinyin: 'zěnme', meaning: 'Như thế nào', ex_cn: '这个字怎么写？', ex_py: 'Zhè ge zì zěnme xiě?', ex_vn: 'Chữ này viết như thế nào?' },
+            { word: '读', pinyin: 'dú', meaning: 'Đọc', ex_cn: '你会读吗？', ex_py: 'Nǐ huì dú ma?', ex_vn: 'Bạn biết đọc không?' },
+            { word: '英语', pinyin: 'Yīngyǔ', meaning: 'Tiếng Anh', ex_cn: '我会说英语。', ex_py: 'Wǒ huì shuō Yīngyǔ.', ex_vn: 'Tôi biết nói tiếng Anh.' },
+            { word: '法语', pinyin: 'Fǎyǔ', meaning: 'Tiếng Pháp', ex_cn: '法语不难。', ex_py: 'Fǎyǔ bù nán.', ex_vn: 'Tiếng Pháp không khó.' },
+            { word: '日语', pinyin: 'Rìyǔ', meaning: 'Tiếng Nhật', ex_cn: '他会说日语。', ex_py: 'Tā huì shuō Rìyǔ.', ex_vn: 'Anh ấy biết nói tiếng Nhật.' }
+        ];
+
+        const quizQuestions = [
+            { q: 'Phân biệt: Động từ nào dùng để chỉ cái biết "thông qua học tập"?', options: ['知道 (zhīdao)', '会 (huì)', '认识 (rènshi)', '是 (shì)'], answer: 1, exp: '会 (huì) dùng để chỉ những kỹ năng phải học mới biết (nói ngoại ngữ, nấu ăn, lái xe...).' },
+            { q: 'Cụm từ "Món ăn Trung Quốc" nói thế nào?', options: ['汉字菜', '中国饭', '中国菜', '汉语菜'], answer: 2, exp: '中国菜 (Zhōngguó cài): Món ăn Trung Quốc.' },
+            { q: 'Dịch câu: "Món ăn mẹ tôi nấu rất ngon".', options: ['我妈妈菜很好吃。', '我妈妈做菜很好吃。', '妈妈做的菜很好吃。', 'B và C đều đúng'], answer: 3, exp: 'Cả hai cách diễn đạt đều phổ biến để khen mẹ nấu ăn ngon.' },
+            { q: 'Từ nào dùng để hỏi cách thức "Làm NHƯ THẾ NÀO"?', options: ['什么 (shénme)', '谁 (shéi)', '怎么 (zěnme)', '哪儿 (nǎr)'], answer: 2, exp: '怎么 (zěnme) + Động từ: làm gì đó như thế nào. Ví dụ: 怎么写 (viết thế nào).' },
+            { q: 'Đâu là cách phủ định của "Biết nói tiếng Trung"?', options: ['不会说汉语', '不说话汉语', '没说汉语', '没会说汉语'], answer: 0, exp: 'Phủ định của 会 là 不会.' },
+            { q: 'Nghĩa của từ <span class="question-highlight">写</span> là gì?', options: ['Đọc', 'Viết', 'Nói', 'Nghe'], answer: 1, exp: '写 (xiě) nghĩa là viết. VD: 写汉字.' },
+            { q: 'Pinyin của từ "Chữ Hán" là gì?', options: ['Hànyǔ', 'Hànzì', 'Zhōngwén', 'Hànyú'], answer: 1, exp: '汉字 là Hànzì. Hãy phân biệt với 汉语 (Hànyǔ - Tiếng Hán).' },
+            { q: 'Chữ <span class="question-highlight">读</span> có bộ thủ gì liên quan đến lời nói?', options: ['Bộ Nhân (亻)', 'Bộ Mộc (木)', 'Bộ Ngôn (讠)', 'Bộ Thảo (艹)'], answer: 2, exp: 'Đọc (读) phải dùng lời nói nên có bộ Ngôn (讠).' },
+            { q: 'Dịch sang tiếng Trung: <br>"Chữ này đọc thế nào?"', options: ['这个字什么读？', '这个字谁读？', '这个字怎么读？', '这个字读怎么？'], answer: 2, exp: 'Cấu trúc: Đối tượng + 怎么 + Động từ.' },
+            { q: 'Tiếng Nhật trong tiếng Trung là gì?', options: ['英语', '法语', '日语', '汉语'], answer: 2, exp: '日 (Rì - Nhật/Mặt trời) + 语 (yǔ - tiếng).' },
+            { q: 'Từ <span class="question-highlight">好吃</span> được ghép bởi hai chữ nào?', options: ['Tốt + Làm', 'Tốt + Ăn', 'Rất + Ngon', 'Mẹ + Ăn'], answer: 1, exp: '好 (Hǎo - tốt/hay) + 吃 (chī - ăn) = Ngon (ăn tốt).' },
+            { q: 'Điền từ: <span class="question-highlight">我会 _ 汉字。</span> (Tôi biết viết chữ Hán)', options: ['说', '做', '写', '读'], answer: 2, exp: 'Viết chữ Hán dùng động từ 写 (xiě).' },
+            { q: 'Khi muốn nói "Tôi rất khỏe", chữ "Rất" là chữ nào?', options: ['很 (hěn)', '会 (huì)', '太 (tài)', '不 (bù)'], answer: 0, exp: '很 (hěn) thường đứng trước tính từ để nhấn mạnh hoặc làm bổ ngữ.' },
+            { q: 'Chữ <span class="question-highlight">会</span> có bộ thủ nào ở trên cùng?', options: ['Bộ Khẩu (口)', 'Bộ Nhân (人)', 'Bộ Thủy (氵)', 'Bộ Mịch (冖)'], answer: 1, exp: 'Chữ 会 có bộ Nhân (人 - người) nằm ở trên.' },
+            { q: 'Điền vào chỗ trống: <br><span class="question-highlight">你会做中国菜 _ ？</span>', options: ['呢', '的', '吗', '谁'], answer: 2, exp: 'Câu hỏi có-không (Yes/No) dùng trợ từ nghi vấn 吗 ở cuối câu.' }
+        ];
+
+        // --- RENDER ---
+        function render() {
+            document.getElementById('hanzi-container').innerHTML = hanziData.map(h => `
+                <div class="hanzi-card">
+                    <div class="char-display">${h.char}</div>
+                    <div class="pinyin">${h.pinyin}</div>
+                    <div class="meaning">${h.meaning}</div>
+                    <div class="hanzi-details"><p><b>🧩 Bộ thủ:</b> ${h.radical}</p></div>
+                    <div class="memo">💡 ${h.memo}</div>
+                </div>`).join('');
+
+            document.getElementById('vocab-container').innerHTML = vocabData.map(v => `
+                <div class="flashcard" onclick="playSound('click'); this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="word-cn">${v.word}</div><div class="hint">👆 Lật thẻ</div></div>
+                        <div class="flashcard-back">
+                            <div class="py">${v.pinyin}</div><div class="mn">${v.meaning}</div>
+                            <div class="example-box">
+                                <div class="ex-cn">${v.ex_cn}</div><div class="ex-py">${v.ex_py}</div><div class="ex-vn">${v.ex_vn}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`).join('');
         }
-        updateVocabCard();
-    }
 
-    function showVocabSummary() {
-        document.getElementById('vocab-screen').style.display = 'none';
-        document.getElementById('vocab-summary-screen').style.display = 'block';
-        
-        const pLearned = Math.round((learnedCount / 15) * 100);
-        document.getElementById('percent-learned').innerText = pLearned + '%';
-        document.getElementById('percent-not-learned').innerText = (100 - pLearned) + '%';
-        
-        const listContainer = document.getElementById('review-list-container');
-        listContainer.innerHTML = '';
-        
-        if (notLearnedList.length === 0) {
-            listContainer.innerHTML = '<p style="text-align:center; color:green">Tuyệt vời! Bạn đã thuộc hết từ vựng! 🌸</p>';
-        } else {
-            notLearnedList.forEach(v => {
-                const item = document.createElement('div');
-                item.className = 'review-item';
-                item.innerHTML = `<span><b>${v.cn}</b> (${v.p})</span> <span>${v.vi}</span>`;
-                listContainer.appendChild(item);
-            });
+        // --- GAME LOGIC ---
+        let currentQ = 0, score = 0, answering = false;
+        function switchTab(id) {
+            playSound('click');
+            document.querySelectorAll('.section, .tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if (id === 'game') startGame();
         }
-    }
 
-    // --- QUIZ ---
-    function startQuiz() {
-        playSound('click');
-        questions = [...rawQuestions].sort(() => Math.random() - 0.5);
-        curIdx = 0; score = 0; correctCount = 0;
-        document.getElementById('home-link').style.display = 'none';
-        document.getElementById('intro-screen').style.display = 'none';
-        document.getElementById('vocab-screen').style.display = 'none';
-        document.getElementById('vocab-summary-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'none';
-        document.getElementById('quiz-screen').style.display = 'block';
-        showQuestion();
-    }
+        function startGame() {
+            currentQ = 0; score = 0;
+            document.getElementById('quiz-area').style.display = 'block';
+            document.getElementById('result-area').style.display = 'none';
+            loadQ();
+        }
 
-    function showQuestion() {
-        const q = questions[curIdx];
-        document.getElementById('question-count').innerText = `Câu: ${curIdx + 1}/30`;
-        document.getElementById('score-display').innerText = `Điểm: ${score}`;
-        document.getElementById('progress').style.width = `${(curIdx / 30) * 100}%`;
-        document.getElementById('question-text').innerHTML = q.q;
-        document.getElementById('feedback-box').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'none';
-        
-        const area = document.getElementById('answer-section');
-        area.innerHTML = '';
-
-        if (q.type === 'mc') {
-            const grid = document.createElement('div');
-            grid.className = 'options-grid';
+        function loadQ() {
+            answering = false;
+            const q = quizQuestions[currentQ];
+            document.getElementById('score-display').innerText = `Điểm: ${score}`;
+            document.getElementById('question-count').innerText = `Câu: ${currentQ+1}/15`;
+            document.getElementById('progress').style.width = `${(currentQ/15)*100}%`;
+            document.getElementById('question-text').innerHTML = q.q;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
             q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerHTML = opt;
-                btn.onclick = () => checkAnswer(i);
-                grid.appendChild(btn);
+                btn.className = 'option-btn'; btn.innerHTML = opt;
+                btn.onclick = () => {
+                    if(answering) return; answering = true;
+                    if(i === q.answer) { btn.classList.add('correct'); score += 10; playSound('correct'); }
+                    else { btn.classList.add('wrong'); container.children[q.answer].classList.add('correct'); playSound('wrong'); }
+                    setTimeout(() => showModal(i === q.answer), 600);
+                };
+                container.appendChild(btn);
             });
-            area.appendChild(grid);
-        } else if (q.type === 'sort') {
-            selectedOrder = [];
-            const ansArea = document.createElement('div');
-            ansArea.className = 'answer-area';
-            ansArea.id = 'ans-box';
-            ansArea.innerHTML = '<span style="color:#aaa; font-size:0.9rem">Chạm từ phía dưới...</span>';
-            
-            const chipBox = document.createElement('div');
-            chipBox.className = 'word-chips';
-            
-            let shuffleWords = [...q.a].filter(w => !["。", "？", "，"].includes(w));
-            const puncs = q.a.filter(w => ["。", "？", "，"].includes(w));
-            shuffleWords = shuffleWords.sort(() => Math.random() - 0.5).concat(puncs);
-
-            shuffleWords.forEach((w) => {
-                const chip = document.createElement('div');
-                chip.className = 'chip';
-                chip.innerText = w;
-                chip.onclick = () => { playSound('click'); selectWord(w, chip); };
-                chipBox.appendChild(chip);
-            });
-            
-            const checkBtn = document.createElement('button');
-            checkBtn.className = 'btn-main';
-            checkBtn.innerText = 'KIỂM TRA 🆗';
-            checkBtn.style.width = "100%";
-            checkBtn.onclick = checkSortAnswer;
-
-            area.appendChild(ansArea);
-            area.appendChild(chipBox);
-            area.appendChild(checkBtn);
         }
-    }
 
-    function selectWord(word, el) {
-        if (el.classList.contains('selected')) return;
-        if (selectedOrder.length === 0) document.getElementById('ans-box').innerHTML = '';
-        el.classList.add('selected');
-        selectedOrder.push({word, el});
-        renderSort();
-    }
-
-    function renderSort() {
-        const box = document.getElementById('ans-box');
-        box.innerHTML = '';
-        selectedOrder.forEach((item, idx) => {
-            const d = document.createElement('div');
-            d.className = 'chip chip-in-answer';
-            d.innerText = item.word;
-            d.onclick = () => {
-                playSound('click');
-                item.el.classList.remove('selected');
-                selectedOrder.splice(idx, 1);
-                if(selectedOrder.length === 0) box.innerHTML = '<span style="color:#aaa; font-size:0.9rem">Chạm từ phía dưới...</span>';
-                else renderSort();
-            };
-            box.appendChild(d);
-        });
-    }
-
-    function checkAnswer(idx) {
-        const q = questions[curIdx];
-        if (document.getElementById('next-btn').style.display === 'block') return;
-        const isCorrect = idx === q.a;
-        if (isCorrect) playSound('correct'); else playSound('wrong');
-        document.querySelectorAll('.option-btn').forEach((b, i) => {
-            b.disabled = true;
-            if(i === q.a) b.classList.add('correct');
-            if(i === idx && !isCorrect) b.classList.add('wrong');
-        });
-        showFeedback(isCorrect, q.exp);
-    }
-
-    function checkSortAnswer() {
-        if (document.getElementById('next-btn').style.display === 'block') return;
-        const q = questions[curIdx];
-        const userStr = selectedOrder.map(i => i.word).join('');
-        const isCorrect = userStr === q.a.join('');
-        if (isCorrect) playSound('correct'); else playSound('wrong');
-        showFeedback(isCorrect, q.exp + `<br>Đáp án: <b>${q.a.join(' ')}</b>`);
-    }
-
-    function showFeedback(isCorrect, exp) {
-        const fb = document.getElementById('feedback-box');
-        fb.style.display = 'block';
-        if (isCorrect) {
-            document.getElementById('result-status').innerHTML = '✅ <b style="color:green">Chính xác!</b> +10đ';
-            score += 10; correctCount++;
-        } else {
-            document.getElementById('result-status').innerHTML = '❌ <b style="color:red">Chưa đúng!</b> -5đ';
-            score = Math.max(0, score - 5);
+        function showModal(correct) {
+            const m = document.getElementById('explanation-modal');
+            document.getElementById('modal-icon').innerText = correct ? "✅" : "❌";
+            document.getElementById('modal-title').innerText = correct ? "Đúng rồi!" : "Tiếc quá!";
+            document.getElementById('modal-title').className = `modal-title ${correct ? 't-correct' : 't-wrong'}`;
+            document.getElementById('modal-desc').innerText = quizQuestions[currentQ].exp;
+            m.style.display = 'flex';
         }
-        document.getElementById('explanation-text').innerHTML = `<b>Giải thích:</b> ${exp}`;
-        document.getElementById('next-btn').style.display = 'block';
-    }
 
-    function handleNext() {
-        playSound('click');
-        curIdx++;
-        if (curIdx < 30) showQuestion();
-        else showFinal();
-    }
+        function nextQuestion() {
+            document.getElementById('explanation-modal').style.display = 'none';
+            currentQ++;
+            if(currentQ < 15) loadQ();
+            else {
+                document.getElementById('quiz-area').style.display = 'none';
+                document.getElementById('result-area').style.display = 'flex';
+                document.getElementById('final-score').innerText = score;
+            }
+        }
 
-    function showFinal() {
-        playSound('win');
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = `${score}đ`;
-        let rank = score >= 250 ? "🌳 Đại thụ" : score >= 150 ? "🌿 Cây nhỏ" : "🌱 Hạt mầm";
-        document.getElementById('rank-icon').innerText = score >= 250 ? "🌳" : score >= 150 ? "🌿" : "🌱";
-        document.getElementById('correct-count-text').innerText = `Bạn đạt danh hiệu "${rank}" với ${correctCount}/30 câu đúng!`;
-    }
-</script>
+        window.onload = render;
+    </script>
 </body>
 </html>
+
