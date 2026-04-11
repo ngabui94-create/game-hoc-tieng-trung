@@ -139,13 +139,18 @@
         }
         .sync-text:hover { background-color: #f1f8e9; border-color: var(--primary); }
         .sync-active {
-            background-color: #ffecb3; /* Vàng nhạt */
-            color: var(--hanzi-color); /* Cam đỏ */
+            background-color: #ffecb3; 
+            color: var(--hanzi-color); 
             border-color: #ffca28;
             box-shadow: 0 2px 5px rgba(255, 183, 77, 0.3);
             transform: scale(1.02);
             display: inline-block;
         }
+
+        /* --- RUBY (PINYIN) SPECIFIC --- */
+        ruby { ruby-position: over; margin: 0 1px; }
+        rt { font-size: 0.9rem; color: #1565c0; font-family: 'Nunito', sans-serif; font-weight: 800; transform: translateY(-2px); }
+        .ruby-char { font-size: 1.6rem; line-height: 1.8; }
 
         /* --- QUIZ SPECIFIC --- */
         .quiz-option {
@@ -248,20 +253,24 @@
         </div>
 
         <!-- ============================================== -->
-        <!-- TAB 2: BÀI KHÓA (KARAOKE SYNC) -->
+        <!-- TAB 2: BÀI KHÓA (PINYIN VIEWER) -->
         <!-- ============================================== -->
         <div id="section-text" class="w-full hidden">
             <div class="card-container">
                 <h2 class="text-2xl font-bold text-center mb-4 chinese-text" style="color: var(--primary-dark);">爱的细节</h2>
                 
-                <!-- Audio Player -->
+                <!-- Audio Player & Pinyin Area -->
                 <div class="sticky top-0 z-10 bg-white pb-3 pt-1 border-b-2 mb-4" style="border-color: var(--primary);">
-                    <p class="text-xs font-bold text-center text-gray-500 mb-2">Bấm vào chữ để tua đến đoạn cần nghe</p>
+                    <p class="text-xs font-bold text-center text-gray-500 mb-2">Bấm vào câu để xem Pinyin. Bấm lần nữa để tắt.</p>
                     <audio id="lesson-audio" controls class="w-full h-10 outline-none rounded-lg" src="audio/hsk5/lesson1/01-1.mp3"></audio>
+                    
+                    <!-- Pinyin Display Box -->
+                    <div id="pinyin-display" class="mt-4 p-4 rounded-xl bg-[#fffde7] border-2 border-[#ffe082] text-center hidden shadow-sm transition-all duration-300">
+                    </div>
                 </div>
 
                 <!-- Text Content -->
-                <div class="chinese-text text-xl leading-relaxed text-gray-800 space-y-4 custom-scroll max-h-[60vh] overflow-y-auto pb-4 px-1" id="sync-container">
+                <div class="chinese-text text-xl leading-relaxed text-gray-800 space-y-4 custom-scroll max-h-[50vh] overflow-y-auto pb-4 px-1" id="sync-container">
                     
                     <p class="indent-8">
                         <span class="sync-text" data-start="0" data-end="3">电台要选出一对最恩爱的夫妻。</span>
@@ -508,31 +517,84 @@
 
         function relearnUnlearned() { startFlashcards(unlearnedItems); }
 
-        // --- AUDIO SYNC (KARAOKE) LOGIC ---
+        // --- AUDIO PLAY & PINYIN SHOWING LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('lesson-audio');
             const spans = document.querySelectorAll('.sync-text');
 
-            // Cập nhật màu chữ theo thời gian
-            audio.addEventListener('timeupdate', () => {
-                const time = audio.currentTime;
-                spans.forEach(span => {
-                    const start = parseFloat(span.getAttribute('data-start'));
-                    const end = parseFloat(span.getAttribute('data-end'));
-                    if(time >= start && time <= end) {
-                        span.classList.add('sync-active');
-                    } else {
-                        span.classList.remove('sync-active');
-                    }
-                });
-            });
+            // Từ điển Pinyin map khớp chính xác với từng câu trong bài khóa HSK5 Bài 1
+            const pinyinDict = {
+                "电台要选出一对最恩爱的夫妻。": ["diàn", "tái", "yào", "xuǎn", "chū", "yí", "duì", "zuì", "ēn", "ài", "de", "fū", "qī", ""],
+                "对比后，有三对夫妻入围。": ["duì", "bǐ", "hòu", "", "yǒu", "sān", "duì", "fū", "qī", "rù", "wéi", ""],
+                "评委叫第一对夫妻说说他俩是如何恩爱的。": ["píng", "wěi", "jiào", "dì", "yī", "duì", "fū", "qī", "shuō", "shuō", "tā", "liǎng", "shì", "rú", "hé", "ēn", "ài", "de", ""],
+                "妻子说，前几年她全身瘫痪了，医生说她站起来的可能性很小。": ["qī", "zǐ", "shuō", "", "qián", "jǐ", "nián", "tā", "quán", "shēn", "tān", "huàn", "le", "", "yī", "shēng", "shuō", "tā", "zhàn", "qǐ", "lái", "de", "kě", "néng", "xìng", "hěn", "xiǎo", ""],
+                "别人都觉得她的丈夫会跟她离婚，": ["bié", "rén", "dōu", "jué", "de", "tā", "de", "zhàng", "fu", "huì", "gēn", "tā", "lí", "hūn", ""],
+                "她也想过自杀。": ["tā", "yě", "xiǎng", "guò", "zì", "shā", ""],
+                "但丈夫一直鼓励她，为她不知找了多少家医院，": ["dàn", "zhàng", "fu", "yì", "zhí", "gǔ", "lì", "tā", "", "wèi", "tā", "bù", "zhī", "zhǎo", "le", "duō", "shao", "jiā", "yī", "yuàn", ""],
+                "并且几年如一日地照顾她，从不抱怨。": ["bìng", "qiě", "jǐ", "nián", "rú", "yī", "rì", "de", "zhào", "gù", "tā", "", "cóng", "bù", "bào", "yuàn", ""],
+                "在丈夫的爱护和努力下，她终于又站了起来。": ["zài", "zhàng", "fu", "de", "ài", "hù", "hé", "nǔ", "lì", "xià", "", "tā", "zhōng", "yú", "yòu", "zhàn", "le", "qǐ", "lái", ""],
+                "他的故事让很多评委感动得流下了眼泪。": ["tā", "de", "gù", "shi", "ràng", "hěn", "duō", "píng", "wěi", "gǎn", "dòng", "de", "liú", "xià", "le", "yǎn", "lèi", ""],
+                "随后进来的是第二对夫妻，": ["suí", "hòu", "jìn", "lái", "de", "shì", "dì", "èr", "duì", "fū", "qī", ""],
+                "他俩说，十几年的婚姻生活中，他们从来没为任何事红过脸、吵过架，": ["tā", "liǎng", "shuō", "", "shí", "jǐ", "nián", "de", "hūn", "yīn", "shēng", "huó", "zhōng", "", "tā", "men", "cóng", "lái", "méi", "wèi", "rèn", "hé", "shì", "hóng", "guò", "liǎn", "", "chǎo", "guò", "jià", ""],
+                "一直相敬如宾，": ["yì", "zhí", "xiāng", "jìng", "rú", "bīn", ""],
+                "评委听了暗暗点头。": ["píng", "wěi", "tīng", "le", "àn", "àn", "diǎn", "tóu", ""],
+                "轮到第三对夫妻了，": ["lún", "dào", "dì", "sān", "duì", "fū", "qī", "le", ""],
+                "却很长时间不见人。": ["què", "hěn", "cháng", "shí", "jiān", "bú", "jiàn", "rén", ""],
+                "评委们等得有些不耐烦，就走出来看个究竟。": ["píng", "wěi", "men", "děng", "de", "yǒu", "xiē", "bú", "nài", "fán", "", "jiù", "zǒu", "chū", "lái", "kàn", "gè", "jiū", "jìng", ""],
+                "只见第三对夫妻仍然坐在门外，": ["zhǐ", "jiàn", "dì", "sān", "duì", "fū", "qī", "réng", "rán", "zuò", "zài", "mén", "wài", ""],
+                "男人的头靠在女人的肩膀上，睡着了。": ["nán", "rén", "de", "tóu", "kào", "zài", "nǚ", "rén", "de", "jiān", "bǎng", "shàng", "", "shuì", "zháo", "le", ""],
+                "评委要喊，女的却伸出手指，做了个小声的动作，": ["píng", "wěi", "yào", "hǎn", "", "nǚ", "de", "què", "shēn", "chū", "shǒu", "zhǐ", "", "zuò", "le", "gè", "xiǎo", "shēng", "de", "dòng", "zuò", ""],
+                "然后小心地从包里拿出笔，用左手歪歪扭扭写下一行字递给评委，": ["rán", "hòu", "xiǎo", "xīn", "de", "cóng", "bāo", "lǐ", "ná", "chū", "bǐ", "", "yòng", "zuǒ", "shǒu", "wāi", "wāi", "niǔ", "niǔ", "xiě", "xià", "yì", "háng", "zì", "dì", "gěi", "píng", "wěi", ""],
+                "而右肩一直让丈夫的脑袋靠着。": ["ér", "yòu", "jiān", "yì", "zhí", "ràng", "zhàng", "fu", "de", "nǎo", "dai", "kào", "zhe", ""],
+                "评委们看那纸条上面写着：": ["píng", "wěi", "men", "kàn", "nà", "zhǐ", "tiáo", "shàng", "miàn", "xiě", "zhe", ""],
+                "别出声，他昨晚没睡好。半夜蚊子叮我，他一直为我赶蚊子。": ["bié", "chū", "shēng", "", "tā", "zuó", "wǎn", "méi", "shuì", "hǎo", "", "bàn", "yè", "wén", "zi", "dīng", "wǒ", "", "tā", "yì", "zhí", "wèi", "wǒ", "gǎn", "wén", "zi", ""],
+                "一个评委开玩笑地说：但是女士，我们得听你们叙述你们是如何恩爱的啊。": ["yí", "gè", "píng", "wěi", "kāi", "wán", "xiào", "de", "shuō", "", "dàn", "shì", "nǚ", "shì", "", "wǒ", "men", "děi", "tīng", "nǐ", "men", "xù", "shù", "nǐ", "men", "shì", "rú", "hé", "ēn", "ài", "de", "a", ""],
+                "女人笑了笑，答道：": ["nǚ", "rén", "xiào", "le", "xiào", "", "dá", "dào", ""],
+                "难道这还不够吗？": ["nán", "dào", "zhè", "hái", "bú", "gòu", "ma", ""],
+                "评委们听了，居然一时语塞。": ["píng", "wěi", "men", "tīng", "le", "", "jū", "rán", "yì", "shí", "yǔ", "sè", ""],
+                "最后，电台增加了一项奖项，": ["zuì", "hòu", "", "diàn", "tái", "zēng", "jiā", "le", "yí", "xiàng", "jiǎng", "xiàng", ""],
+                "将“最恩爱夫妻”奖给了第三对夫妻。": ["jiāng", "", "zuì", "ēn", "ài", "fū", "qī", "", "jiǎng", "gěi", "le", "dì", "sān", "duì", "fū", "qī", ""]
+            };
 
-            // Click vào câu nào, tua audio tới câu đó
+            // Click vào câu nào, hiện thị Pinyin (Audio cứ phát bình thường, không bị tua/ngắt)
             spans.forEach(span => {
                 span.addEventListener('click', function() {
-                    const start = parseFloat(this.getAttribute('data-start'));
-                    audio.currentTime = start;
-                    audio.play();
+                    
+                    const displayBox = document.getElementById('pinyin-display');
+
+                    // Nếu câu đang được chọn lại được bấm lần nữa -> Tắt Pinyin, trả về như ban đầu
+                    if (this.classList.contains('sync-active')) {
+                        this.classList.remove('sync-active');
+                        displayBox.classList.add('hidden');
+                        displayBox.innerHTML = '';
+                        return; // Kết thúc sớm sự kiện
+                    }
+
+                    // Đổi màu câu đang chọn (Xóa highlight ở các câu khác)
+                    spans.forEach(s => s.classList.remove('sync-active'));
+                    this.classList.add('sync-active');
+
+                    // Lấy nội dung chữ và hiển thị Pinyin
+                    const text = this.innerText;
+                    const pinyinArr = pinyinDict[text];
+
+                    if(pinyinArr) {
+                        let html = '<div class="flex flex-wrap justify-center items-end gap-x-1 gap-y-4">';
+                        for(let i=0; i<text.length; i++) {
+                            const char = text[i];
+                            const py = pinyinArr[i] || '';
+                            if(py) {
+                                html += `<ruby class="ruby-char chinese-text">${char}<rt>${py}</rt></ruby>`;
+                            } else {
+                                html += `<span class="ruby-char chinese-text" style="color: var(--text-main); font-weight:bold; margin: 0 2px;">${char}</span>`;
+                            }
+                        }
+                        html += '</div>';
+                        displayBox.innerHTML = html;
+                        displayBox.classList.remove('hidden');
+                    } else {
+                         displayBox.innerHTML = `<span class="ruby-char chinese-text" style="color: var(--text-main); font-weight:bold;">${text}</span>`;
+                         displayBox.classList.remove('hidden');
+                    }
                 });
             });
         });
